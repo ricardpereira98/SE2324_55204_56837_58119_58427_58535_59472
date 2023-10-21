@@ -1,3 +1,16 @@
+
+# Project Members
+
+Diogo Lemos 56837 / git: dblemos
+Gustavo Silva 59472 / git: Gustavo-MS
+José Trigueiro 58119 / git: jtrigueiro
+José Pereira 55204 / git: ricardpereira98
+Liliane Correia 58427 / git: LillyMC20
+Wilker Martins 58535 / git: eng-wilker
+
+
+
+
 # FreeCol - Colonization Strategy Game
 
 <!-- [![Coverity Scan Build Status](https://img.shields.io/coverity/scan/13524.svg)](https://scan.coverity.com/projects/freecol-freecol) -->
