@@ -1,0 +1,2 @@
+Review (08/11/2023 - Diogo Lemos):
+    All code smells (Long Method, Long Class and Magic Number) appear to be correctly identified.
