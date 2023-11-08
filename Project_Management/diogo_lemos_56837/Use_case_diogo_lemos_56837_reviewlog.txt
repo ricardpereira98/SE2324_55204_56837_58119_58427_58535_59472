@@ -1,0 +1,6 @@
+REVIEWER: José Trigueiro 58119 -
+
+I'm not sure if the arrows direction is correct. I would need help from another person to check on it.
+The Doc has some information that was not ask by the teachers but it's a nice addition, like the pre/post condition and main/alternative flow.
+I like how you divided the Use Cases in different subjects. 
+Overall the it seems to be ok.
