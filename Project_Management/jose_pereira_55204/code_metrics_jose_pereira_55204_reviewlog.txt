@@ -1,0 +1,5 @@
+Reviewd by Gustavo Silva 59472 (08/11/2023):
+    - Method Metrics analisys is valid, that method might need to be refactored.
+    - With the numbers given we can see that the average lines of code aren´t hight wich in fact means the code is easier to maintain.
+    - Interface Metrics conclusions are valid.
+    - Package Metrics suggest the lack of documentantion about the packages.
