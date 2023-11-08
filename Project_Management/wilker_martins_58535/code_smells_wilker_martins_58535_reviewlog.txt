@@ -1,0 +1,7 @@
+REVIEWER: José Trigueiro 58119 -
+
+1- Message Chains: Yes it's a Message Chain code smell, not the longest I have seen haha but it's one. And yes the code should be broken down into seperate steps as said. The Code smell is ok but it only happends once in that class so it's not that bad I guess?
+
+2- Large Class: Yes it's a Large Class code smell, it has 2606 lines!!! I agree to all you have said but you could give more tips on how to break it down by showing examples.
+
+3- Long Method: Yes it can be considered a Long Methond but it's not the worst I have seen, it's 80 lines long, there are methods way bigger needing refactoring. I like and agree with the suggestion of code break down as given in the example.
