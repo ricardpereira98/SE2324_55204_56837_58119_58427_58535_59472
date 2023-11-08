@@ -1,0 +1,8 @@
+wilker martins 58535
+
+It's worth noting that the design patterns utilized in the codebase appear to have been well chosen for their respective contexts.
+
+The Singleton Pattern, as applied in FSGConverter.java, effectively embodies the essential characteristics of a Singleton, ensuring a single instance with private constructor, synchronized access, and global access point.
+The Factory Pattern, exemplified by ResourceFactory.java, is a suitable choice for creating Resource objects based on parameters, offering a structured and flexible approach while simplifying resource management.
+The Template Pattern, employed in Resource.java and its eight implementations, provides a clear and effective way to establish a common structure and make necessary method adjustments, promoting code reuse and consistency.
+Overall, the use of these design patterns appears to be well-matched with the specific requirements and objectives of the respective classes.
