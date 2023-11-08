@@ -1,0 +1,8 @@
+Liliane Correia Review 
+Comments:
+
+- The report includes code snippets and UML diagrams, making it easier to compehend the design pattern being demonstrated
+
+- It might beneficial to double-check some of the patterns to ensure accuracy. Fro example: oe of the pattern appears to be more closely related to Factory Design pattern than the Command pattern.
+
+- Nonetheless, the explanations of the patterns are clear and comprehensible
