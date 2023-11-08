@@ -1,0 +1,2 @@
+Reviewed by Gustavo Silva 59472 (08/11/2023):
+    - Use case Diagram seems to represent the correct use case.
