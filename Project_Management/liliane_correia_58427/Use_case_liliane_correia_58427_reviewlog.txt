@@ -1,0 +1,3 @@
+Review (08/11/2023 - Diogo Lemos):
+    Some grammar mistakes.
+    Very complete Use Case. All alternative flows scenarios were explored.
