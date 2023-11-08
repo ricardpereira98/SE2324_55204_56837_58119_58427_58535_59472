@@ -1,0 +1,7 @@
+Liliane Correia Review:
+Comments:
+- A very detailed and well-presented report
+- Analized each metric percentage in the MOOD metrics, providing an overall understanding of the system's complexity.
+- Offered improvement tips, especially regarding AHF, where it could be beneficial to reduce attributes visibility
+
+
