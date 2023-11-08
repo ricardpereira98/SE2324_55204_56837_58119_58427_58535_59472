@@ -1,0 +1,3 @@
+Wilker Martins 58535
+
+The lily´s  project correctly points out that the LootSession class appears to be a "Data Class," which mainly contains data without real functionality.The lily´s project rightly identifies a "Long Method" issue in the main method of ForestMaker.java. Long methods can be challenging to maintain and understand, leading to reduced code quality. In summary, the code review effectively identifies areas for improvement in terms of code structure, length, and relevance.
