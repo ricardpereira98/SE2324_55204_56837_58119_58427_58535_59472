@@ -1,0 +1,4 @@
+Review (08/11/2023 - Diogo Lemos):
+    The metrics of the Martin Packaging are well explained and the relations between unnaceptable
+    metric values and code smells are well executed.
+    The results from the FreeCol code metrics are well interpreted.
