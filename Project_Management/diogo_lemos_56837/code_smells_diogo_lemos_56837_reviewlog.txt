@@ -1,0 +1,2 @@
+Reviewed by Gustavo Silva 59472 (08/11/2023):
+    - All code smells (Long Method, Data Class and Large Class) appear to be correctly identified.
