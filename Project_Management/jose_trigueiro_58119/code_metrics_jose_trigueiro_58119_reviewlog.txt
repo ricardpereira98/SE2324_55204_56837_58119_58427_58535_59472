@@ -1,0 +1,2 @@
+Reviewer: Reviewed by José Pereira:
+The Project Metrics appear to touch every crucial detail about the metrics in question, and my colleague made sure to analyze the variations from the Average Complexity’s values and explained with great detail its consequences. 
