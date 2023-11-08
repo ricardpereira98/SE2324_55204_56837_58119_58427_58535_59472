@@ -1,2 +1,11 @@
 Reviewed by Gustavo Silva 59472 (08/11/2023):
     - All code smells (Long Method, Data Class and Large Class) appear to be correctly identified.
+
+
+--------------------------------------
+
+Reviewer: José Pereira –
+
+-	The first proposed smell is indeed a Long Method since it could clearly be broken down into multiple auxiliary methods to prevent such clutter of information.
+-	The second proposed smell is the classic Data Class code smell, with simple “getters” and “setters”, however this is not necessarily a bad thing.
+-	Well, the last proposed smell is hard to analyze but if we consider the number of lines from the screenshot presented it is indeed a very large class that surely could be broken down into simpler parts, and it could imply bad code management as well.
