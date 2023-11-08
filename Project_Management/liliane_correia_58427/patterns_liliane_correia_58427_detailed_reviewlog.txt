@@ -1,3 +1,13 @@
 wilker Martins 58535
 
 Comment: It appears that the Singleton pattern might not have been the most suitable choice for this class. One of the key characteristics of a Singleton is to restrict the instantiation of the class to a single instance and ensure that access to that instance is controlled via a global point of access method. However, in this code, it seems that the class's methods are not private, potentially allowing multiple instances or direct instantiation, which can undermine the intended behavior of a Singleton. Reevaluating the use of Singleton or ensuring proper access control for the class's methods may be necessary to align with the Singleton pattern's principles. However, the other design patterns (Template Method and Chain of Responsibility) appear to have been well-suited for their respective use cases.
+
+
+--------------------
+REVIEWER José Trigueiro 58119 -
+
+1- The Template Method was well identified and it's correct.
+
+2- I don't think that is a chain of responsability code pattern, the try catches go no where, they simply trown exceptions.
+
+3 - I'm not sure if it's a Singleton Pattern the variable "specification" should be "static" for the class to be considered a Singleton.
