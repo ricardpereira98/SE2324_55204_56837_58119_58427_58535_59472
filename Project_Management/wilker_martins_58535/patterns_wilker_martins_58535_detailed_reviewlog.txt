@@ -1,0 +1,7 @@
+Reviewer: Reviewed by José Pereira:
+
+The first design pattern appears to be correctly assigned as a Factory Design Pattern, since we have a generic interface from which its subclasses redefine the object, in this case the unit’s location, each subclass manages its object (location) independently from the other subclasses.
+
+The second design pattern also seems to be correctly identified as a Template Method, since we have an abstract class that defines a general skeleton and then we specify the “algorithm”, in this case a particular Nation in each subclass.
+
+The third and last pattern, is also correctly identified as a Singleton since we have a private constructor implying that the class can only be instantiated by itself.
