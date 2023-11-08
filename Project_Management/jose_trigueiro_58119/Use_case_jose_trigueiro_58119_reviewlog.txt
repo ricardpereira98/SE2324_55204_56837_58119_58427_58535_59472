@@ -1,0 +1,2 @@
+Reviewed by José Pereira:
+The Use Case diagram appears to be well constructed, highly detailed, and easy to understand. The Actors were correctly identified, and the description matches the Use Case perfectly.
