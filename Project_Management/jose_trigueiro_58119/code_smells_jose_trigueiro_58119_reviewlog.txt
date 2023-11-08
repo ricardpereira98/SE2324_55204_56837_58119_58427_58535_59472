@@ -1,0 +1,6 @@
+Liliane Correia Review
+Comments:
+- Perhaps a reduction of the code presented in "handleArgs" method should be considered, providing only a snippet of it to illustrate the issue.
+- The overall report is concise in demonstrating the code smells present in the program
+- The analysis was well-done and even included solutions for the identified code smells.
+
