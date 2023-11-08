@@ -1,0 +1,7 @@
+Review (08/11/2023 - Diogo Lemos):
+    There may be more classes than what is required in the first pattern (Template Method) diagram,
+    but it seems to be correctly identified.
+    While the inheritance does enable the possibility of having more than one implementation per method,
+    I believe the pattern identified might not be the most accurate one, since the object's behaviour doesnt
+    really change dinamically.
+    The third pattern (Factory Method) seems to be correctly identified.
