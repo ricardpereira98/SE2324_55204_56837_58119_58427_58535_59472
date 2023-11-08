@@ -1,0 +1,4 @@
+Review (08/11/2023 - Diogo Lemos):
+    Spelling error in diagram: "Meeting".
+    Missing secondary actor (Player2 or AI);
+    Everything else seems alright.
