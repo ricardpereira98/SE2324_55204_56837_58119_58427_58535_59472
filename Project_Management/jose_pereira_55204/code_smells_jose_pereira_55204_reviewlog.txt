@@ -1,0 +1,9 @@
+Review (08/11/2023 - Diogo Lemos):
+    The first pattern seems to be correctly identified. It is a good example of Magic Numbers,
+    since it does compromise the readability of the method.
+    The second pattern seems to be correctly identified and the explanation behind it seems
+    very accurate.
+    It is true that it is a bad pratice to keep that many characters grouped together without much
+    context other than comments, especially repeated ones, I dont believe Data Clump to be the most
+    accurate Code Pattern in this situation, since it usually applies to a group of data that would
+    rather be together inside its own class to be used as a single instance.
