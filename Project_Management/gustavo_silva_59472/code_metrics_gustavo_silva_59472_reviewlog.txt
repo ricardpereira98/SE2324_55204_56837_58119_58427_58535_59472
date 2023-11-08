@@ -1,0 +1,5 @@
+REVIEWER - José Trigueiro 58119:
+
+The document seems to be well-structured and informative. It provides a detailed explanation of the Chidamber-Kemerer metrics, including Coupling Between Objects (CBO), Depth of Inheritance Tree (DIT), Lack of Cohesion in Methods (LCOM), Number of Children (NOC), Response For a Class (RFC), and Weighted Methods per Class (WMC). Each metric is explained with its definition, data considerations, and an analysis of its application.
+The graphs help alot visualizing the data and it's a nice adition.
+Overall it seems to be ok, except the page 6 that has a minor formation problem with the text "Interface" leaving the word page.
