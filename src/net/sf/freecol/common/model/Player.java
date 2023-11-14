@@ -2730,6 +2730,8 @@ public class Player extends FreeColGameObject implements Nameable {
         addModelMessage(new ModelMessage(ModelMessage.MessageType.TUTORIAL,
                                          "model.player.startGame", this)
             .addTagged("%direction%", sailTag));
+        //TODO: LILY
+        //addModelMessage(new ModelMessage(ModelMessage.MessageType.TUTORIAL, "startTutorial", this));
     }
 
     /**
