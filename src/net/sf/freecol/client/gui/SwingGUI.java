@@ -2410,6 +2410,14 @@ public class SwingGUI extends GUI {
      * {@inheritDoc}
      */
     @Override
+    public FreeColPanel showTurnManagerWindow() {
+        return this.widgets.showReportHistoryPanel();
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
     public Parameters showParametersDialog() {
         return this.widgets.showParametersDialog();
     }

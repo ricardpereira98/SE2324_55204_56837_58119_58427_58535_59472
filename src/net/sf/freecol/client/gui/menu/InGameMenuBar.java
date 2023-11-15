@@ -19,18 +19,13 @@
 
 package net.sf.freecol.client.gui.menu;
 
-import java.awt.BasicStroke;
-import java.awt.Color;
 import java.awt.Font;
 import java.awt.FontMetrics;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
 import java.awt.RenderingHints;
-import java.awt.Shape;
-import java.awt.Stroke;
 import java.awt.event.KeyEvent;
 import java.awt.event.MouseMotionListener;
-import java.awt.font.TextLayout;
 import java.awt.geom.Rectangle2D;
 import java.util.logging.Logger;
 
@@ -65,6 +60,7 @@ import net.sf.freecol.client.gui.action.LoadAction;
 import net.sf.freecol.client.gui.action.MapControlsAction;
 import net.sf.freecol.client.gui.action.NewAction;
 import net.sf.freecol.client.gui.action.OpenAction;
+import net.sf.freecol.client.gui.action.OpenTurnManagerAction;
 import net.sf.freecol.client.gui.action.PreferencesAction;
 import net.sf.freecol.client.gui.action.QuitAction;
 import net.sf.freecol.client.gui.action.ReconnectAction;
@@ -315,6 +311,7 @@ public class InGameMenuBar extends FreeColMenuBar {
         JMenu menu = Utility.localizedMenu("menuBar.turnmanager");
         menu.setOpaque(false);
         menu.setMnemonic(KeyEvent.VK_M);
+        menu.add(getMenuItem(OpenTurnManagerAction.id));
 
         add(menu);
     }
