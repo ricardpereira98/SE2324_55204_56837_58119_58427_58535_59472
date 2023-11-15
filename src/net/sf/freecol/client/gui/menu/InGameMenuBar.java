@@ -152,6 +152,7 @@ public class InGameMenuBar extends FreeColMenuBar {
         buildOrdersMenu();
         buildReportMenu();
         buildColopediaMenu();
+        buildTurnManagerMenu();
 
         if (FreeColDebugger.isInDebugMode(FreeColDebugger.DebugMode.MENUS)) {
             add(new DebugMenu(this.freeColClient));
@@ -308,6 +309,15 @@ public class InGameMenuBar extends FreeColMenuBar {
         add(menu);
     }
 
+    private void buildTurnManagerMenu() {
+        // --> TurnManager
+
+        JMenu menu = Utility.localizedMenu("menuBar.turnmanager");
+        menu.setOpaque(false);
+        menu.setMnemonic(KeyEvent.VK_M);
+
+        add(menu);
+    }
 
     // Override JComponent
 
