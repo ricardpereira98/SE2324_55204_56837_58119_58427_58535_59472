@@ -456,9 +456,7 @@ public final class ConnectController extends FreeColClientHolder {
      * @param port The port in which the server should listen for new clients.
      * @return True if the game is started successfully.
      */
-    public boolean startMultiplayerGame(Specification specification,
-                                        boolean publicServer,
-                                        InetAddress address,
+    public boolean startMultiplayerGame(Specification specification, boolean publicServer, InetAddress address,
                                         int port) {
         final FreeColClient fcc = getFreeColClient();
         fcc.setMapEditor(false);

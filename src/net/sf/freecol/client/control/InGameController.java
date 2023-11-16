@@ -1046,6 +1046,14 @@ public final class InGameController extends FreeColClientHolder {
         Unit active = getGUI().getActiveUnit();
         boolean ret = true;
 
+        //TODO: lilly
+       /* if (getGame().getTurn().isFirstTurn())
+        {
+            player.addStartTutorial();
+            nextModelMessage();
+        }
+        */
+
         // Ensure the goto mode sticks.
         moveMode = moveMode.maximize(MoveMode.EXECUTE_GOTO_ORDERS);
 
@@ -1177,6 +1185,14 @@ public final class InGameController extends FreeColClientHolder {
         Location destination = unit.getDestination();
         PathNode path;
         boolean ret;
+
+        //TODO :Lilly
+        /*if (getGame().getTurn().getNumber() == 1)
+        {
+            player.addStartTutorial();
+        }
+        igc().nextModelMessage();
+*/
         if (!requireOurTurn()
             || unit.isAtSea()
             || unit.getMovesLeft() <= 0
@@ -1691,6 +1707,7 @@ public final class InGameController extends FreeColClientHolder {
      */
     private boolean moveDisembark(Unit unit, final Direction direction) {
         final Tile tile = unit.getTile().getNeighbourOrNull(direction);
+
         if (tile.getFirstUnit() != null
             && tile.getFirstUnit().getOwner() != unit.getOwner()) {
             return false; // Can not disembark onto other nation units.

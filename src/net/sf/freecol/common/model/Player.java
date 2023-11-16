@@ -2727,15 +2727,15 @@ public class Player extends FreeColGameObject implements Nameable {
         String sailTag = (tile == null) ? "unknown"
             : (tile.getX() < tile.getMap().getWidth() / 2) ? "east"
             : "west";
-        addModelMessage(new ModelMessage(ModelMessage.MessageType.TUTORIAL,
-                                         "model.player.startGame", this)
-            .addTagged("%direction%", sailTag));
-        }
 
-    public void addStartTutorial (){
-        //TODO: LILY
-        addModelMessage(new ModelMessage(ModelMessage.MessageType.TUTORIAL, "startTutorial", this));
+        addModelMessage(new ModelMessage(ModelMessage.MessageType.TUTORIAL, "model.player.startGame", this)
+            .addTagged("%direction%", sailTag));
+
+
+        //TODO: lilly
+        addModelMessage(new ModelMessage(ModelMessage.MessageType.TUTORIAL, "startTutorial", this).);
     }
+
 
     /**
      * Get the history events for this player.
