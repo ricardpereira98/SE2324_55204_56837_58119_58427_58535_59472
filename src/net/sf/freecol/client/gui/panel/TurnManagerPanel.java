@@ -25,8 +25,6 @@ package net.sf.freecol.client.gui.panel;
 
         import net.miginfocom.swing.MigLayout;
         import net.sf.freecol.client.FreeColClient;
-        import net.sf.freecol.client.gui.panel.FreeColPanel;
-        import net.sf.freecol.client.gui.panel.MigPanel;
         import net.sf.freecol.client.gui.panel.report.ReportPanel;
         import net.sf.freecol.common.i18n.Messages;
         import net.sf.freecol.common.model.Colony;
@@ -59,7 +57,7 @@ public final class TurnManagerPanel extends ReportPanel {
                             .getSmallUnitTypeImage(unitType, (count == 0)))),
                     "spany 2");
             add(new JLabel(Messages.getName(unitType)));
-            add(new JLabel(Integer.toString(count)));
+
             setPreferredSize(getPreferredSize());
         }
 
@@ -118,7 +116,7 @@ public final class TurnManagerPanel extends ReportPanel {
      * @param freeColClient The enclosing {@code FreeColClient}.
      */
     public TurnManagerPanel(FreeColClient freeColClient) {
-        super(freeColClient, "reportLabourAction");
+        super(freeColClient, "TurnManagerPanel");
 
         final Player player = getMyPlayer();
         this.data = new HashMap<>();
@@ -154,10 +152,10 @@ public final class TurnManagerPanel extends ReportPanel {
 
         DefaultListModel<ManagerPanel> model
                 = new DefaultListModel<>();
-        for (UnitType unitType : getSpecification().getUnitTypeList()) {
-            if (unitType.isPerson() && unitType.isAvailableTo(player)) {
-                int count = this.unitCount.getCount(unitType);
-                model.addElement(new ManagerPanel(freeColClient, unitType, count));
+        for (Unit unit : player.getUnitSet()) {
+            if (unit.couldMove()) {
+                int count = this.unitCount.getCount(unit.getType());
+                model.addElement(new ManagerPanel(freeColClient, unit.getType(), count));
             }
         }
         Action selectAction = new AbstractAction() {
