@@ -2411,7 +2411,7 @@ public class SwingGUI extends GUI {
      */
     @Override
     public FreeColPanel showTurnManagerWindow() {
-        return this.widgets.showReportHistoryPanel();
+        return this.widgets.showTurnManagerPanel();
     }
 
     /**

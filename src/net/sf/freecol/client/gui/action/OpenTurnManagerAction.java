@@ -29,7 +29,7 @@ import net.sf.freecol.client.FreeColClient;
  */
 public class OpenTurnManagerAction extends FreeColAction {
 
-    public static final String id = "reportHistoryAction";//"openTurnManagerAction";
+    public static final String id = "openTurnManagerAction";
 
 
     /**
