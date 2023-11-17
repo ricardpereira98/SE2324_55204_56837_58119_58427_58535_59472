@@ -42,7 +42,7 @@ import static net.sf.freecol.common.util.CollectionUtils.transform;
 import static net.sf.freecol.common.util.StringUtils.getEnumKey;
 import static net.sf.freecol.common.util.StringUtils.lastPart;
 
-import java.awt.Color;
+import java.awt.*;
 import java.awt.image.BufferedImage;
 import java.util.ArrayList;
 import java.util.Collection;
@@ -74,6 +74,8 @@ import net.sf.freecol.common.networking.ChangeSet;
 import net.sf.freecol.common.networking.Connection;
 import net.sf.freecol.common.option.GameOptions;
 import net.sf.freecol.common.option.OptionGroup;
+import net.sf.freecol.common.resources.ImageCache;
+import net.sf.freecol.common.resources.ImageResource;
 import net.sf.freecol.common.util.LogBuilder;
 import net.sf.freecol.common.util.Utils;
 
@@ -2739,24 +2741,31 @@ public class Player extends FreeColGameObject implements Nameable {
     //TODO: lilly
     public void addtartTutorial()
     {
-        public ImageIcon getObjectImageIcon(FreeColObject display)
-        final ImageLibrary lib = getImageLibrary();
-        this.getUnitByName("naval");
-        BufferedImage image =  ImageLibrary.getPathImage(ImageLibrary.PathType.NAVAL);
-        addModelMessage(new ModelMessage(ModelMessage.MessageType.TUTORIAL, "testing", this, this.getDisplayObject()));
-        this.getUnits();
+        //ImageResource ship = ImageCache.getImageResource("image.unit.model.unit.caravel");
+        //ship.getImage()
+        //BufferedImage image =  ImageLibrary.getPathImage(ImageLibrary.PathType.NAVAL);
+        //Colony colony = this.getName();
+        //Unit unit;
+        invokeLater(() ->
+                getGUI().showFirstContactDialog(player, other, tile, n,
+                        (Boolean b) -> firstContact(player, other, tile, b)));
 
-        addModelMessage(new ModelMessage(ModelMessage.MessageType.TUTORIAL, "startTutorial.intro", this));
+        addModelMessage(new ModelMessage(ModelMessage.MessageType.TUTORIAL, "testing", this));
+
+        //this.getUnits();
+
+       /* addModelMessage(new ModelMessage(ModelMessage.MessageType.TUTORIAL, "startTutorial.intro", this));
             addModelMessage(new ModelMessage(ModelMessage.MessageType.TUTORIAL, "startTutorial.missao", this));
             addModelMessage(new ModelMessage(ModelMessage.MessageType.TUTORIAL, "startTutorial.navegacao", this));
             addModelMessage(new ModelMessage(ModelMessage.MessageType.TUTORIAL, "startTutorial.elementos", this));
             addModelMessage(new ModelMessage(ModelMessage.MessageType.TUTORIAL, "startTutorial.prosseguir", this));
             addModelMessage(new ModelMessage(ModelMessage.MessageType.TUTORIAL, "startTutorial.conselho", this));
             addModelMessage(new ModelMessage(ModelMessage.MessageType.TUTORIAL, "startTutorial.sorte", this));
-            
+            */
     }
     public void addTeste ()
     {
+
         addModelMessage(new ModelMessage(ModelMessage.MessageType.TUTORIAL , "startTutorial", this));
     }
 
