@@ -61,6 +61,7 @@ public class ModelMessage extends StringTemplate {
         MARKET_PRICES("model.option.guiShowMarketPrices"),
         MISSING_GOODS("model.option.guiShowMissingGoods"),
         SONS_OF_LIBERTY("model.option.guiShowSonsOfLiberty"),
+
         TUTORIAL("model.option.guiShowTutorial"),
         UNIT_ADDED("model.option.guiShowUnitAdded"),
         UNIT_ARRIVED("model.option.guiShowUnitArrived"),

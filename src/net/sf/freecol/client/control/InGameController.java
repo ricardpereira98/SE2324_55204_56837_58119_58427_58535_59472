@@ -224,6 +224,7 @@ public final class InGameController extends FreeColClientHolder {
         return false;
     }
 
+
     /**
      * Convenience function to find an adjacent settlement.  Intended
      * to be called in contexts where we are expecting a settlement to
@@ -1046,13 +1047,8 @@ public final class InGameController extends FreeColClientHolder {
         Unit active = getGUI().getActiveUnit();
         boolean ret = true;
 
-        //TODO: lilly
-       /* if (getGame().getTurn().isFirstTurn())
-        {
-            player.addStartTutorial();
-            nextModelMessage();
-        }
-        */
+
+
 
         // Ensure the goto mode sticks.
         moveMode = moveMode.maximize(MoveMode.EXECUTE_GOTO_ORDERS);
@@ -1070,6 +1066,8 @@ public final class InGameController extends FreeColClientHolder {
                 break;
             }
         }
+
+
         if (!messages.isEmpty()) {
             turnReportMessages.addAll(messages);
             for (ModelMessage m : messages) player.addModelMessage(m);
@@ -5399,5 +5397,17 @@ public final class InGameController extends FreeColClientHolder {
             updateGUI(null, false);
         }
         return ret;
+    }
+
+    public void tutorialStart()
+    {
+        final Game game = getGame();
+        final Turn currTurn = game.getTurn();
+        final Player player = getMyPlayer();
+        if (currTurn.isFirstTurn()) {
+            player.addModelMessage(new ModelMessage(ModelMessage.MessageType.TUTORIAL,
+                    "startTutorial", player));
+        }
+
     }
 }
