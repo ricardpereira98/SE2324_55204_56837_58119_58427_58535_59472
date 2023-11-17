@@ -1048,8 +1048,6 @@ public final class InGameController extends FreeColClientHolder {
         boolean ret = true;
 
 
-
-
         // Ensure the goto mode sticks.
         moveMode = moveMode.maximize(MoveMode.EXECUTE_GOTO_ORDERS);
 
@@ -1184,13 +1182,7 @@ public final class InGameController extends FreeColClientHolder {
         PathNode path;
         boolean ret;
 
-        //TODO :Lilly
-        /*if (getGame().getTurn().getNumber() == 1)
-        {
-            player.addStartTutorial();
-        }
-        igc().nextModelMessage();
-*/
+
         if (!requireOurTurn()
             || unit.isAtSea()
             || unit.getMovesLeft() <= 0

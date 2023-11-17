@@ -43,6 +43,7 @@ import static net.sf.freecol.common.util.StringUtils.getEnumKey;
 import static net.sf.freecol.common.util.StringUtils.lastPart;
 
 import java.awt.Color;
+import java.awt.image.BufferedImage;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
@@ -59,8 +60,10 @@ import java.util.logging.Logger;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
+import javax.swing.*;
 import javax.xml.stream.XMLStreamException;
 
+import net.sf.freecol.client.gui.ImageLibrary;
 import net.sf.freecol.common.debug.FreeColDebugger;
 import net.sf.freecol.common.i18n.Messages;
 import net.sf.freecol.common.i18n.NameCache;
@@ -2736,15 +2739,16 @@ public class Player extends FreeColGameObject implements Nameable {
     //TODO: lilly
     public void addtartTutorial()
     {
-        this.getUnits();
-
-        addModelMessage(new ModelMessage(ModelMessage.MessageType.TUTORIAL, "startTutorial", this));
+        public ImageIcon getObjectImageIcon(FreeColObject display)
+        final ImageLibrary lib = getImageLibrary();
+        this.getUnitByName("naval");
+        BufferedImage image =  ImageLibrary.getPathImage(ImageLibrary.PathType.NAVAL);
+        addModelMessage(new ModelMessage(ModelMessage.MessageType.TUTORIAL, "testing", this, this.getDisplayObject()));
     }
 
     public void addTeste ()
     {
-        addModelMessage(new ModelMessage(ModelMessage.MessageType.  , "startTutorial", this));
-
+        addModelMessage(new ModelMessage(ModelMessage.MessageType.TUTORIAL , "startTutorial", this));
     }
 
 
