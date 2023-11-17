@@ -2734,7 +2734,7 @@ public class Player extends FreeColGameObject implements Nameable {
 
         addModelMessage(new ModelMessage(ModelMessage.MessageType.TUTORIAL, "model.player.startGame", this)
            .addTagged("%direction%", sailTag));
-
+    
        }
     //TODO: lilly
     public void addtartTutorial()
@@ -2744,8 +2744,17 @@ public class Player extends FreeColGameObject implements Nameable {
         this.getUnitByName("naval");
         BufferedImage image =  ImageLibrary.getPathImage(ImageLibrary.PathType.NAVAL);
         addModelMessage(new ModelMessage(ModelMessage.MessageType.TUTORIAL, "testing", this, this.getDisplayObject()));
-    }
+        this.getUnits();
 
+        addModelMessage(new ModelMessage(ModelMessage.MessageType.TUTORIAL, "startTutorial.intro", this));
+            addModelMessage(new ModelMessage(ModelMessage.MessageType.TUTORIAL, "startTutorial.missao", this));
+            addModelMessage(new ModelMessage(ModelMessage.MessageType.TUTORIAL, "startTutorial.navegacao", this));
+            addModelMessage(new ModelMessage(ModelMessage.MessageType.TUTORIAL, "startTutorial.elementos", this));
+            addModelMessage(new ModelMessage(ModelMessage.MessageType.TUTORIAL, "startTutorial.prosseguir", this));
+            addModelMessage(new ModelMessage(ModelMessage.MessageType.TUTORIAL, "startTutorial.conselho", this));
+            addModelMessage(new ModelMessage(ModelMessage.MessageType.TUTORIAL, "startTutorial.sorte", this));
+            
+    }
     public void addTeste ()
     {
         addModelMessage(new ModelMessage(ModelMessage.MessageType.TUTORIAL , "startTutorial", this));
