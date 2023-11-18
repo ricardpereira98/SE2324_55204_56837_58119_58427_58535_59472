@@ -55,12 +55,11 @@ public final class TurnManagerPanel extends ReportPanel {
             this.unitType = unit.getType();
             setOpaque(false);
             add(new JLabel(new ImageIcon(freeColClient.getGUI().getFixedImageLibrary()
-                            .getSmallUnitTypeImage(unitType, (count == 0)))),
+                            .getSmallUnitTypeImage(unitType, (count == 1)))),
                     "spany 2");
             add(new JLabel(Messages.getName(unitType)));
+            add(new JLabel("Moves: " + unit.getMovesLeft()));
 
-            Button freeButton = new Button("freeButton");
-            //add(new JLabel(freeButton).setText(Messages.message("FREE")));
             if(unit.getState().getKey().equals("unitState.active"))
                 add(new JLabel("SKIP"));
             else
@@ -116,6 +115,8 @@ public final class TurnManagerPanel extends ReportPanel {
     /** A list of panels for the unit types. */
     private JList<ManagerPanel> panelList = null;
 
+    private DefaultListModel<ManagerPanel> model;
+
 
     /**
      * The constructor that will add the items to this panel.
@@ -157,18 +158,11 @@ public final class TurnManagerPanel extends ReportPanel {
 
         this.colonies = player.getColonyList();
 
-        DefaultListModel<ManagerPanel> model
-                = new DefaultListModel<>();
-        for (Unit unit : player.getUnitSet()) {
-            if (!unit.isInEurope() && !unit.isOnCarrier()) {
-                int count = this.unitCount.getCount(unit.getType());
-                model.addElement(new ManagerPanel(freeColClient, unit, count));
-            }
-        }
+        update(freeColClient);
         Action selectAction = new AbstractAction() {
             @Override
             public void actionPerformed(ActionEvent ae) {
-                toggleState();
+                toggleState(getFreeColClient() );
             }
         };
         Action quitAction = new AbstractAction() {
@@ -189,7 +183,7 @@ public final class TurnManagerPanel extends ReportPanel {
         this.panelList.addMouseListener(new MouseAdapter() {
             @Override
             public void mouseClicked(MouseEvent e) {
-                toggleState();
+                toggleState(getFreeColClient());
             }
         });
         this.panelList.setOpaque(false);
@@ -200,23 +194,27 @@ public final class TurnManagerPanel extends ReportPanel {
         this.scrollPane.setViewportView(this.panelList);
     }
 
-    private void toggleState() {
-        /*UnitType unitType = panelList.getSelectedValue()
-               // .unitType;
+    private void update(FreeColClient freeColClient) {
+        reportPanel.removeAll();
 
-        if (unitCount.getCount(unitType) == 0) {
-            // No details to be displayed: Ignore.
-            return;
+        Player player = freeColClient.getMyPlayer();
+
+        model = new DefaultListModel<>();
+        for (Unit unit : player.getUnitSet()) {
+            if (!unit.isInEurope() && !unit.isOnCarrier()) {
+                model.addElement(new ManagerPanel(freeColClient, unit, 0));
+            }
         }
+    }
 
-        //getGUI().showReportLabourDetailPanel(unitType, this.data,
-               // this.unitCount, this.colonies);*/
-
+    private void toggleState(FreeColClient freeColClient) {
         Unit unit = panelList.getSelectedValue().unit;
         if(unit.getState().getKey().equals("unitState.active"))
-            unit.setState(SKIPPED);
+            unit.setState(Unit.UnitState.SKIPPED);
         else
-            unit.setState(ACTIVE);
+            unit.setState(Unit.UnitState.ACTIVE);
+
+        update(freeColClient);
     }
 
 
