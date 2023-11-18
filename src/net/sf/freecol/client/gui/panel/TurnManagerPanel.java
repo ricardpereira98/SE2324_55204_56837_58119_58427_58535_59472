@@ -57,8 +57,10 @@ public final class TurnManagerPanel extends ReportPanel {
             add(new JLabel(new ImageIcon(freeColClient.getGUI().getFixedImageLibrary()
                             .getSmallUnitTypeImage(unitType, (count == 1)))),
                     "spany 2");
-            add(new JLabel(Messages.getName(unitType)));
-            add(new JLabel("Moves: " + unit.getMovesLeft()));
+            //add(new JLabel(Messages.getName(unitType)));
+            add(new JLabel(unit.getDescription(Unit.UnitLabelType.NATIONAL)));
+            add(new JLabel("Moves: " + unit.getMovesAsString()));
+
 
             if(unit.getState().getKey().equals("unitState.active"))
                 add(new JLabel("SKIP"));
