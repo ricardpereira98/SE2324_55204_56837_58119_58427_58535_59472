@@ -1,11 +1,6 @@
 package net.sf.freecol.client.gui.panel;
 
-        import java.awt.AlphaComposite;
-        import java.awt.Color;
-        import java.awt.Component;
-        import java.awt.Composite;
-        import java.awt.Graphics;
-        import java.awt.Graphics2D;
+        import java.awt.*;
         import java.awt.event.ActionEvent;
         import java.awt.event.MouseAdapter;
         import java.awt.event.MouseEvent;
@@ -22,8 +17,8 @@ package net.sf.freecol.client.gui.panel;
         import javax.swing.KeyStroke;
         import javax.swing.ListCellRenderer;
         import javax.swing.ListSelectionModel;
-
         import net.miginfocom.swing.MigLayout;
+        import net.sf.freecol.FreeCol;
         import net.sf.freecol.client.FreeColClient;
         import net.sf.freecol.client.gui.panel.report.ReportPanel;
         import net.sf.freecol.common.i18n.Messages;
@@ -33,6 +28,9 @@ package net.sf.freecol.client.gui.panel;
         import net.sf.freecol.common.model.TypeCountMap;
         import net.sf.freecol.common.model.Unit;
         import net.sf.freecol.common.model.UnitType;
+
+        import static net.sf.freecol.common.model.Unit.UnitState.ACTIVE;
+        import static net.sf.freecol.common.model.Unit.UnitState.SKIPPED;
 
 
 /**
@@ -46,18 +44,27 @@ public final class TurnManagerPanel extends ReportPanel {
         public boolean selected;
         public final UnitType unitType;
 
+        public final Unit unit;
 
-        public ManagerPanel(FreeColClient freeColClient, UnitType unitType,
+
+        public ManagerPanel(FreeColClient freeColClient, Unit unit,
                                int count) {
             super(new MigLayout("wrap 2", "[60, right][left]"));
 
-            this.unitType = unitType;
+            this.unit = unit;
+            this.unitType = unit.getType();
             setOpaque(false);
             add(new JLabel(new ImageIcon(freeColClient.getGUI().getFixedImageLibrary()
                             .getSmallUnitTypeImage(unitType, (count == 0)))),
                     "spany 2");
             add(new JLabel(Messages.getName(unitType)));
 
+            Button freeButton = new Button("freeButton");
+            //add(new JLabel(freeButton).setText(Messages.message("FREE")));
+            if(unit.getState().getKey().equals("unitState.active"))
+                add(new JLabel("SKIP"));
+            else
+                add(new JLabel("FREE"));
             setPreferredSize(getPreferredSize());
         }
 
@@ -153,15 +160,15 @@ public final class TurnManagerPanel extends ReportPanel {
         DefaultListModel<ManagerPanel> model
                 = new DefaultListModel<>();
         for (Unit unit : player.getUnitSet()) {
-            if (unit.couldMove()) {
+            if (!unit.isInEurope() && !unit.isOnCarrier()) {
                 int count = this.unitCount.getCount(unit.getType());
-                model.addElement(new ManagerPanel(freeColClient, unit.getType(), count));
+                model.addElement(new ManagerPanel(freeColClient, unit, count));
             }
         }
         Action selectAction = new AbstractAction() {
             @Override
             public void actionPerformed(ActionEvent ae) {
-                showDetails();
+                toggleState();
             }
         };
         Action quitAction = new AbstractAction() {
@@ -182,7 +189,7 @@ public final class TurnManagerPanel extends ReportPanel {
         this.panelList.addMouseListener(new MouseAdapter() {
             @Override
             public void mouseClicked(MouseEvent e) {
-                showDetails();
+                toggleState();
             }
         });
         this.panelList.setOpaque(false);
@@ -193,17 +200,23 @@ public final class TurnManagerPanel extends ReportPanel {
         this.scrollPane.setViewportView(this.panelList);
     }
 
-    private void showDetails() {
-        UnitType unitType = panelList.getSelectedValue()
-                .unitType;
+    private void toggleState() {
+        /*UnitType unitType = panelList.getSelectedValue()
+               // .unitType;
 
         if (unitCount.getCount(unitType) == 0) {
             // No details to be displayed: Ignore.
             return;
         }
 
-        getGUI().showReportLabourDetailPanel(unitType, this.data,
-                this.unitCount, this.colonies);
+        //getGUI().showReportLabourDetailPanel(unitType, this.data,
+               // this.unitCount, this.colonies);*/
+
+        Unit unit = panelList.getSelectedValue().unit;
+        if(unit.getState().getKey().equals("unitState.active"))
+            unit.setState(SKIPPED);
+        else
+            unit.setState(ACTIVE);
     }
 
 
