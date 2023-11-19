@@ -34,59 +34,40 @@ package net.sf.freecol.client.gui.panel;
 
 
 /**
- * This panel displays the Labour Report.
+ * This panel displays the Turn Manager.
  */
 public final class TurnManagerPanel extends ReportPanel {
 
-    /** An individual unit type panel. */
+    /** An individual unit panel. */
     private static class ManagerPanel extends MigPanel {
 
         public boolean selected;
-        public final UnitType unitType;
-
         public final Unit unit;
 
 
-        public ManagerPanel(FreeColClient freeColClient, Unit unit,
-                               int count) {
+        public ManagerPanel(FreeColClient freeColClient, Unit unit) {
             super(new MigLayout("wrap 2", "[60, right][left]"));
 
             this.unit = unit;
-            this.unitType = unit.getType();
+
             setOpaque(false);
             add(new JLabel(new ImageIcon(freeColClient.getGUI().getFixedImageLibrary()
-                            .getSmallUnitTypeImage(unitType, (count == 1)))),
+                            .getSmallUnitTypeImage(unit.getType(), false))),
                     "spany 2");
-            //add(new JLabel(Messages.getName(unitType)));
+
             add(new JLabel(unit.getDescription(Unit.UnitLabelType.NATIONAL)));
             add(new JLabel("Moves: " + unit.getMovesAsString()));
 
-
             if(unit.getState().getKey().equals("unitState.active"))
-                add(new JLabel("SKIP"));
+                add(new JLabel("SKIP UNIT"));
             else
-                add(new JLabel("FREE"));
+                add(new JLabel("ACTIVATE UNIT"));
+
             setPreferredSize(getPreferredSize());
-        }
-
-
-        @Override
-        public void paintComponent(Graphics g) {
-            if (selected) {
-                Graphics2D g2d = (Graphics2D) g;
-                Composite oldComposite = g2d.getComposite();
-                Color oldColor = g2d.getColor();
-                g2d.setComposite(AlphaComposite.getInstance(AlphaComposite.SRC_OVER, 0.1f));
-                g2d.setColor(Color.BLACK);
-                g2d.fillRect(0, 0, getWidth(), getHeight());
-                g2d.setComposite(oldComposite);
-                g2d.setColor(oldColor);
-            }
-            super.paintComponent(g);
         }
     }
 
-    /** A renderer for the labour unit panels. */
+    /** A renderer for the unit panels. */
     private static class ManagerPanelRenderer
             implements ListCellRenderer<ManagerPanel> {
 
@@ -104,19 +85,10 @@ public final class TurnManagerPanel extends ReportPanel {
         }
     }
 
+    /** A list of panels for the player units. */
+    private JList<ManagerPanel> panelList;
 
-    /** The map of unit type to location and count. */
-    private final java.util.Map<UnitType, java.util.Map<Location, Integer>> data;
-
-    /** A map of count by unit type. */
-    private final TypeCountMap<UnitType> unitCount;
-
-    /** The player colonies. */
-    private final List<Colony> colonies;
-
-    /** A list of panels for the unit types. */
-    private JList<ManagerPanel> panelList = null;
-
+    /** A model based on the player units list. */
     private DefaultListModel<ManagerPanel> model;
 
 
@@ -128,39 +100,21 @@ public final class TurnManagerPanel extends ReportPanel {
     public TurnManagerPanel(FreeColClient freeColClient) {
         super(freeColClient, "TurnManagerPanel");
 
-        final Player player = getMyPlayer();
-        this.data = new HashMap<>();
-        this.unitCount = new TypeCountMap<>();
-        for (Unit unit : player.getUnitSet()) {
-            UnitType type = unit.getType();
-            this.unitCount.incrementCount(type, 1);
-            Map<Location, Integer> unitMap = this.data.get(type);
-            if (unitMap == null) {
-                unitMap = new HashMap<>();
-                this.data.put(type, unitMap);
-            }
+        update(freeColClient);
+    }
 
-            Location location = unit.getLocation();
-            if (location == null) {
-                logger.warning("Unit has null location: " + unit);
-            } else if (location.getSettlement() != null) {
-                location = location.getSettlement();
-            } else if (unit.isInEurope()) {
-                location = player.getEurope();
-            } else if (location.getTile() != null) {
-                location = location.getTile();
-            }
-            Integer count = unitMap.get(location);
-            if (count == null) {
-                unitMap.put(location, 1);
-            } else {
-                unitMap.put(location, count + 1);
+
+    /** The function that will handle the construction of the list. */
+    private void update(FreeColClient freeColClient) {
+        Player player = freeColClient.getMyPlayer();
+
+        model = new DefaultListModel<>();
+        for (Unit unit : player.getUnitSet()) {
+            if (!unit.isInEurope() && !unit.isOnCarrier()) {
+                model.addElement(new ManagerPanel(freeColClient, unit));
             }
         }
 
-        this.colonies = player.getColonyList();
-
-        update(freeColClient);
         Action selectAction = new AbstractAction() {
             @Override
             public void actionPerformed(ActionEvent ae) {
@@ -196,21 +150,9 @@ public final class TurnManagerPanel extends ReportPanel {
         this.scrollPane.setViewportView(this.panelList);
     }
 
-    private void update(FreeColClient freeColClient) {
-        reportPanel.removeAll();
-
-        Player player = freeColClient.getMyPlayer();
-
-        model = new DefaultListModel<>();
-        for (Unit unit : player.getUnitSet()) {
-            if (!unit.isInEurope() && !unit.isOnCarrier()) {
-                model.addElement(new ManagerPanel(freeColClient, unit, 0));
-            }
-        }
-    }
-
     private void toggleState(FreeColClient freeColClient) {
         Unit unit = panelList.getSelectedValue().unit;
+
         if(unit.getState().getKey().equals("unitState.active"))
             unit.setState(Unit.UnitState.SKIPPED);
         else
@@ -228,12 +170,7 @@ public final class TurnManagerPanel extends ReportPanel {
     @Override
     public void actionPerformed(ActionEvent ae) {
         final String command = ae.getActionCommand();
-        if (FreeColPanel.OK.equals(command)) {
+        if (FreeColPanel.OK.equals(command))
             super.actionPerformed(ae);
-        } else {
-            UnitType unitType = getSpecification().getUnitType(command);
-            getGUI().showReportLabourDetailPanel(unitType, this.data,
-                    this.unitCount, this.colonies);
-        }
     }
 }
