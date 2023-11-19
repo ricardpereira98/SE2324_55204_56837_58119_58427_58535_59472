@@ -62,7 +62,6 @@ import net.sf.freecol.common.util.Introspector;
 import net.sf.freecol.common.util.LogBuilder;
 import net.sf.freecol.common.util.Utils;
 
-
 /**
  * The main component of the game model.
  */
@@ -74,15 +73,15 @@ public class Game extends FreeColGameObject {
 
     /** Reasons for logging out. */
     public static enum LogoutReason {
-        DEFEATED,   // Game over, player lost
-        LOGIN,      // Logging in again FIXME: this should go away
-        LOGOUT,     // Player quits but game continues
+        DEFEATED, // Game over, player lost
+        LOGIN, // Logging in again FIXME: this should go away
+        LOGOUT, // Player quits but game continues
         MAIN_TITLE, // Complete reset back to the MainPanel
-        NEW_GAME,   // Part reset back to the NewPanel
-        QUIT,       // Player quits and whole game is over
-        RECONNECT,  // Implement reconnect
+        NEW_GAME, // Part reset back to the NewPanel
+        QUIT, // Player quits and whole game is over
+        RECONNECT, // Implement reconnect
     };
-    
+
     /** State for the FCGO iterator, out here because it has to be static. */
     private static enum FcgoState {
         INVALID,
@@ -91,57 +90,53 @@ public class Game extends FreeColGameObject {
     };
 
     /** Map of all classes with corresponding server classes. */
-    private static final java.util.Map<Class<? extends FreeColObject>,
-                                       Class<? extends FreeColObject>>
-        serverClasses = new HashMap<>();
+    private static final java.util.Map<Class<? extends FreeColObject>, Class<? extends FreeColObject>> serverClasses = new HashMap<>();
     static {
         serverClasses.put(net.sf.freecol.common.model.Building.class,
-                          net.sf.freecol.server.model.ServerBuilding.class);
+                net.sf.freecol.server.model.ServerBuilding.class);
         serverClasses.put(net.sf.freecol.common.model.Colony.class,
-                          net.sf.freecol.server.model.ServerColony.class);
+                net.sf.freecol.server.model.ServerColony.class);
         serverClasses.put(net.sf.freecol.common.model.ColonyTile.class,
-                          net.sf.freecol.server.model.ServerColonyTile.class);
+                net.sf.freecol.server.model.ServerColonyTile.class);
         serverClasses.put(net.sf.freecol.common.model.Europe.class,
-                          net.sf.freecol.server.model.ServerEurope.class);
+                net.sf.freecol.server.model.ServerEurope.class);
         serverClasses.put(net.sf.freecol.common.model.Game.class,
-                          net.sf.freecol.server.model.ServerGame.class);
+                net.sf.freecol.server.model.ServerGame.class);
         serverClasses.put(net.sf.freecol.common.model.IndianSettlement.class,
-                          net.sf.freecol.server.model.ServerIndianSettlement.class);
+                net.sf.freecol.server.model.ServerIndianSettlement.class);
         serverClasses.put(net.sf.freecol.common.model.Region.class,
-                          net.sf.freecol.server.model.ServerRegion.class);
+                net.sf.freecol.server.model.ServerRegion.class);
         serverClasses.put(net.sf.freecol.common.model.Player.class,
-                          net.sf.freecol.server.model.ServerPlayer.class);
+                net.sf.freecol.server.model.ServerPlayer.class);
         serverClasses.put(net.sf.freecol.common.model.Unit.class,
-                          net.sf.freecol.server.model.ServerUnit.class);
+                net.sf.freecol.server.model.ServerUnit.class);
     };
 
     /**
      * Map of class name to class for the location classes, to speed
      * up game loading.
      */
-    private static final java.util.Map<String, Class<? extends FreeColGameObject>>
-        locationClasses = new HashMap<>();
+    private static final java.util.Map<String, Class<? extends FreeColGameObject>> locationClasses = new HashMap<>();
     static {
         locationClasses.put("Building",
-                            net.sf.freecol.common.model.Building.class);
+                net.sf.freecol.common.model.Building.class);
         locationClasses.put("Colony",
-                            net.sf.freecol.common.model.Colony.class);
+                net.sf.freecol.common.model.Colony.class);
         locationClasses.put("ColonyTile",
-                            net.sf.freecol.common.model.ColonyTile.class);
+                net.sf.freecol.common.model.ColonyTile.class);
         locationClasses.put("Europe",
-                            net.sf.freecol.common.model.Europe.class);
+                net.sf.freecol.common.model.Europe.class);
         locationClasses.put("HighSeas",
-                            net.sf.freecol.common.model.HighSeas.class);
+                net.sf.freecol.common.model.HighSeas.class);
         locationClasses.put("IndianSettlement",
-                            net.sf.freecol.common.model.IndianSettlement.class);
+                net.sf.freecol.common.model.IndianSettlement.class);
         locationClasses.put("Map",
-                            net.sf.freecol.common.model.Map.class);
+                net.sf.freecol.common.model.Map.class);
         locationClasses.put("Tile",
-                            net.sf.freecol.common.model.Tile.class);
+                net.sf.freecol.common.model.Tile.class);
         locationClasses.put("Unit",
-                            net.sf.freecol.common.model.Unit.class);
+                net.sf.freecol.common.model.Unit.class);
     };
-
 
     /** The Specification this game uses. */
     private Specification specification = null;
@@ -168,7 +163,7 @@ public class Game extends FreeColGameObject {
     protected Map map = null;
 
     /**
-     * The current nation options.  Mainly used to see if a player
+     * The current nation options. Mainly used to see if a player
      * nation is available.
      */
     private NationOptions nationOptions = null;
@@ -184,7 +179,7 @@ public class Game extends FreeColGameObject {
 
     /** Initial active unit identifier. */
     private String initialActiveUnitId = null;
-    
+
     // Serialization not required below.
 
     /**
@@ -192,8 +187,7 @@ public class Game extends FreeColGameObject {
      * Serialization is not needed directly as these must be completely
      * within { players, unknownEnemy, map } which are directly serialized.
      */
-    protected final HashMap<String, WeakReference<FreeColGameObject>>
-        freeColGameObjects;
+    protected final HashMap<String, WeakReference<FreeColGameObject>> freeColGameObjects;
 
     /** The number of removed FCGOs that should trigger a cache clean. */
     private static final int REMOVE_GC_THRESHOLD = 64;
@@ -207,7 +201,6 @@ public class Game extends FreeColGameObject {
      * FIXME: is this better done with a property change listener?
      */
     protected FreeColGameObjectListener freeColGameObjectListener = null;
-
 
     /**
      * Root constructor for games.
@@ -251,23 +244,22 @@ public class Game extends FreeColGameObject {
      * Creates a new {@code Game} instance from a stream.
      *
      * @param game A base {@code Game} (not used here, this is a very
-     *     special case).
-     * @param xr The {@code FreeColXMLReader} to read from.
+     *             special case).
+     * @param xr   The {@code FreeColXMLReader} to read from.
      * @exception XMLStreamException if an error occurs
      */
-    public Game(@SuppressWarnings("unused")Game game,
-                FreeColXMLReader xr) throws XMLStreamException {
+    public Game(@SuppressWarnings("unused") Game game,
+            FreeColXMLReader xr) throws XMLStreamException {
         this();
-        
+
         readFromXML(xr);
     }
-
 
     /**
      * Special update handler for the pre-game update.
      *
      * When starting a new game the server sends an update that
-     * contains the game map.  This must be synchronized so that the
+     * contains the game map. This must be synchronized so that the
      * client does not race ahead and launch into the game before the
      * update completes.
      *
@@ -285,48 +277,49 @@ public class Game extends FreeColGameObject {
     /**
      * Instantiate an uninitialized FreeColGameObject within a game.
      *
-     * @param <T> The actual return type.
-     * @param game The {@code Game} to instantiate in.
+     * @param <T>         The actual return type.
+     * @param game        The {@code Game} to instantiate in.
      * @param returnClass The required {@code FreeColObject} class.
-     * @param server Create a server object if possible.
+     * @param server      Create a server object if possible.
      * @return The new uninitialized object, or null on error.
      */
     public static <T extends FreeColObject> T newInstance(Game game,
-                                                          Class<T> returnClass,
-                                                          boolean server) {
+            Class<T> returnClass,
+            boolean server) {
         // Do not restrict trying the full (Game,String) constructor
         // to just server objects as there are simpler FCOs that
         // implement it (e.g. Goods).
         if (server) {
             @SuppressWarnings("unchecked")
-            Class<T> sc = (Class<T>)serverClasses.get(returnClass);
-            if (sc != null) returnClass = sc;
+            Class<T> sc = (Class<T>) serverClasses.get(returnClass);
+            if (sc != null)
+                returnClass = sc;
         }
         try {
             return Introspector.instantiate(returnClass,
-                new Class[] { Game.class, String.class },
-                new Object[] { game, (String)null }); // No intern!
+                    new Class[] { Game.class, String.class },
+                    new Object[] { game, (String) null }); // No intern!
         } catch (Introspector.IntrospectorException ex) {
             ; // Allow another try on failure
         }
 
         if (game != null
-            && FreeColSpecObject.class.isAssignableFrom(returnClass)) {
+                && FreeColSpecObject.class.isAssignableFrom(returnClass)) {
             try {
                 return Introspector.instantiate(returnClass,
-                    new Class[] { Specification.class },
-                    new Object[] { game.getSpecification() });
+                        new Class[] { Specification.class },
+                        new Object[] { game.getSpecification() });
             } catch (Introspector.IntrospectorException ex) {
                 logger.log(Level.WARNING, "newInstance(spec) fail for: "
-                    + returnClass.getName(), ex);
+                        + returnClass.getName(), ex);
             }
         } else { // Or just use the trivial constructor
             try {
                 return Introspector.instantiate(returnClass,
-                    new Class[] {}, new Object[] {});
+                        new Class[] {}, new Object[] {});
             } catch (Introspector.IntrospectorException ex) {
                 logger.log(Level.WARNING, "newInstance(trivial) fail for: "
-                    + returnClass.getName(), ex);
+                        + returnClass.getName(), ex);
             }
         }
         return null;
@@ -363,7 +356,7 @@ public class Game extends FreeColGameObject {
      * Gets the map generator options associated with this game.
      *
      * @return An {@code OptionGroup} containing the map
-     *     generator options.
+     *         generator options.
      */
     public OptionGroup getMapGeneratorOptions() {
         return specification.getMapGeneratorOptions();
@@ -373,7 +366,7 @@ public class Game extends FreeColGameObject {
      * Sets the map generator options associated with this game.
      *
      * @param mgo An {@code OptionGroup} containing the map
-     *     generator options.
+     *            generator options.
      */
     public void setMapGeneratorOptions(OptionGroup mgo) {
         specification.setMapGeneratorOptions(mgo);
@@ -395,12 +388,14 @@ public class Game extends FreeColGameObject {
      * @return The game object, or null if not found.
      */
     public FreeColGameObject getFreeColGameObject(String id) {
-        if (id == null || id.isEmpty()) return null;
+        if (id == null || id.isEmpty())
+            return null;
         final WeakReference<FreeColGameObject> ro;
         synchronized (this.freeColGameObjects) {
             ro = freeColGameObjects.get(id);
         }
-        if (ro == null) return null;
+        if (ro == null)
+            return null;
         final FreeColGameObject o = ro.get();
         if (o == null) {
             removeFreeColGameObject(id, "missed");
@@ -413,13 +408,13 @@ public class Game extends FreeColGameObject {
      * Gets the {@code FreeColGameObject} with the specified
      * identifier and class.
      *
-     * @param <T> The actual return type.
-     * @param id The object identifier.
+     * @param <T>         The actual return type.
+     * @param id          The object identifier.
      * @param returnClass The expected class of the object.
      * @return The game object, or null if not found.
      */
     public <T extends FreeColGameObject> T getFreeColGameObject(String id,
-        Class<T> returnClass) {
+            Class<T> returnClass) {
         FreeColGameObject fcgo = getFreeColGameObject(id);
         try {
             return returnClass.cast(fcgo);
@@ -431,13 +426,13 @@ public class Game extends FreeColGameObject {
     /**
      * Set the mapping between object identifier and object.
      *
-     * @param id The object identifier.
+     * @param id   The object identifier.
      * @param fcgo The {@code FreeColGameObject} to add to this {@code Game}.
      */
     public void setFreeColGameObject(String id, FreeColGameObject fcgo) {
         if (id == null || id.isEmpty()) {
             throw new RuntimeException("Null/empty identifier: " + this);
-        } else  if (fcgo == null) {
+        } else if (fcgo == null) {
             throw new RuntimeException("Null FreeColGameObject: " + id);
         }
 
@@ -446,11 +441,11 @@ public class Game extends FreeColGameObject {
             this.freeColGameObjects.put(id, wr);
         }
     }
-        
+
     /**
      * Add a new {@code FreeColGameObject} with a given identifier.
      *
-     * @param id The object identifier.
+     * @param id   The object identifier.
      * @param fcgo The {@code FreeColGameObject} to add to this {@code Game}.
      */
     public void addFreeColGameObject(String id, FreeColGameObject fcgo) {
@@ -463,8 +458,8 @@ public class Game extends FreeColGameObject {
         final FreeColGameObject old = getFreeColGameObject(id);
         if (old != null) {
             throw new RuntimeException("Tried to replace FCGO "
-                + id + " : " + old.getClass()
-                + " with " + fcgo.getId() + " : " + fcgo.getClass());
+                    + id + " : " + old.getClass()
+                    + " with " + fcgo.getId() + " : " + fcgo.getClass());
         }
 
         setFreeColGameObject(id, fcgo);
@@ -475,7 +470,7 @@ public class Game extends FreeColGameObject {
      * Removes the {@code FreeColGameObject} with the specified
      * identifier.
      *
-     * @param id The object identifier.
+     * @param id     The object identifier.
      * @param reason A reason to remove the object.
      * @exception IllegalArgumentException If the identifier is null or empty.
      */
@@ -494,7 +489,8 @@ public class Game extends FreeColGameObject {
         if (++removeCount > REMOVE_GC_THRESHOLD) {
             synchronized (this.freeColGameObjects) {
                 Iterator<FreeColGameObject> iter = getFreeColGameObjectIterator();
-                while (iter.hasNext()) iter.next();
+                while (iter.hasNext())
+                    iter.next();
             }
             removeCount = 0;
         }
@@ -503,30 +499,31 @@ public class Game extends FreeColGameObject {
     /**
      * Update a {@code FreeColGameObject} from another.
      *
-     * @param <T> The type of object to update.
-     * @param other The other object.
+     * @param <T>    The type of object to update.
+     * @param other  The other object.
      * @param create If true, create the object if it is missing.
      * @return The resulting object after update.
      */
     public <T extends FreeColGameObject> T update(T other, boolean create) {
         return (other == null) ? null
-            : update(other, other.getFreeColObjectClass(), create);
+                : update(other, other.getFreeColObjectClass(), create);
     }
 
     /**
      * Update a {@code FreeColGameObject} from another, optionally allowing
      * missing objects to be created.
      *
-     * @param <T> The type of object to update.
-     * @param other The other object.
+     * @param <T>         The type of object to update.
+     * @param other       The other object.
      * @param returnClass The expected class of the object.
-     * @param create If true, create missing objects.
+     * @param create      If true, create missing objects.
      * @return The resulting object after update.
      */
     private <T extends FreeColGameObject> T update(T other,
-                                                   Class<T> returnClass,
-                                                   boolean create) {
-        if (other == null) return null;
+            Class<T> returnClass,
+            boolean create) {
+        if (other == null)
+            return null;
         final String id = other.getId();
         FreeColGameObject fcgo = getFreeColGameObject(id);
         if (fcgo == null) {
@@ -536,7 +533,7 @@ public class Game extends FreeColGameObject {
             } else {
                 // Otherwise this is an error
                 logger.warning("Update of missing object: " + id
-                    + "\n" + net.sf.freecol.common.debug.FreeColDebugger.stackTraceToString());
+                        + "\n" + net.sf.freecol.common.debug.FreeColDebugger.stackTraceToString());
                 return null;
             }
         }
@@ -546,32 +543,35 @@ public class Game extends FreeColGameObject {
         } catch (ClassCastException cce) {
             // "Can not happen"
             throw new RuntimeException("Update class clash: " + fcgo.getClass()
-                + " / " + returnClass, cce);
+                    + " / " + returnClass, cce);
         }
         if (!t.copyIn(other)) {
             // "Can not happen"
             throw new RuntimeException("Update copy failed: " + id
-                + " onto " + t);
+                    + " onto " + t);
         }
-        if (create) t.internId(id);
+        if (create)
+            t.internId(id);
         return t;
     }
 
     /**
      * Convenience wrapper to update several {@code FreeColGameObject}s.
      *
-     * @param <T> The type of object to update.
-     * @param other The collection of objects to update.
+     * @param <T>    The type of object to update.
+     * @param other  The collection of objects to update.
      * @param create If true, create missing objects.
      * @return The resulting list of updated objects.
      */
     public <T extends FreeColGameObject> List<T> update(Collection<T> other,
-                                                        boolean create) {
-        if (other == null) return null;
+            boolean create) {
+        if (other == null)
+            return null;
         List<T> ret = new ArrayList<>();
         for (T t : other) {
             T nt = update(t, create);
-            if (nt != null) ret.add(nt);
+            if (nt != null)
+                ret.add(nt);
         }
         return ret;
     }
@@ -579,47 +579,50 @@ public class Game extends FreeColGameObject {
     /**
      * Update a {@code FreeColGameObject} from a reference to it in an update.
      *
-     * @param <T> The type of object to update.
+     * @param <T>   The type of object to update.
      * @param other The other object.
      * @return The resulting object after update.
      */
     public <T extends FreeColGameObject> T updateRef(T other) {
         return (other == null) ? null
-            : updateRef(other, other.getFreeColObjectClass());
+                : updateRef(other, other.getFreeColObjectClass());
     }
 
     /**
      * Update a {@code FreeColGameObject} from a reference to it in an update.
      *
-     * @param <T> The type of object to update.
-     * @param other The other object.
+     * @param <T>         The type of object to update.
+     * @param other       The other object.
      * @param returnClass The expected class of the object.
      * @return The resulting object after update.
      */
     private <T extends FreeColGameObject> T updateRef(T other,
-                                                      Class<T> returnClass) {
-        if (other == null) return null;
+            Class<T> returnClass) {
+        if (other == null)
+            return null;
         final String id = other.getId();
         return getFreeColGameObject(id, returnClass);
-    }        
+    }
 
     /**
      * Update several {@code FreeColGameObject}s from a list of
      * references to it in an update.
      *
-     * @param <T> The type of object to update.
+     * @param <T>   The type of object to update.
      * @param other The other object.
      * @return The resulting object after update.
      */
     public <T extends FreeColGameObject> List<T> updateRef(Collection<T> other) {
-        if (other == null) return null;
+        if (other == null)
+            return null;
         List<T> ret = new ArrayList<>();
         for (T t : other) {
             T nt = updateRef(t);
-            if (nt != null) ret.add(nt);
+            if (nt != null)
+                ret.add(nt);
         }
         return ret;
-    }        
+    }
 
     /**
      * Update a {@code Location} from a reference to it in an update.
@@ -629,7 +632,7 @@ public class Game extends FreeColGameObject {
      */
     public Location updateLocationRef(Location loc) {
         return (loc == null) ? null : findFreeColLocation(loc.getId());
-    }        
+    }
 
     /**
      * Convenience wrapper to find a location (which is an interface,
@@ -643,7 +646,7 @@ public class Game extends FreeColGameObject {
      */
     public Location findFreeColLocation(String id) {
         FreeColGameObject fcgo = getFreeColGameObject(id);
-        return (fcgo instanceof Location) ? (Location)fcgo : null;
+        return (fcgo instanceof Location) ? (Location) fcgo : null;
     }
 
     /**
@@ -651,35 +654,33 @@ public class Game extends FreeColGameObject {
      * {@code FreeColGameObject}.
      *
      * This {@code Iterator} should be iterated once in a while
-     * since it cleans the {@code FreeColGameObject} cache.  Very
+     * since it cleans the {@code FreeColGameObject} cache. Very
      * few routines call this any more, so there is a thresholded call
      * in removeFreeColGameObject to ensure the cache is still
-     * cleaned.  Reconsider this if the situation changes.
+     * cleaned. Reconsider this if the situation changes.
      *
      * Lock freeColGameObjects when using this.
      *
      * @return An {@code Iterator} containing every registered
-     *     {@code FreeColGameObject}.
+     *         {@code FreeColGameObject}.
      */
     private Iterator<FreeColGameObject> getFreeColGameObjectIterator() {
         return new Iterator<FreeColGameObject>() {
 
             /** An iterator over the freeColGameObjects map. */
-            private final Iterator<Entry<String,
-                                         WeakReference<FreeColGameObject>>> it
-                = freeColGameObjects.entrySet().iterator();
+            private final Iterator<Entry<String, WeakReference<FreeColGameObject>>> it = freeColGameObjects.entrySet()
+                    .iterator();
 
             /** Read ahead to this next entry. */
-            private Entry<String, WeakReference<FreeColGameObject>> readAhead
-                = null;
+            private Entry<String, WeakReference<FreeColGameObject>> readAhead = null;
 
             /** State of the readahead value. */
             private FcgoState fcgoState = FcgoState.INVALID;
 
-
             @Override
             public boolean hasNext() {
-                if (this.fcgoState == FcgoState.VALID) return true;
+                if (this.fcgoState == FcgoState.VALID)
+                    return true;
                 while (this.it.hasNext()) {
                     this.readAhead = this.it.next();
                     if (this.readAhead.getValue().get() != null) {
@@ -694,7 +695,8 @@ public class Game extends FreeColGameObject {
 
             @Override
             public FreeColGameObject next() {
-                if (!hasNext()) throw new NoSuchElementException();
+                if (!hasNext())
+                    throw new NoSuchElementException();
                 FreeColGameObject fcgo = this.readAhead.getValue().get();
                 this.fcgoState = FcgoState.CONSUMED;
                 return fcgo;
@@ -704,7 +706,7 @@ public class Game extends FreeColGameObject {
             public void remove() {
                 if (this.fcgoState == FcgoState.INVALID) {
                     throw new RuntimeException("No current entry: "
-                        + this.fcgoState);
+                            + this.fcgoState);
                 }
                 final String key = this.readAhead.getKey();
                 this.fcgoState = FcgoState.INVALID;
@@ -724,18 +726,19 @@ public class Game extends FreeColGameObject {
         List<FreeColGameObject> ret = new ArrayList<>();
         synchronized (this.freeColGameObjects) {
             Iterator<FreeColGameObject> iter = getFreeColGameObjectIterator();
-            while (iter.hasNext()) ret.add(iter.next());
+            while (iter.hasNext())
+                ret.add(iter.next());
         }
         return ret;
     }
 
     /**
-     * Gets the unique identifier for this game. 
+     * Gets the unique identifier for this game.
      * A game UUID persists in save game files.
      *
      * @return The game {@code UUID}.
      */
-    public UUID getUUID () {
+    public UUID getUUID() {
         return this.uuid;
     }
 
@@ -783,7 +786,8 @@ public class Game extends FreeColGameObject {
     private void setPlayers(List<Player> players) {
         synchronized (this.players) {
             this.players.clear();
-            if (players != null) this.players.addAll(players);
+            if (players != null)
+                this.players.addAll(players);
         }
     }
 
@@ -791,23 +795,26 @@ public class Game extends FreeColGameObject {
      * Gets the live player after the given player.
      *
      * @param beforePlayer The {@code Player} before the
-     *     {@code Player} to be returned.
+     *                     {@code Player} to be returned.
      * @return The {@code Player} after the {@code beforePlayer}
-     *     in the list which determines the order each player becomes the
-     *     current player.
+     *         in the list which determines the order each player becomes the
+     *         current player.
      * @see #getNextPlayer
      */
     private Player getPlayerAfter(Player beforePlayer) {
         synchronized (this.players) {
-            if (this.players.isEmpty()) return null;
+            if (this.players.isEmpty())
+                return null;
 
             final int start = this.players.indexOf(beforePlayer);
             int index = start;
             do {
-                if (++index >= this.players.size()) index = 0;
+                if (++index >= this.players.size())
+                    index = 0;
                 Player player = this.players.get(index);
                 if (!player.isUnknownEnemy()
-                    && !player.isDead()) return player;
+                        && !player.isDead())
+                    return player;
             } while (index != start);
         }
         return null;
@@ -820,7 +827,8 @@ public class Game extends FreeColGameObject {
      */
     public void addPlayer(Player player) {
         synchronized (this.players) {
-            if (!this.players.contains(player)) this.players.add(player);
+            if (!this.players.contains(player))
+                this.players.add(player);
         }
         Nation nation = getSpecification().getNation(player.getNationId());
         nationOptions.getNations().put(nation, NationState.NOT_AVAILABLE);
@@ -837,17 +845,19 @@ public class Game extends FreeColGameObject {
      */
     public boolean removePlayer(Player player) {
         Player newCurrent = (currentPlayer != player) ? null
-            : getPlayerAfter(currentPlayer);
+                : getPlayerAfter(currentPlayer);
 
         synchronized (this.players) {
-            if (!this.players.remove(player)) return false;
+            if (!this.players.remove(player))
+                return false;
         }
 
         Nation nation = getSpecification().getNation(player.getNationId());
         nationOptions.getNations().put(nation, NationState.AVAILABLE);
         player.dispose();
 
-        if (newCurrent != null) currentPlayer = newCurrent;
+        if (newCurrent != null)
+            currentPlayer = newCurrent;
         return true;
     }
 
@@ -873,7 +883,6 @@ public class Game extends FreeColGameObject {
         }
     }
 
-
     /**
      * Gets a player specified by a name.
      *
@@ -889,7 +898,7 @@ public class Game extends FreeColGameObject {
      *
      * @param nation The {@code Nation} to search for.
      * @return The {@code Player} of the given nation, or null if
-     *     not found.
+     *         not found.
      */
     public Player getPlayerByNation(Nation nation) {
         return getPlayerByNationId(nation.getId());
@@ -900,7 +909,7 @@ public class Game extends FreeColGameObject {
      *
      * @param nationId The nation identifier to search for.
      * @return The {@code Player} of the given nation, or null if
-     *     not found.
+     *         not found.
      */
     public Player getPlayerByNationId(String nationId) {
         return getPlayer(matchKeyEquals(nationId, Player::getNationId));
@@ -914,8 +923,7 @@ public class Game extends FreeColGameObject {
      * @return A list of live {@code Player}s, without the excluded ones.
      */
     public List<Player> getLivePlayerList(final Player... exclude) {
-        final Predicate<Player> livePred = p ->
-            !p.isUnknownEnemy() && !p.isDead() && !any(exclude, matchKey(p));
+        final Predicate<Player> livePred = p -> !p.isUnknownEnemy() && !p.isDead() && !any(exclude, matchKey(p));
         return getPlayerList(livePred);
     }
 
@@ -925,7 +933,7 @@ public class Game extends FreeColGameObject {
      *
      * @param exclude The {@code Player}s to exclude.
      * @return A stream of live {@code Player}s, without the
-     *     excluded ones.
+     *         excluded ones.
      */
     public Stream<Player> getLivePlayers(final Player... exclude) {
         return getLivePlayerList(exclude).stream();
@@ -936,11 +944,10 @@ public class Game extends FreeColGameObject {
      *
      * @param exclude {@code Player}s to exclude.
      * @return A list of live European {@code Player}s in this game,
-     *     without the excluded ones.
+     *         without the excluded ones.
      */
     public List<Player> getLiveEuropeanPlayerList(final Player... exclude) {
-        final Predicate<Player> europeanPred = p ->
-            !p.isUnknownEnemy() && !p.isDead() && p.isEuropean()
+        final Predicate<Player> europeanPred = p -> !p.isUnknownEnemy() && !p.isDead() && p.isEuropean()
                 && !any(exclude, matchKey(p));
         return getPlayerList(europeanPred);
     }
@@ -950,7 +957,7 @@ public class Game extends FreeColGameObject {
      *
      * @param exclude {@code Player}s to exclude.
      * @return A stream of live European {@code Player}s in this game,
-     *     without the excluded ones.
+     *         without the excluded ones.
      */
     public Stream<Player> getLiveEuropeanPlayers(final Player... exclude) {
         return getLiveEuropeanPlayerList(exclude).stream();
@@ -963,8 +970,7 @@ public class Game extends FreeColGameObject {
      * @return A list of live native {@code Player}s in this game.
      */
     public List<Player> getLiveNativePlayerList(final Player... exclude) {
-        final Predicate<Player> nativePred = p ->
-            !p.isUnknownEnemy() && !p.isDead() && p.isIndian()
+        final Predicate<Player> nativePred = p -> !p.isUnknownEnemy() && !p.isDead() && p.isIndian()
                 && !any(exclude, matchKey(p));
         return getPlayerList(nativePred);
     }
@@ -978,7 +984,7 @@ public class Game extends FreeColGameObject {
     public Stream<Player> getLiveNativePlayers(final Player... exclude) {
         return getLiveNativePlayerList(exclude).stream();
     }
-    
+
     /**
      * Gets the next current player.
      *
@@ -992,7 +998,7 @@ public class Game extends FreeColGameObject {
      * Add a list of players to this game.
      *
      * Called from the pre and in-game controllers when players change.
-     * ATM we never remove players, even dead ones.  Must tolerate player
+     * ATM we never remove players, even dead ones. Must tolerate player
      * being both present and not present.
      *
      * @param players The list of {@code players} to add.
@@ -1003,11 +1009,11 @@ public class Game extends FreeColGameObject {
             FreeColGameObject fcgo = getFreeColGameObject(p.getId());
             if (fcgo == null) {
                 if ((fcgo = update(p, Player.class, true)) != null) {
-                    addPlayer((Player)fcgo);
+                    addPlayer((Player) fcgo);
                     logger.finest("addPlayers added new: " + fcgo);
                 } else {
                     logger.warning("addPlayers create new fail: " + p);
-                }                
+                }
             } else if (fcgo instanceof Player) {
                 if (fcgo.copyIn(p)) {
                     logger.finest("addPlayers copied in: " + fcgo);
@@ -1066,14 +1072,14 @@ public class Game extends FreeColGameObject {
     }
 
     /**
-     * Get the client player this thread is operating for.  If in the server
+     * Get the client player this thread is operating for. If in the server
      * there will be none.
      *
      * @return The client {@code Player}.
      */
     public Player getClientPlayer() {
         return (this.clientUserName == null) ? null
-            : getPlayerByName(this.clientUserName);
+                : getPlayerByName(this.clientUserName);
     }
 
     /**
@@ -1133,7 +1139,7 @@ public class Game extends FreeColGameObject {
         Map oldMap = setMap(newMap);
         if (newMap != oldMap) {
             for (HighSeas hs : transform(getLivePlayers(), alwaysTrue(),
-                                         Player::getHighSeas, toListNoNulls())) {
+                    Player::getHighSeas, toListNoNulls())) {
                 hs.removeDestination(oldMap);
 
                 hs.addDestination(newMap);
@@ -1167,9 +1173,8 @@ public class Game extends FreeColGameObject {
      * @return A vacant {@code Nation} or null if none found.
      */
     public Nation getVacantNation() {
-        Entry<Nation, NationState> entry
-            = find(nationOptions.getNations().entrySet(),
-                   matchKey(NationState.AVAILABLE, Entry::getValue));
+        Entry<Nation, NationState> entry = find(nationOptions.getNations().entrySet(),
+                matchKey(NationState.AVAILABLE, Entry::getValue));
         return (entry == null) ? null : entry.getKey();
     }
 
@@ -1180,8 +1185,8 @@ public class Game extends FreeColGameObject {
      */
     public final List<Nation> getVacantNations() {
         return transform(nationOptions.getNations().entrySet(),
-                         matchKey(NationState.AVAILABLE, Entry::getValue),
-                         Entry::getKey);
+                matchKey(NationState.AVAILABLE, Entry::getValue),
+                Entry::getKey);
     }
 
     /**
@@ -1219,7 +1224,7 @@ public class Game extends FreeColGameObject {
     public int getAge() {
         return getSpecification().getAge(turn);
     }
-    
+
     /**
      * Get the combat model in this game.
      *
@@ -1267,7 +1272,7 @@ public class Game extends FreeColGameObject {
      */
     public Unit getInitialActiveUnit() {
         return (this.initialActiveUnitId == null) ? null
-            : getFreeColGameObject(this.initialActiveUnitId, Unit.class);
+                : getFreeColGameObject(this.initialActiveUnitId, Unit.class);
     }
 
     /**
@@ -1278,7 +1283,7 @@ public class Game extends FreeColGameObject {
     public void setInitialActiveUnitId(String initialActiveUnitId) {
         this.initialActiveUnitId = initialActiveUnitId;
     }
-        
+
     /**
      * Sets the {@code FreeColGameObjectListener} attached to this game.
      *
@@ -1291,7 +1296,7 @@ public class Game extends FreeColGameObject {
     /**
      * Notify a listener (if any) of a new game object.
      *
-     * @param id The object identifier.
+     * @param id   The object identifier.
      * @param fcgo The new {@code FreeColGameObject}.
      */
     public void notifySetFreeColGameObject(String id, FreeColGameObject fcgo) {
@@ -1314,12 +1319,12 @@ public class Game extends FreeColGameObject {
     /**
      * Notify a listener (if any) of that a game object has changed owner.
      *
-     * @param source The {@code FreeColGameObject} that changed owner.
+     * @param source   The {@code FreeColGameObject} that changed owner.
      * @param oldOwner The old owning {@code Player}.
      * @param newOwner The new owning {@code Player}.
      */
     public void notifyOwnerChanged(FreeColGameObject source,
-                                   Player oldOwner, Player newOwner) {
+            Player oldOwner, Player newOwner) {
         if (freeColGameObjectListener != null) {
             freeColGameObjectListener.ownerChanged(source, oldOwner, newOwner);
         }
@@ -1330,22 +1335,22 @@ public class Game extends FreeColGameObject {
      * Mainly useful in the client, informing the player that it has
      * gained or lost an ownable.
      *
-     * @param o The {@code Ownable} that may have changed.
+     * @param o        The {@code Ownable} that may have changed.
      * @param oldOwner The previous (possible unchanged) owning
-     *     {@code Player}.
+     *                 {@code Player}.
      */
     public void checkOwners(Ownable o, Player oldOwner) {
         Player newOwner = o.getOwner();
-        if (oldOwner == newOwner) return;
+        if (oldOwner == newOwner)
+            return;
 
         if (oldOwner != null && oldOwner.removeOwnable(o)) {
-            oldOwner.invalidateCanSeeTiles();//+vis
+            oldOwner.invalidateCanSeeTiles();// +vis
         }
         if (newOwner != null && newOwner.addOwnable(o)) {
-            newOwner.invalidateCanSeeTiles();//+vis
+            newOwner.invalidateCanSeeTiles();// +vis
         }
     }
-
 
     // Miscellaneous utilities.
 
@@ -1367,7 +1372,7 @@ public class Game extends FreeColGameObject {
     public Stream<Colony> getAllColonies(Player player) {
         return flatten(getLiveEuropeanPlayerList(player), Player::getColonies);
     }
-            
+
     /**
      * Get a list of all the colonies in the game.
      *
@@ -1377,18 +1382,18 @@ public class Game extends FreeColGameObject {
     public List<Colony> getAllColoniesList(Player player) {
         return toList(getAllColonies(player));
     }
-            
+
     /**
      * Finds a settlement by name.
      *
      * @param name The name of the {@code Settlement}.
      * @return The {@code Settlement} found, or {@code null}
-     *     if there is no known {@code Settlement} with the
-     *     specified name (the settlement might not be visible to a client).
+     *         if there is no known {@code Settlement} with the
+     *         specified name (the settlement might not be visible to a client).
      */
     public Settlement getSettlementByName(String name) {
         return find(flatten(getLivePlayers(), Player::getSettlements),
-                    matchKeyEquals(name, Settlement::getName));
+                matchKeyEquals(name, Settlement::getName));
     }
 
     /**
@@ -1410,7 +1415,8 @@ public class Game extends FreeColGameObject {
      */
     public FreeColObject getMessageDisplay(ModelMessage message) {
         String id = message.getDisplayId();
-        if (id == null) id = message.getSourceId();
+        if (id == null)
+            id = message.getSourceId();
         FreeColObject o = getFreeColGameObject(id);
         if (o == null) {
             try {
@@ -1418,6 +1424,9 @@ public class Game extends FreeColGameObject {
             } catch (Exception e) {
                 o = null; // Ignore
             }
+        }
+        if (message.getMessageType() == ModelMessage.MessageType.TUTORIAL) {
+            o = null;
         }
         return o;
     }
@@ -1432,9 +1441,9 @@ public class Game extends FreeColGameObject {
 
         // Memory
         Utils.garbageCollect();
-        long free = Runtime.getRuntime().freeMemory()/(1024*1024);
-        long total = Runtime.getRuntime().totalMemory()/(1024*1024);
-        long max = Runtime.getRuntime().maxMemory()/(1024*1024);
+        long free = Runtime.getRuntime().freeMemory() / (1024 * 1024);
+        long total = Runtime.getRuntime().totalMemory() / (1024 * 1024);
+        long max = Runtime.getRuntime().maxMemory() / (1024 * 1024);
         stats.put("freeMemory", Long.toString(free));
         stats.put("totalMemory", Long.toString(total));
         stats.put("maxMemory", Long.toString(max));
@@ -1451,7 +1460,8 @@ public class Game extends FreeColGameObject {
             } else {
                 objStats.put(className, 1L);
             }
-            if (fcgo.isDisposed()) disposed++;
+            if (fcgo.isDisposed())
+                disposed++;
         }
         stats.put("disposed", Long.toString(disposed));
         forEachMapEntry(objStats,
@@ -1473,16 +1483,16 @@ public class Game extends FreeColGameObject {
     /**
      * Unserialize from XML to a FreeColObject in this game.
      *
-     * @param <T> The actual return type.
-     * @param xml The xml serialized version of an object.
+     * @param <T>         The actual return type.
+     * @param xml         The xml serialized version of an object.
      * @param returnClass The expected object class.
      * @return The unserialized object.
      * @exception XMLStreamException if there are any problems reading from
-     *     the stream.
+     *                               the stream.
      */
     public <T extends FreeColObject> T unserialize(String xml,
-                                                   Class<T> returnClass)
-        throws XMLStreamException {
+            Class<T> returnClass)
+            throws XMLStreamException {
         try {
             FreeColXMLReader xr = new FreeColXMLReader(new StringReader(xml));
             xr.nextTag();
@@ -1494,7 +1504,6 @@ public class Game extends FreeColGameObject {
             throw new XMLStreamException(ex);
         }
     }
-
 
     // Override FreeColGameObject
 
@@ -1513,7 +1522,7 @@ public class Game extends FreeColGameObject {
                     lb.add(" null-fcgo");
                 } else if (!fcgo.isInitialized()) {
                     lb.add(" ", fcgo.getId(),
-                        "(", lastPart(fcgo.getClass().getName(), "."), ")");
+                            "(", lastPart(fcgo.getClass().getName(), "."), ")");
                 } else {
                     continue;
                 }
@@ -1526,7 +1535,8 @@ public class Game extends FreeColGameObject {
             }
         }
         if (lb.grew("\n  Uninitialized game ids: ")) {
-            if (fix) lb.add(" (dropped)");
+            if (fix)
+                lb.add(" (dropped)");
         }
 
         Map map = getMap();
@@ -1540,7 +1550,6 @@ public class Game extends FreeColGameObject {
         }
         return result;
     }
-
 
     // Override FreeColObject
 
@@ -1559,7 +1568,7 @@ public class Game extends FreeColGameObject {
     public final void setSpecification(Specification specification) {
         this.specification = specification;
     }
-    
+
     // Override FreeColObject
 
     /**
@@ -1568,7 +1577,8 @@ public class Game extends FreeColGameObject {
     @Override
     public <T extends FreeColObject> boolean copyIn(T other) {
         Game o = copyInCast(other, Game.class);
-        if (o == null || !super.copyIn(o)) return false;
+        if (o == null || !super.copyIn(o))
+            return false;
         this.specification = o.getSpecification();
         // Do not update nextId, it is not meaningful in the client.
         this.uuid = o.getUUID();
@@ -1590,12 +1600,11 @@ public class Game extends FreeColGameObject {
         return true;
     }
 
-
     // Serialization
     // Note: The order of the children is really sensitive.
     // Several fields can not be read without a specification, so it
     // must be written first if the intent is to use that spec in the
-    // game when it is read again.  Similarly we try to fail fast
+    // game when it is read again. Similarly we try to fail fast
     // if required to read those fields if a spec has not shown up.
     private static final String CIBOLA_TAG = "cibola";
     private static final String CLIENT_USER_NAME_TAG = "clientUserName";
@@ -1605,7 +1614,6 @@ public class Game extends FreeColGameObject {
     private static final String SPANISH_SUCCESSION_TAG = "spanishSuccession";
     private static final String TURN_TAG = "turn";
     private static final String UUID_TAG = "UUID";
-
 
     /**
      * {@inheritDoc}
@@ -1668,13 +1676,16 @@ public class Game extends FreeColGameObject {
         }
 
         synchronized (this.players) { // Should already be sorted
-            for (Player p : this.players) p.toXML(xw);
+            for (Player p : this.players)
+                p.toXML(xw);
         }
         Player unknown = getUnknownEnemy();
-        if (unknown != null) unknown.toXML(xw);
+        if (unknown != null)
+            unknown.toXML(xw);
 
         Map map = getMap();
-        if (map != null) map.toXML(xw);
+        if (map != null)
+            map.toXML(xw);
     }
 
     /**
@@ -1687,9 +1698,9 @@ public class Game extends FreeColGameObject {
         nextId = xr.getAttribute(NEXT_ID_TAG, -1);
 
         this.clientUserName = xr.getAttribute(CLIENT_USER_NAME_TAG,
-                                              (String)null);
+                (String) null);
 
-        String str = xr.getAttribute(UUID_TAG, (String)null);
+        String str = xr.getAttribute(UUID_TAG, (String) null);
         if (str == null) {
             this.uuid = UUID.randomUUID();
         } else {
@@ -1706,7 +1717,7 @@ public class Game extends FreeColGameObject {
         spanishSuccession = xr.getAttribute(SPANISH_SUCCESSION_TAG, false);
 
         initialActiveUnitId = xr.getAttribute(INITIAL_ACTIVE_UNIT_ID,
-                                              (String)null);
+                (String) null);
 
         // currentPlayer handled in readChildren()
     }
@@ -1721,10 +1732,10 @@ public class Game extends FreeColGameObject {
         players.clear();
         unknownEnemy = null;
 
-        // The current player is special.  Defer lookup of the current
+        // The current player is special. Defer lookup of the current
         // player tag until we read the children, because that is
         // where the players are defined.
-        String current = xr.getAttribute(CURRENT_PLAYER_TAG, (String)null);
+        String current = xr.getAttribute(CURRENT_PLAYER_TAG, (String) null);
 
         super.readChildren(xr);
 
@@ -1749,7 +1760,8 @@ public class Game extends FreeColGameObject {
             String cibola = xr.readId();
             // @compat 0.11.3
             final String oldPrefix = "lostCityRumour.cityName";
-            if (cibola.startsWith(oldPrefix)) cibola = "nameCache." + cibola;
+            if (cibola.startsWith(oldPrefix))
+                cibola = "nameCache." + cibola;
             // end @compat 0.11.3
             NameCache.addCityOfCibola(cibola);
             xr.closeTag(CIBOLA_TAG);
@@ -1757,21 +1769,21 @@ public class Game extends FreeColGameObject {
         } else if (Map.TAG.equals(tag)) {
             if (this.specification == null) {
                 throw new XMLStreamException("Tried to read " + tag
-                    + " with null specification");
+                        + " with null specification");
             }
             changeMap(xr.readFreeColObject(game, Map.class));
 
         } else if (NationOptions.TAG.equals(tag)) {
             if (this.specification == null) {
                 throw new XMLStreamException("Tried to read " + tag
-                    + " with null specification");
+                        + " with null specification");
             }
             setNationOptions(new NationOptions(xr, specification));
 
         } else if (Player.TAG.equals(tag)) {
             if (this.specification == null) {
                 throw new XMLStreamException("Tried to read " + tag
-                    + " with null specification");
+                        + " with null specification");
             }
             Player player = xr.readFreeColObject(game, Player.class);
             if (player.isUnknownEnemy()) {
@@ -1791,8 +1803,9 @@ public class Game extends FreeColGameObject {
     /**
      * {@inheritDoc}
      */
-    public String getXMLTagName() { return TAG; }
-
+    public String getXMLTagName() {
+        return TAG;
+    }
 
     // Override Object
 
