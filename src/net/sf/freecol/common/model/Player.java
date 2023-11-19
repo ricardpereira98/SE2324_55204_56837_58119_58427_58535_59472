@@ -2749,7 +2749,7 @@ public class Player extends FreeColGameObject implements Nameable {
                 : (tile.getX() < tile.getMap().getWidth() / 2) ? "east"
                         : "west";
 
-        addModelMessage(new ModelMessage(ModelMessage.MessageType.TUTORIAL, "model.player.startGame", this)
+        addModelMessage(new ModelMessage(ModelMessage.MessageType.WARNING, "model.player.startGame", this)
                 .addTagged("%direction%", sailTag));
 
     }
