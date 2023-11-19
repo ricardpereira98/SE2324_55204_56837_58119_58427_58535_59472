@@ -1303,8 +1303,9 @@ public final class Widgets {
                 = this.canvas.getExistingFreeColPanel(TurnManagerPanel.class);
         if (panel == null) {
             panel = new TurnManagerPanel(this.freeColClient);
-            this.canvas.showFreeColPanel(panel, PopupPosition.CENTERED, true);
+            this.canvas.showFreeColPanel(panel, PopupPosition.CENTERED_RIGHT, true);
         }
         return panel;
     }
 }
+

@@ -45,14 +45,14 @@ public final class TurnManagerPanel extends ReportPanel {
         public final Unit unit;
 
 
-        public ManagerPanel(FreeColClient freeColClient, Unit unit) {
-            super(new MigLayout("wrap 2", "[60, right][left]"));
+        public ManagerPanel(FreeColClient freeColClient, Unit unit, boolean grayScale) {
+            super(new MigLayout("wrap 2", ""));
 
             this.unit = unit;
 
             setOpaque(false);
             add(new JLabel(new ImageIcon(freeColClient.getGUI().getFixedImageLibrary()
-                            .getSmallUnitTypeImage(unit.getType(), false))),
+                            .getSmallUnitTypeImage(unit.getType(), grayScale))),
                     "spany 2");
 
             add(new JLabel(unit.getDescription(Unit.UnitLabelType.NATIONAL)));
@@ -101,6 +101,7 @@ public final class TurnManagerPanel extends ReportPanel {
         super(freeColClient, "TurnManagerPanel");
 
         update(freeColClient);
+
     }
 
 
@@ -110,8 +111,9 @@ public final class TurnManagerPanel extends ReportPanel {
 
         model = new DefaultListModel<>();
         for (Unit unit : player.getUnitSet()) {
-            if (!unit.isInEurope() && !unit.isOnCarrier()) {
-                model.addElement(new ManagerPanel(freeColClient, unit));
+            if (!unit.isInEurope() && !unit.isOnCarrier() && !unit.isInColony()) {
+                boolean grayScale = !(unit.getState().getKey().equals("unitState.active"));
+                model.addElement(new ManagerPanel(freeColClient, unit, grayScale));
             }
         }
 
