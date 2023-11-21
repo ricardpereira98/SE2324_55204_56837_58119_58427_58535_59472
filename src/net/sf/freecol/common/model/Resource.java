@@ -211,13 +211,10 @@ public class Resource extends TileItem {
      * {@inheritDoc}
      */
     @Override
-    public int applyBonus(GoodsType goodsType, UnitType unitType,
-                          int potential) {
-        int amount = -potential + (int)applyModifiers(potential, null,
-            type.getModifiers(goodsType.getId(), unitType));
-        return potential
-            + ((quantity == UNLIMITED || quantity > amount) ? amount
-                : quantity);
+    public int applyBonus(GoodsType goodsType, UnitType unitType, int potential) {
+
+        int amount = -potential + (int)applyModifiers(potential, null, type.getModifiers(goodsType.getId(), unitType));
+        return potential + ((quantity == UNLIMITED || quantity > amount) ? amount : quantity);
     }
 
     /**

@@ -385,6 +385,7 @@ public class TileItemContainer extends FreeColGameObject {
         int result = potential;
         for (TileItem item : transform(getTileItems(),
                                        ti -> !onlyNatural || ti.isNatural())) {
+
             result = item.applyBonus(goodsType, unitType, result);
         }
         return result;

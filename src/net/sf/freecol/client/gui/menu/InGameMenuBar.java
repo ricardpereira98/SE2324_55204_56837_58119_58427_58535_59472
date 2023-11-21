@@ -322,11 +322,7 @@ public class InGameMenuBar extends FreeColMenuBar {
         final Player player = this.freeColClient.getMyPlayer();
         if (player == null) return;
 
-        final String text = Messages.message(StringTemplate
-            .template("menuBar.statusLine")
-            .addAmount("%gold%", player.getGold())
-            .addAmount("%tax%", player.getTax())
-            .addAmount("%score%", player.getScore())
+        final String text = Messages.message(StringTemplate.template("menuBar.statusLine").addAmount("%gold%", player.getGold()).addAmount("%tax%", player.getTax()).addAmount("%score%", player.getScore())
             .addStringTemplate("%year%", this.freeColClient.getGame()
             .getTurn().getLabel())).replace("|", "✧");
         

@@ -44,8 +44,17 @@ public class TileProductionCalculator {
 
     private Player owner;
     private int colonyProductionBonus;
-    
-    
+
+    //seasons of the year and the arbitrary constants that define them
+    private static final int WINTER = 0;
+    private static final int SPRING = 1;
+    private static final int SUMMER = 2;
+    private static final int AUTUMN = 3;
+    private static final double WINTER_NERF = 0.8 ;
+    private static final double AUTUMN_NERF = 0.85;
+    private static final double SPRING_BUFF = 1.15;
+    private static final double SUMMER_BUFF = 1.2;
+
     /**
      * Creates a calculator for the given owner and colony data.
      * 
@@ -78,10 +87,8 @@ public class TileProductionCalculator {
      * @return The raw production of this colony tile.
      * @see ProductionCache#update
      */
-    public ProductionInfo getBasicProductionInfo(Tile tile,
-            Turn turn,
-            WorkerAssignment workerAssignment,
-            boolean colonyCenterTile) {
+    public ProductionInfo getBasicProductionInfo(Tile tile, Turn turn, WorkerAssignment workerAssignment, boolean colonyCenterTile) {
+
         ProductionInfo pi = new ProductionInfo();
         
         if (workerAssignment.getProductionType() == null) {
@@ -126,16 +133,51 @@ public class TileProductionCalculator {
      * @return The maximum return from this unit.
      */
     public int getUnitProduction(Turn turn, Tile tile, WorkerAssignment workerAssignment, GoodsType goodsType) {
+
         if (workerAssignment == null
                 || workerAssignment.getProductionType().getOutputs().noneMatch(g -> goodsType.equals(g.getType()))
                 || workerAssignment.getUnitType() == null) {
             return 0;
         }
 
-        return Math.max(0, (int) FeatureContainer.applyModifiers(
-                getBaseProduction(tile, workerAssignment.getProductionType(), goodsType, workerAssignment.getUnitType()),
-                turn,
-                getProductionModifiers(turn, tile, goodsType, workerAssignment.getUnitType())));
+        //0->Winter, 1->Spring, 2->Summer, 3-> Autumn
+        int seasonOfTheYear = turn.getSeason();
+
+        switch (seasonOfTheYear){
+            case WINTER -> {
+                int production = getBaseProduction(tile, workerAssignment.getProductionType(), goodsType, workerAssignment.getUnitType());
+                //20% nerf on production
+                double nerfedProduction = production * WINTER_NERF;
+                production = (int) Math.floor(nerfedProduction);
+
+                return Math.max(0, (int) FeatureContainer.applyModifiers(production, turn, getProductionModifiers(turn, tile, goodsType, workerAssignment.getUnitType())));
+            }
+            case SPRING -> {
+                int production = getBaseProduction(tile, workerAssignment.getProductionType(), goodsType, workerAssignment.getUnitType());
+                //15% buff on production
+                double buffedProduction = production * SPRING_BUFF;
+                production = (int) Math.ceil(buffedProduction);
+
+                return Math.max(0, (int) FeatureContainer.applyModifiers(production, turn, getProductionModifiers(turn, tile, goodsType, workerAssignment.getUnitType())));
+            }
+            case SUMMER -> {
+                int production = getBaseProduction(tile, workerAssignment.getProductionType(), goodsType, workerAssignment.getUnitType());
+                //20% buff on production
+                double buffedProduction = production * SUMMER_BUFF;
+                production = (int) Math.ceil(buffedProduction);
+
+                return Math.max(0, (int) FeatureContainer.applyModifiers(production, turn, getProductionModifiers(turn, tile, goodsType, workerAssignment.getUnitType())));
+            }
+            case AUTUMN -> {
+                int production = getBaseProduction(tile, workerAssignment.getProductionType(), goodsType, workerAssignment.getUnitType());
+                //15% nerf on production
+                double nerfedProduction = production * AUTUMN_NERF;
+                production = (int) Math.floor(nerfedProduction);
+
+                return Math.max(0, (int) FeatureContainer.applyModifiers(production, turn, getProductionModifiers(turn, tile, goodsType, workerAssignment.getUnitType())));
+            }
+        }
+        return Math.max(0, (int) FeatureContainer.applyModifiers(getBaseProduction(tile, workerAssignment.getProductionType(), goodsType, workerAssignment.getUnitType()), turn, getProductionModifiers(turn, tile, goodsType, workerAssignment.getUnitType())));
     }
     
     private int getCenterTileProduction(Turn turn, Tile tile, GoodsType goodsType) {
