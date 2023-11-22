@@ -150,22 +150,22 @@ public class TileProductionCalculator {
             case WINTER:
                 //20% nerf on production
                 nerfedProduction = production * WINTER_NERF;
-                production = (int) Math.floor(nerfedProduction);
+                production = (int) Math.round(nerfedProduction);
                 break;
             case SPRING:
                 //15% buff on production
-                buffedProduction = production * 1000;//SPRING_BUFF;
-                production = (int) Math.ceil(buffedProduction);
+                buffedProduction = production * SPRING_BUFF;
+                production = (int) Math.round(buffedProduction);
                 break;
             case SUMMER:
                 //20% buff on production
                 buffedProduction = production * SUMMER_BUFF;
-                production = (int) Math.ceil(buffedProduction);
+                production = (int) Math.round(buffedProduction);
                 break;
             case AUTUMN:
                 //15% nerf on production
                 nerfedProduction = production * AUTUMN_NERF;
-                production = (int) Math.floor(nerfedProduction);
+                production = (int) Math.round(nerfedProduction);
                 break;
             default:
                 return Math.max(0, (int) FeatureContainer.applyModifiers(production, turn, getProductionModifiers(turn, tile, goodsType, workerAssignment.getUnitType())));
