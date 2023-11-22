@@ -1,20 +1,20 @@
 /**
- *  Copyright (C) 2002-2022   The FreeCol Team
- *
- *  This file is part of FreeCol.
- *
- *  FreeCol is free software: you can redistribute it and/or modify
- *  it under the terms of the GNU General Public License as published by
- *  the Free Software Foundation, either version 2 of the License, or
- *  (at your option) any later version.
- *
- *  FreeCol is distributed in the hope that it will be useful,
- *  but WITHOUT ANY WARRANTY; without even the implied warranty of
- *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- *  GNU General Public License for more details.
- *
- *  You should have received a copy of the GNU General Public License
- *  along with FreeCol.  If not, see <http://www.gnu.org/licenses/>.
+ * Copyright (C) 2002-2022   The FreeCol Team
+ * <p>
+ * This file is part of FreeCol.
+ * <p>
+ * FreeCol is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation, either version 2 of the License, or
+ * (at your option) any later version.
+ * <p>
+ * FreeCol is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ * <p>
+ * You should have received a copy of the GNU General Public License
+ * along with FreeCol.  If not, see <http://www.gnu.org/licenses/>.
  */
 
 package net.sf.freecol.common.model.production;
@@ -50,14 +50,14 @@ public class TileProductionCalculator {
     private static final int SPRING = 1;
     private static final int SUMMER = 2;
     private static final int AUTUMN = 3;
-    private static final double WINTER_NERF = 0.8 ;
+    private static final double WINTER_NERF = 0.8;
     private static final double AUTUMN_NERF = 0.85;
     private static final double SPRING_BUFF = 1.15;
     private static final double SUMMER_BUFF = 1.2;
 
     /**
      * Creates a calculator for the given owner and colony data.
-     * 
+     *
      * @param owner The {@code Player} owning the building.
      * @param colonyProductionBonus The production bonus for the colony where the building
      *      is located.
@@ -66,8 +66,8 @@ public class TileProductionCalculator {
         this.owner = owner;
         this.colonyProductionBonus = colonyProductionBonus;
     }
-    
-    
+
+
     /**
      * Gets the basic production information for the colony tile,
      * ignoring any colony limits (which for now, should be
@@ -90,35 +90,35 @@ public class TileProductionCalculator {
     public ProductionInfo getBasicProductionInfo(Tile tile, Turn turn, WorkerAssignment workerAssignment, boolean colonyCenterTile) {
 
         ProductionInfo pi = new ProductionInfo();
-        
+
         if (workerAssignment.getProductionType() == null) {
             /*
              *  XXX: It's silly that the production is calculated
              *       before the productionType is set.
              */
-             
+
             return pi;
         }
 
         if (colonyCenterTile) {
             forEach(workerAssignment.getProductionType().getOutputs(), output -> {
-                    int n = getCenterTileProduction(turn, tile, output.getType());
-                    if (n > 0) {
-                        pi.addProduction(new AbstractGoods(output.getType(), n));
-                    }
-                });
+                int n = getCenterTileProduction(turn, tile, output.getType());
+                if (n > 0) {
+                    pi.addProduction(new AbstractGoods(output.getType(), n));
+                }
+            });
         } else {
             forEach(map(workerAssignment.getProductionType().getOutputs(), AbstractGoods::getType),
-                gt -> {
-                    int n = getUnitProduction(turn, tile, workerAssignment, gt);
-                    if (n > 0) {
-                        pi.addProduction(new AbstractGoods(gt, n));
-                    }
-                });
+                    gt -> {
+                        int n = getUnitProduction(turn, tile, workerAssignment, gt);
+                        if (n > 0) {
+                            pi.addProduction(new AbstractGoods(gt, n));
+                        }
+                    });
         }
         return pi;
     }
-    
+
     /**
      * Gets the productivity of a unit working in this work location,
      * considering *only* the contribution of the unit, exclusive of
@@ -142,44 +142,37 @@ public class TileProductionCalculator {
 
         //0->Winter, 1->Spring, 2->Summer, 3-> Autumn
         int seasonOfTheYear = turn.getSeason();
+        int production = getBaseProduction(tile, workerAssignment.getProductionType(), goodsType, workerAssignment.getUnitType());
+        double buffedProduction = 0.0;
+        double nerfedProduction = 0.0;
 
-        switch (seasonOfTheYear){
-            case WINTER -> {
-                int production = getBaseProduction(tile, workerAssignment.getProductionType(), goodsType, workerAssignment.getUnitType());
+        switch (seasonOfTheYear) {
+            case WINTER:
                 //20% nerf on production
-                double nerfedProduction = production * WINTER_NERF;
+                nerfedProduction = production * WINTER_NERF;
                 production = (int) Math.floor(nerfedProduction);
-
-                return Math.max(0, (int) FeatureContainer.applyModifiers(production, turn, getProductionModifiers(turn, tile, goodsType, workerAssignment.getUnitType())));
-            }
-            case SPRING -> {
-                int production = getBaseProduction(tile, workerAssignment.getProductionType(), goodsType, workerAssignment.getUnitType());
+                break;
+            case SPRING:
                 //15% buff on production
-                double buffedProduction = production * SPRING_BUFF;
+                buffedProduction = production * 1000;//SPRING_BUFF;
                 production = (int) Math.ceil(buffedProduction);
-
-                return Math.max(0, (int) FeatureContainer.applyModifiers(production, turn, getProductionModifiers(turn, tile, goodsType, workerAssignment.getUnitType())));
-            }
-            case SUMMER -> {
-                int production = getBaseProduction(tile, workerAssignment.getProductionType(), goodsType, workerAssignment.getUnitType());
+                break;
+            case SUMMER:
                 //20% buff on production
-                double buffedProduction = production * SUMMER_BUFF;
+                buffedProduction = production * SUMMER_BUFF;
                 production = (int) Math.ceil(buffedProduction);
-
-                return Math.max(0, (int) FeatureContainer.applyModifiers(production, turn, getProductionModifiers(turn, tile, goodsType, workerAssignment.getUnitType())));
-            }
-            case AUTUMN -> {
-                int production = getBaseProduction(tile, workerAssignment.getProductionType(), goodsType, workerAssignment.getUnitType());
+                break;
+            case AUTUMN:
                 //15% nerf on production
-                double nerfedProduction = production * AUTUMN_NERF;
+                nerfedProduction = production * AUTUMN_NERF;
                 production = (int) Math.floor(nerfedProduction);
-
+                break;
+            default:
                 return Math.max(0, (int) FeatureContainer.applyModifiers(production, turn, getProductionModifiers(turn, tile, goodsType, workerAssignment.getUnitType())));
-            }
         }
-        return Math.max(0, (int) FeatureContainer.applyModifiers(getBaseProduction(tile, workerAssignment.getProductionType(), goodsType, workerAssignment.getUnitType()), turn, getProductionModifiers(turn, tile, goodsType, workerAssignment.getUnitType())));
+        return Math.max(0, (int) FeatureContainer.applyModifiers(production, turn, getProductionModifiers(turn, tile, goodsType, workerAssignment.getUnitType())));
     }
-    
+
     private int getCenterTileProduction(Turn turn, Tile tile, GoodsType goodsType) {
         final int production = tile.getBaseProduction(null, goodsType, null);
         return Math.max(0, (int) FeatureContainer.applyModifiers(
@@ -187,7 +180,7 @@ public class TileProductionCalculator {
                 turn,
                 getCenterTileProductionModifiers(turn, tile, goodsType)));
     }
-    
+
     /**
      * Get the base production exclusive of any bonuses.
      *
@@ -199,14 +192,14 @@ public class TileProductionCalculator {
      * @return The base production due to tile type and resources.
      */
     private int getBaseProduction(Tile tile, ProductionType productionType,
-                                 GoodsType goodsType, UnitType unitType) {
+                                  GoodsType goodsType, UnitType unitType) {
         if (tile == null || goodsType == null || !goodsType.isFarmed()) {
             return 0;
         }
         final int amount = tile.getBaseProduction(productionType, goodsType, unitType);
         return (amount < 0) ? 0 : amount;
     }
-    
+
     /**
      * Gets the production modifiers for the given type of goods and
      * unit type.
@@ -219,11 +212,11 @@ public class TileProductionCalculator {
         if (unitType == null || !tile.canProduce(goodsType, unitType)) {
             return Stream.<Modifier>empty();
         }
-        
+
         return concat(tile.getProductionModifiers(goodsType, unitType),
                 unitType.getModifiers(goodsType.getId(), tile.getType(), turn),
                 ((owner == null) ? null
-                    : owner.getModifiers(goodsType.getId(), unitType, turn)),
+                        : owner.getModifiers(goodsType.getId(), unitType, turn)),
                 ProductionUtils.getRebelProductionModifiersForTile(tile, colonyProductionBonus, goodsType, unitType));
     }
 
@@ -244,7 +237,7 @@ public class TileProductionCalculator {
                 // This does not seem to influence center tile production, but was present in the old code.
                 //colony.getModifiers(id, null, turn),
                 //((owner == null) ? null : owner.getModifiers(goodsType.getId(), tile.getType(), turn))
-                );
+        );
     }
 
 }
