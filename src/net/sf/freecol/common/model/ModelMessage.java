@@ -326,6 +326,7 @@ public class ModelMessage extends StringTemplate {
             case PERSON :
                 o = source.getSpecification().getDefaultUnitType();
                 break;
+
             case GIFT_GOODS:
             default:
                 if (source instanceof Player)

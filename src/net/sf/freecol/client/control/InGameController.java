@@ -52,13 +52,9 @@ import javax.swing.SwingUtilities;
 import net.sf.freecol.FreeCol;
 import net.sf.freecol.client.ClientOptions;
 import net.sf.freecol.client.FreeColClient;
-import net.sf.freecol.client.gui.ChoiceItem;
-import net.sf.freecol.client.gui.DialogHandler;
-import net.sf.freecol.client.gui.GUI;
-import net.sf.freecol.client.gui.ImageLibrary;
+import net.sf.freecol.client.gui.*;
 import net.sf.freecol.client.gui.option.FreeColActionUI;
 import net.sf.freecol.client.gui.panel.FreeColPanel;
-import net.sf.freecol.client.gui.panel.InfoPanel;
 import net.sf.freecol.common.FreeColException;
 import net.sf.freecol.common.debug.DebugUtils;
 import net.sf.freecol.common.debug.FreeColDebugger;
@@ -4505,22 +4501,25 @@ public final class InGameController extends FreeColClientHolder {
 
 
             //aparece com a sigla do player
-            showInformationPanel(player, StringTemplate.template("startTutorial.sorte"));
+            //showInformationPanel(player, StringTemplate.template("startTutorial.sorte"));
             //aparece sem nda
-            showInformationPanel(null, StringTemplate.template("startTutorial.intro"));
+            //showInformationPanel(null, StringTemplate.template("startTutorial.intro"));
             //aparece o homemzinho
-            FreeColObject obg = getGame().getSpecification().getDefaultUnitType(player);
-            showInformationPanel(obg, StringTemplate.template("startTutorial.sorte"));
+            //FreeColObject obg = getGame().getSpecification().getDefaultUnitType(player);
+            //showInformationPanel(obg, StringTemplate.template("startTutorial.sorte"));
             //show caravel
 
-            FreeColObject obg = getGame().getSpecification().getUnitType("model.unit.caravel");
-            showInformationPanel(obg, StringTemplate.template("startTutorial.intro"));
+           // FreeColObject obg = getGame().getSpecification().getUnitType("image.miscicon.button.normal.toggle_fog_of_war");
 
+            //showInformationPanel(obg, StringTemplate.template("startTutorial.intro"));
 
-            //BufferedImage lib = getGUI().getFixedImageLibrary().getScaledImage("image.unit.model.unit.caravel");
+            BufferedImage libo = getGUI().getFixedImageLibrary().getScaledImage("image.miscicon.button.normal.toggle_fog_of_war");
+                    //model.option.miniMapToggleFogOfWar");
+            FreeColObject b = getSpecification().getType("image.miscicon.button.normal.toggle_fog_of_war");
+            showInformationPanel(b, StringTemplate.template("startTutorial.intro"));
 
-        }*/
-
+        }
+*/
         if (currTurn.isFirstSeasonTurn()) {
             player.addModelMessage(new ModelMessage(MessageType.WARNING,
                                                     "twoTurnsPerYear", player)

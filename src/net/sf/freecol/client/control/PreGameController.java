@@ -20,15 +20,17 @@
 package net.sf.freecol.client.control;
 
 import java.awt.Color;
+import java.awt.image.BufferedImage;
 import java.util.List;
 import java.util.logging.Logger;
 
-import javax.swing.SwingUtilities;
+import javax.swing.*;
 
 import net.sf.freecol.FreeCol;
 import net.sf.freecol.client.ClientOptions;
 import net.sf.freecol.client.FreeColClient;
 import net.sf.freecol.client.gui.GUI;
+import net.sf.freecol.client.gui.ImageLibrary;
 import net.sf.freecol.common.debug.FreeColDebugger;
 import net.sf.freecol.common.i18n.Messages;
 import net.sf.freecol.common.io.FreeColDirectories;
@@ -318,14 +320,15 @@ public final class PreGameController extends FreeColClientHolder {
         // Starting message if needed
         if (getGame().getTurn().getNumber() == 1) {
 
+            moveBoatTutorial(player);
+            igc().nextModelMessage();
+
             player.addStartGameMessage(); //game message
             igc().nextModelMessage();
 
             InfoPanelTutorial(player);
             igc().nextModelMessage();
 
-            //moveBoat (player); // moves
-            //igc().nextModelMessage();
 
             player.addTutorialIntro(); // intro tutorial
 
@@ -345,17 +348,12 @@ public final class PreGameController extends FreeColClientHolder {
     }
     private void moveBoatTutorial(Player player) {
         player.addModelMessage(new ModelMessage(ModelMessage.MessageType.SHIP, "startTutorial.moveBoat", player));
+        player.addModelMessage(new ModelMessage(ModelMessage.MessageType.TUTORIAL, "startTutorial.move", player));
+        player.addModelMessage(new ModelMessage(ModelMessage.MessageType.TUTORIAL, "startTutorial.endTurn", player));
 
-        //TODO: eliminate later 1
-        //FreeColObject obg = getGame().getSpecification().getUnitType("model.unit.freeColonist.pioneer");
-        //showInformationPanel(player, StringTemplate.template("startTutorial.intro"));
+
     }
 
-    //TODO: eliminate later 1
-    private void showInformationPanel(final FreeColObject disp,
-                                      final StringTemplate template) {
-        getGUI().invokeNowOrLater(() -> getGUI().showInformationPanel(disp, template));
-    }
 
     /**
      * Handles an update.
