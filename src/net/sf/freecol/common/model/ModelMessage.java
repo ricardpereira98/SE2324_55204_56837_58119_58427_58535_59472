@@ -62,6 +62,13 @@ public class ModelMessage extends StringTemplate {
         SONS_OF_LIBERTY("model.option.guiShowSonsOfLiberty"),
 
         TUTORIAL("model.option.guiShowTutorial"),
+
+        //For Tutorial
+        SHIP("model.option.guiShowTutorial"),
+
+        PERSON("model.option.guiShowTutorial"),
+
+        //END Tutorial
         UNIT_ADDED("model.option.guiShowUnitAdded"),
         UNIT_ARRIVED("model.option.guiShowUnitArrived"),
         UNIT_DEMOTED("model.option.guiShowUnitDemoted"),
@@ -311,9 +318,14 @@ public class ModelMessage extends StringTemplate {
             case MARKET_PRICES:
             case MISSING_GOODS:
             case TUTORIAL:
-             o = source;
+                o = source;
                 break;
-               
+            case SHIP:
+               o  = source.getSpecification().getUnitType("model.unit.caravel");
+               break;
+            case PERSON :
+                o = source.getSpecification().getDefaultUnitType();
+                break;
             case GIFT_GOODS:
             default:
                 if (source instanceof Player)

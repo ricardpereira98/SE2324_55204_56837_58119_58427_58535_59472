@@ -32,13 +32,9 @@ import net.sf.freecol.client.gui.GUI;
 import net.sf.freecol.common.debug.FreeColDebugger;
 import net.sf.freecol.common.i18n.Messages;
 import net.sf.freecol.common.io.FreeColDirectories;
-import net.sf.freecol.common.model.FreeColObject;
-import net.sf.freecol.common.model.Game;
+import net.sf.freecol.common.model.*;
 import net.sf.freecol.common.model.Game.LogoutReason;
-import net.sf.freecol.common.model.Nation;
 import net.sf.freecol.common.model.NationOptions.NationState;
-import net.sf.freecol.common.model.NationType;
-import net.sf.freecol.common.model.Player;
 import net.sf.freecol.common.model.StringTemplate;
 import net.sf.freecol.common.option.GameOptions;
 import net.sf.freecol.common.option.MapGeneratorOptions;
@@ -317,21 +313,48 @@ public final class PreGameController extends FreeColClientHolder {
             fcc.skipTurns(FreeColDebugger.getDebugRunTurns());
             return false;
         }
-        
+
+        //TODO: TUTORIAL BEGINNING
         // Starting message if needed
         if (getGame().getTurn().getNumber() == 1) {
-            player.addStartGameMessage();
 
+            player.addStartGameMessage(); //game message
             igc().nextModelMessage();
-            player.addStartTutorial();
 
-           
+            InfoPanelTutorial(player);
+            igc().nextModelMessage();
+
+            //moveBoat (player); // moves
+            //igc().nextModelMessage();
+
+            player.addTutorialIntro(); // intro tutorial
+
         }
         igc().nextModelMessage();
 
 
-
         return true;
+    }
+
+    private void InfoPanelTutorial (Player player)
+    {
+        player.addModelMessage(new ModelMessage(ModelMessage.MessageType.TUTORIAL, "startTutorial.infopanel", player));
+        player.addModelMessage(new ModelMessage(ModelMessage.MessageType.SHIP, "startTutorial.infopanel.ship", player));
+        player.addModelMessage(new ModelMessage(ModelMessage.MessageType.PERSON, "startTutorial.infopanel.person", player));
+
+    }
+    private void moveBoatTutorial(Player player) {
+        player.addModelMessage(new ModelMessage(ModelMessage.MessageType.SHIP, "startTutorial.moveBoat", player));
+
+        //TODO: eliminate later 1
+        //FreeColObject obg = getGame().getSpecification().getUnitType("model.unit.freeColonist.pioneer");
+        //showInformationPanel(player, StringTemplate.template("startTutorial.intro"));
+    }
+
+    //TODO: eliminate later 1
+    private void showInformationPanel(final FreeColObject disp,
+                                      final StringTemplate template) {
+        getGUI().invokeNowOrLater(() -> getGUI().showInformationPanel(disp, template));
     }
 
     /**

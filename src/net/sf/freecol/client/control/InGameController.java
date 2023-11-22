@@ -31,6 +31,7 @@ import static net.sf.freecol.common.util.Utils.delay;
 import static net.sf.freecol.common.util.Utils.deleteFile;
 
 import java.awt.Color;
+import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
 import java.lang.reflect.InvocationTargetException;
@@ -54,8 +55,10 @@ import net.sf.freecol.client.FreeColClient;
 import net.sf.freecol.client.gui.ChoiceItem;
 import net.sf.freecol.client.gui.DialogHandler;
 import net.sf.freecol.client.gui.GUI;
+import net.sf.freecol.client.gui.ImageLibrary;
 import net.sf.freecol.client.gui.option.FreeColActionUI;
 import net.sf.freecol.client.gui.panel.FreeColPanel;
+import net.sf.freecol.client.gui.panel.InfoPanel;
 import net.sf.freecol.common.FreeColException;
 import net.sf.freecol.common.debug.DebugUtils;
 import net.sf.freecol.common.debug.FreeColDebugger;
@@ -1109,9 +1112,10 @@ public final class InGameController extends FreeColClientHolder {
      */
     private void doEndTurn(boolean showDialog) {
         final Player player = getMyPlayer();
+
         // Clear any panels first
         if (getGUI().isPanelShowing()) return;
-        
+
         if (showDialog) {
             List<Unit> units = transform(player.getUnits(), Unit::isCandidateForNextActiveUnit);
             if (!units.isEmpty()) {
@@ -4478,6 +4482,7 @@ public final class InGameController extends FreeColClientHolder {
         final Game game = getGame();
         final Player player = getMyPlayer();
 
+
         if (turn < 0) {
             logger.warning("Bad turn in newTurn: " + turn);
             return false;
@@ -4491,6 +4496,31 @@ public final class InGameController extends FreeColClientHolder {
         }
 
         final Turn currTurn = game.getTurn();
+
+        //TODO: Teste only if >1
+       /* if(currTurn.getNumber() == 2)
+        { //TODO PUT ICON INSTEAD OF NULL
+
+            BufferedImage unit = getGUI().getFixedImageLibrary().getScaledImage("image.unit.model.unit.caravel");
+
+
+            //aparece com a sigla do player
+            showInformationPanel(player, StringTemplate.template("startTutorial.sorte"));
+            //aparece sem nda
+            showInformationPanel(null, StringTemplate.template("startTutorial.intro"));
+            //aparece o homemzinho
+            FreeColObject obg = getGame().getSpecification().getDefaultUnitType(player);
+            showInformationPanel(obg, StringTemplate.template("startTutorial.sorte"));
+            //show caravel
+
+            FreeColObject obg = getGame().getSpecification().getUnitType("model.unit.caravel");
+            showInformationPanel(obg, StringTemplate.template("startTutorial.intro"));
+
+
+            //BufferedImage lib = getGUI().getFixedImageLibrary().getScaledImage("image.unit.model.unit.caravel");
+
+        }*/
+
         if (currTurn.isFirstSeasonTurn()) {
             player.addModelMessage(new ModelMessage(MessageType.WARNING,
                                                     "twoTurnsPerYear", player)

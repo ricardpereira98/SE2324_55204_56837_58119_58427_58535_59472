@@ -2755,15 +2755,20 @@ public class Player extends FreeColGameObject implements Nameable {
     }
 
     // TODO: lilly
-    public void addStartTutorial() {
-
+    public void addTutorialIntro() {
         addModelMessage(new ModelMessage(ModelMessage.MessageType.TUTORIAL, "startTutorial.intro", this));
         addModelMessage(new ModelMessage(ModelMessage.MessageType.TUTORIAL, "startTutorial.missao", this));
-        addModelMessage(new ModelMessage(ModelMessage.MessageType.TUTORIAL, "startTutorial.navegacao", this));
-        addModelMessage(new ModelMessage(ModelMessage.MessageType.TUTORIAL, "startTutorial.elementos", this));
-        addModelMessage(new ModelMessage(ModelMessage.MessageType.TUTORIAL, "startTutorial.prosseguir", this));
+
+        //addModelMessage(new ModelMessage(ModelMessage.MessageType.TUTORIAL, "startTutorial.navegacao", this));
+        //addModelMessage(new ModelMessage(ModelMessage.MessageType.TUTORIAL, "startTutorial.elementos", this));
+        //addModelMessage(new ModelMessage(ModelMessage.MessageType.TUTORIAL, "startTutorial.prosseguir", this));
+    }
+
+    public void addTutorialEnd()
+    {
         addModelMessage(new ModelMessage(ModelMessage.MessageType.TUTORIAL, "startTutorial.conselho", this));
         addModelMessage(new ModelMessage(ModelMessage.MessageType.TUTORIAL, "startTutorial.sorte", this));
+
     }
 
     /**
