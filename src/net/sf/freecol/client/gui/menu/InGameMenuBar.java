@@ -125,6 +125,12 @@ public class InGameMenuBar extends FreeColMenuBar {
     @SuppressWarnings("unused")
     private static final Logger logger = Logger.getLogger(InGameMenuBar.class.getName());
 
+    //seasons of the year and the constants that define them
+    private static final int WINTER = 0;
+    private static final int SPRING = 1;
+    private static final int SUMMER = 2;
+    private static final int AUTUMN = 3;
+
     /**
      * Creates a new {@code FreeColMenuBar}. This menu bar will include
      * all of the submenus and items.
@@ -322,29 +328,69 @@ public class InGameMenuBar extends FreeColMenuBar {
         final Player player = this.freeColClient.getMyPlayer();
         if (player == null) return;
 
-        final String text = Messages.message(StringTemplate.template("menuBar.statusLine").addAmount("%gold%", player.getGold()).addAmount("%tax%", player.getTax()).addAmount("%score%", player.getScore())
-            .addStringTemplate("%year%", this.freeColClient.getGame()
-            .getTurn().getLabel())).replace("|", "✧");
-        
-        Graphics2D g2d = (Graphics2D)g;
+        final String text = Messages.message(StringTemplate.template("menuBar.statusLine").
+                addAmount("%gold%", player.getGold()).
+                addAmount("%tax%", player.getTax()).
+                addAmount("%score%", player.getScore()).
+                addStringTemplate("%year%", this.freeColClient.getGame().getTurn().getLabel())).replace("|", "✧");
+
+        int seasonOfTheYear = this.freeColClient.getGame().getTurn().getSeason();
+
+        String textWeather = "";
+
+        switch (seasonOfTheYear) {
+            case WINTER:
+                textWeather = Messages.message(StringTemplate.label("menuBar.statusLine").add("WINTER 50% PRODUCTION DEBUFF ONGOING"));
+                break;
+            case SPRING:
+                textWeather = Messages.message(StringTemplate.label("menuBar.statusLine").add("SPRING 15% PRODUCTION BUFF ONGOING"));
+                break;
+            case SUMMER:
+                textWeather = Messages.message(StringTemplate.label("menuBar.statusLine").add("SUMMER 50% PRODUCTION BUFF ONGOING"));
+                break;
+            case AUTUMN:
+                textWeather = Messages.message(StringTemplate.label("menuBar.statusLine").add("AUTUMN 15% PRODUCTION DEBUFF ONGOING"));
+                break;
+            default:
+                break;
+        }
+
+
+        Graphics2D g2d = (Graphics2D) g;
         g2d.setRenderingHint(RenderingHints.KEY_ANTIALIASING,
-                             RenderingHints.VALUE_ANTIALIAS_ON);
+                RenderingHints.VALUE_ANTIALIAS_ON);
         g2d.setRenderingHint(RenderingHints.KEY_RENDERING,
-                             RenderingHints.VALUE_RENDER_QUALITY);
+                RenderingHints.VALUE_RENDER_QUALITY);
 
         final Font font = FontLibrary.getMainFont();
         g2d.setFont(font);
-        
+
         final FontMetrics fm = g2d.getFontMetrics();
-        final Rectangle2D d  = fm.getStringBounds(text, g2d);
+
+        final Rectangle2D d = fm.getStringBounds(text, g2d);
+
         final int textWidth = (int) d.getWidth();
-        final int textHeight = (int) d.getHeight();;
-        
+        final int textHeight = (int) d.getHeight();
         final int rightSidePaddingInPx = 10;
         final int centerHeight = getHeight() - getInsets().bottom;
         final int x = getWidth() - rightSidePaddingInPx - textWidth - getInsets().right;
         final int y = (centerHeight - textHeight) / 2 + fm.getAscent();
-        
+
+        if (!textWeather.isEmpty()) {
+            //test
+            final Rectangle2D d2 = fm.getStringBounds(textWeather, g2d);
+            //test
+            final int textWidth2 = (int) d2.getWidth();
+            final int textHeight2 = (int) d2.getHeight();
+            //test
+            final int testPadding = 770;
+            final int x2 = getWidth() - testPadding - textWidth2 - getInsets().right;
+            final int y2 = (centerHeight - textHeight2) / 2 + fm.getAscent();
+            Utility.drawGoldenText(textWeather, g2d, font, x2, y2);
+        }
+
+
         Utility.drawGoldenText(text, g2d, font, x, y);
+
     }
 }

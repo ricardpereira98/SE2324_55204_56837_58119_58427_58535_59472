@@ -45,15 +45,15 @@ public class TileProductionCalculator {
     private Player owner;
     private int colonyProductionBonus;
 
-    //seasons of the year and the arbitrary constants that define them
+    //seasons of the year and the constants that define them
     private static final int WINTER = 0;
     private static final int SPRING = 1;
     private static final int SUMMER = 2;
     private static final int AUTUMN = 3;
-    private static final double WINTER_NERF = 0.8;
+    private static final double WINTER_NERF = 0.5;
     private static final double AUTUMN_NERF = 0.85;
     private static final double SPRING_BUFF = 1.15;
-    private static final double SUMMER_BUFF = 1.2;
+    private static final double SUMMER_BUFF = 1.5;
 
     /**
      * Creates a calculator for the given owner and colony data.
@@ -148,24 +148,24 @@ public class TileProductionCalculator {
 
         switch (seasonOfTheYear) {
             case WINTER:
-                //20% nerf on production
+                //50% nerf on production
                 nerfedProduction = production * WINTER_NERF;
-                production = (int) Math.round(nerfedProduction);
+                production = (int) Math.floor(nerfedProduction);
                 break;
             case SPRING:
                 //15% buff on production
                 buffedProduction = production * SPRING_BUFF;
-                production = (int) Math.round(buffedProduction);
+                production = (int) Math.ceil(buffedProduction);
                 break;
             case SUMMER:
-                //20% buff on production
+                //50% buff on production
                 buffedProduction = production * SUMMER_BUFF;
-                production = (int) Math.round(buffedProduction);
+                production = (int) Math.ceil(buffedProduction);
                 break;
             case AUTUMN:
                 //15% nerf on production
                 nerfedProduction = production * AUTUMN_NERF;
-                production = (int) Math.round(nerfedProduction);
+                production = (int) Math.floor(nerfedProduction);
                 break;
             default:
                 return Math.max(0, (int) FeatureContainer.applyModifiers(production, turn, getProductionModifiers(turn, tile, goodsType, workerAssignment.getUnitType())));
