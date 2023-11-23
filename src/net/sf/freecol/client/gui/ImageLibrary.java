@@ -550,6 +550,18 @@ public final class ImageLibrary {
     public BufferedImage getColopediaConceptImage() {
         return getScaledImage("image.icon.Colopedia.idea");
     }
+    public BufferedImage getColopediaWinterImage() {
+        return getScaledImage("image.icon.Colopedia.winter");
+    }
+    public BufferedImage getColopediaSpringImage() {
+        return getScaledImage("image.icon.Colopedia.spring");
+    }
+    public BufferedImage getColopediaSummerImage() {
+        return getScaledImage("image.icon.Colopedia.summer");
+    }
+    public BufferedImage getColopediaAutumnImage() {
+        return getScaledImage("image.icon.Colopedia.autumn");
+    }
 
     public static BufferedImage getColorCellRendererBackground() {
         return getUnscaledImage("image.background.ColorCellRenderer");

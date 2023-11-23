@@ -37,7 +37,7 @@ public class ColopediaAction extends FreeColAction {
     public static enum PanelType {
         TERRAIN, RESOURCES, GOODS, UNITS,
         BUILDINGS, FATHERS, NATIONS,
-        NATION_TYPES, CONCEPTS;
+        NATION_TYPES, CONCEPTS, SEASONS;
 
         public String getKey() {
             return getEnumKey(this);
@@ -53,7 +53,8 @@ public class ColopediaAction extends FreeColAction {
         KeyEvent.VK_F,
         KeyEvent.VK_N,
         KeyEvent.VK_A,
-        KeyEvent.VK_C
+        KeyEvent.VK_C,
+        KeyEvent.VK_S //new for SEASONS
     };
 
 

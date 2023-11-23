@@ -383,7 +383,7 @@ public class InGameMenuBar extends FreeColMenuBar {
             final int textWidth2 = (int) d2.getWidth();
             final int textHeight2 = (int) d2.getHeight();
             //test
-            final int testPadding = getWidth()/2;
+            final int testPadding = 770;
             final int x2 = getWidth() - testPadding - textWidth2 - getInsets().right;
             final int y2 = (centerHeight - textHeight2) / 2 + fm.getAscent();
             Utility.drawGoldenText(textWeather, g2d, font, x2, y2);
