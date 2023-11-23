@@ -146,6 +146,7 @@ public class TileProductionCalculator {
 
     /**
      * Get the base production exclusive of any bonuses.
+     * Only the season bonus is taken into account.
      *
      * @param tile The tile where the production is happening.
      * @param productionType An optional {@code ProductionType} to use,
@@ -176,8 +177,10 @@ public class TileProductionCalculator {
         if (unitType == null || !tile.canProduce(goodsType, unitType)) {
             return Stream.<Modifier>empty();
         }
+        SeasonEffect seasonEffect = new SeasonEffect(turn);
 
-        return concat(tile.getProductionModifiers(goodsType, unitType),
+        return concat(seasonEffect.getSeasonModifierStream(),
+                tile.getProductionModifiers(goodsType, unitType),
                 unitType.getModifiers(goodsType.getId(), tile.getType(), turn),
                 ((owner == null) ? null
                     : owner.getModifiers(goodsType.getId(), unitType, turn)),
