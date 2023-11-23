@@ -1,7 +1,10 @@
 package net.sf.freecol.common.model.production;
 
 import net.sf.freecol.common.model.Game;
+import net.sf.freecol.common.model.Modifier;
 import net.sf.freecol.common.model.Turn;
+
+import java.util.stream.Stream;
 
 public class SeasonEffect {
 
@@ -12,35 +15,61 @@ public class SeasonEffect {
     private static final int SPRING = 1;
     private static final int SUMMER = 2;
     private static final int AUTUMN = 3;
-    private static final double WINTER_NERF = 0.8 ;
-    private static final double AUTUMN_NERF = 0.85;
-    private static final double SPRING_BUFF = 1.15;
-    private static final double SUMMER_BUFF = 1.2;
 
+    // Effect on season (Percentage)
+    private final int WINTER_EFFECT = -20 ;
+    private final int AUTUMN_EFFECT = -15;
+    private final int SPRING_EFFECT = 15;
+    private final int SUMMER_EFFECT = 20;
 
-
-    public SeasonEffect(Game game) {
-        this.turn = game.getTurn();
-    }
 
     public SeasonEffect(Turn turn) {
         this.turn = turn;
     }
 
-    public int getSeasonProduction(){
-        int season = turn.getSeason();
-
-        return switch (season) {
-            case WINTER -> 1;
-            case SPRING -> 2;
-            case SUMMER -> 3;
-            case AUTUMN -> 5;
-            default -> 1;
-        };
+    public int getWinterEffect() {
+        return WINTER_EFFECT;
     }
 
-    public double getCenterTileProductionEffect(){
-
+    public int getAutumnEffect() {
+        return AUTUMN_EFFECT;
     }
 
+    public int getSpringEffect() {
+        return SPRING_EFFECT;
+    }
+
+    public int getSummerEffect() {
+        return SUMMER_EFFECT;
+    }
+
+    public Stream<Modifier> getSeasonModifierStream() {
+        switch (turn.getSeason()){
+            case WINTER:
+                return Stream.of(getWinterMod());
+            case SPRING:
+                return Stream.of(getSpringMod());
+            case SUMMER:
+                return Stream.of(getSummerMod());
+            case AUTUMN:
+                return Stream.of(getAutumnMod());
+            default: return null;
+        }
+    }
+
+    private Modifier getWinterMod() {
+        return new Modifier(Modifier.TILE_TYPE_CHANGE_PRODUCTION, WINTER_EFFECT, Modifier.ModifierType.PERCENTAGE);
+    }
+
+    private Modifier getSpringMod() {
+        return new Modifier(Modifier.TILE_TYPE_CHANGE_PRODUCTION, SPRING_EFFECT, Modifier.ModifierType.PERCENTAGE);
+    }
+
+    private Modifier getSummerMod() {
+        return new Modifier(Modifier.TILE_TYPE_CHANGE_PRODUCTION, SUMMER_EFFECT, Modifier.ModifierType.PERCENTAGE);
+    }
+
+    private Modifier getAutumnMod() {
+        return new Modifier(Modifier.TILE_TYPE_CHANGE_PRODUCTION, AUTUMN_EFFECT, Modifier.ModifierType.PERCENTAGE);
+    }
 }
