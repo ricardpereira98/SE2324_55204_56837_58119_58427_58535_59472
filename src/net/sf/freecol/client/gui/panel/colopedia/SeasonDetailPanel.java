@@ -80,16 +80,16 @@ public class SeasonDetailPanel extends FreeColPanel
     ;
 
     private static final String id = "colopediaAction." + PanelType.SEASONS.getKey();
-    private static final String WINTER = "Winter";
-    private static final String SPRING = "Spring";
-    private static final String SUMMER = "Summer";
-    private static final String AUTUMN = "Autumn";
+    private static final String WINTER = "winter";
+    private static final String SPRING = "spring";
+    private static final String SUMMER = "summer";
+    private static final String AUTUMN = "autumn";
 
     private static final String[] seasons = {
-            "Winter",
-            "Spring",
-            "Summer",
-            "Autumn"
+            "winter",
+            "spring",
+            "summer",
+            "autumn"
 
     };
 
