@@ -123,6 +123,8 @@ public class Modifier extends Feature {
         = "model.modifier.SoL";
     public static final String TILE_TYPE_CHANGE_PRODUCTION
         = "model.modifier.tileTypeChangeProduction";
+    public static final String TILE_SEASON_EFFECT
+        = "model.modifier.tileSeasonEffect";
     public static final String TRADE_BONUS
         = "model.modifier.tradeBonus";
     public static final String TRADE_VOLUME_PENALTY

@@ -2,6 +2,7 @@ package net.sf.freecol.common.model.production;
 
 import net.sf.freecol.common.model.Game;
 import net.sf.freecol.common.model.Modifier;
+import net.sf.freecol.common.model.Specification;
 import net.sf.freecol.common.model.Turn;
 
 import java.util.stream.Stream;
@@ -58,18 +59,18 @@ public class SeasonEffect {
     }
 
     private Modifier getWinterMod() {
-        return new Modifier(Modifier.TILE_TYPE_CHANGE_PRODUCTION, WINTER_EFFECT, Modifier.ModifierType.PERCENTAGE);
+        return new Modifier(Modifier.TILE_SEASON_EFFECT, WINTER_EFFECT, Modifier.ModifierType.PERCENTAGE, Specification.TILE_SEASON_EFFECT);
     }
 
     private Modifier getSpringMod() {
-        return new Modifier(Modifier.TILE_TYPE_CHANGE_PRODUCTION, SPRING_EFFECT, Modifier.ModifierType.PERCENTAGE);
+        return new Modifier(Modifier.TILE_SEASON_EFFECT, SPRING_EFFECT, Modifier.ModifierType.PERCENTAGE, Specification.TILE_SEASON_EFFECT);
     }
 
     private Modifier getSummerMod() {
-        return new Modifier(Modifier.TILE_TYPE_CHANGE_PRODUCTION, SUMMER_EFFECT, Modifier.ModifierType.PERCENTAGE);
+        return new Modifier(Modifier.TILE_SEASON_EFFECT, SUMMER_EFFECT, Modifier.ModifierType.PERCENTAGE, Specification.TILE_SEASON_EFFECT);
     }
 
     private Modifier getAutumnMod() {
-        return new Modifier(Modifier.TILE_TYPE_CHANGE_PRODUCTION, AUTUMN_EFFECT, Modifier.ModifierType.PERCENTAGE);
+        return new Modifier(Modifier.TILE_SEASON_EFFECT, AUTUMN_EFFECT, Modifier.ModifierType.PERCENTAGE, Specification.TILE_SEASON_EFFECT);
     }
 }

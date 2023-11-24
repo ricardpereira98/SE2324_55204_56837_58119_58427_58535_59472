@@ -146,7 +146,6 @@ public class TileProductionCalculator {
 
     /**
      * Get the base production exclusive of any bonuses.
-     * Only the season bonus is taken into account.
      *
      * @param tile The tile where the production is happening.
      * @param productionType An optional {@code ProductionType} to use,
@@ -168,6 +167,7 @@ public class TileProductionCalculator {
     /**
      * Gets the production modifiers for the given type of goods and
      * unit type.
+     * Applies the season effect.
      *
      * @param goodsType The {@code GoodsType} to produce.
      * @param unitType The optional {@code UnitType} to produce them.
