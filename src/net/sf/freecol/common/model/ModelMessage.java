@@ -64,9 +64,13 @@ public class ModelMessage extends StringTemplate {
         TUTORIAL("model.option.guiShowTutorial"),
 
         //For Tutorial
+        STARTTUTORIAL("model.option.guiShowTutorial"),
+
         SHIP("model.option.guiShowTutorial"),
 
         PERSON("model.option.guiShowTutorial"),
+
+        //TOGGLE("model.option.guiShowTutorial"),
 
         //END Tutorial
         UNIT_ADDED("model.option.guiShowUnitAdded"),
@@ -320,13 +324,17 @@ public class ModelMessage extends StringTemplate {
             case TUTORIAL:
                 o = source;
                 break;
+            case STARTTUTORIAL:
+                o = source;
             case SHIP:
                o  = source.getSpecification().getUnitType("model.unit.caravel");
                break;
             case PERSON :
                 o = source.getSpecification().getDefaultUnitType();
                 break;
-
+            //case TOGGLE:
+                //o = source.getSpecification().getUnitType("model.toggle");
+                //break;
             case GIFT_GOODS:
             default:
                 if (source instanceof Player)

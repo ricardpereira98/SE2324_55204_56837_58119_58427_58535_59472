@@ -65,28 +65,7 @@ import net.sf.freecol.client.gui.dialog.SelectDestinationDialog;
 import net.sf.freecol.client.gui.dialog.SelectTributeAmountDialog;
 import net.sf.freecol.client.gui.dialog.VictoryDialog;
 import net.sf.freecol.client.gui.dialog.WarehouseDialog;
-import net.sf.freecol.client.gui.panel.AboutPanel;
-import net.sf.freecol.client.gui.panel.BuildQueuePanel;
-import net.sf.freecol.client.gui.panel.ChatPanel;
-import net.sf.freecol.client.gui.panel.ColorChooserPanel;
-import net.sf.freecol.client.gui.panel.DeclarationPanel;
-import net.sf.freecol.client.gui.panel.ErrorPanel;
-import net.sf.freecol.client.gui.panel.EuropePanel;
-import net.sf.freecol.client.gui.panel.EventPanel;
-import net.sf.freecol.client.gui.panel.FindSettlementPanel;
-import net.sf.freecol.client.gui.panel.FreeColPanel;
-import net.sf.freecol.client.gui.panel.IndianSettlementPanel;
-import net.sf.freecol.client.gui.panel.InformationPanel;
-import net.sf.freecol.client.gui.panel.NewPanel;
-import net.sf.freecol.client.gui.panel.PurchasePanel;
-import net.sf.freecol.client.gui.panel.RecruitPanel;
-import net.sf.freecol.client.gui.panel.ServerListPanel;
-import net.sf.freecol.client.gui.panel.StatisticsPanel;
-import net.sf.freecol.client.gui.panel.TilePanel;
-import net.sf.freecol.client.gui.panel.TradeRouteInputPanel;
-import net.sf.freecol.client.gui.panel.TradeRoutePanel;
-import net.sf.freecol.client.gui.panel.TrainPanel;
-import net.sf.freecol.client.gui.panel.WorkProductionPanel;
+import net.sf.freecol.client.gui.panel.*;
 import net.sf.freecol.client.gui.panel.colopedia.ColopediaPanel;
 import net.sf.freecol.client.gui.panel.report.CompactLabourReport;
 import net.sf.freecol.client.gui.panel.report.LabourData.UnitData;
@@ -662,6 +641,19 @@ public final class Widgets {
                                    new ImageIcon[] { icon });
         return this.canvas.showFreeColPanel(panel, pos, false);
     }
+    //TODO lilly
+    public FreeColPanel showTutorialPanel(FreeColObject displayObject,
+                                             PopupPosition pos, ImageIcon icon,
+                                             StringTemplate tmpl,String imkey) {
+        TutorialPanel panel
+                = new TutorialPanel(this.freeColClient,
+                new String[] { Messages.message(tmpl) },
+                new FreeColObject[] { displayObject },
+                new ImageIcon[] { icon },
+                new String[]{ imkey });
+        return this.canvas.showFreeColPanelTutorial(panel, pos, false);
+    }
+
 
     /**
      * Show a dialog where the user may choose a file.

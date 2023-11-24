@@ -2245,6 +2245,27 @@ public class SwingGUI extends GUI {
                                                  icon, template);
     }
 
+    //TODO: lilly
+    @Override
+    public FreeColPanel showTutorialPanel(FreeColObject displayObject,
+                                             StringTemplate template, String imkey) {
+        ImageIcon icon = null;
+        Tile tile = null;
+        if (displayObject != null) {
+            BufferedImage library = this.fixedImageLibrary.getSizedImage(imkey, new Dimension(1,1));
+            icon  = new ImageIcon(library);
+            //icon = this.fixedImageLibrary.getObjectImageIcon(displayObject);
+            tile = (displayObject instanceof Location)
+                    ? ((Location)displayObject).getTile()
+                    : null;
+        }
+        if (getClientOptions().getBoolean(ClientOptions.AUDIO_ALERTS)) {
+            playSound("sound.event.alertSound");
+        }
+        return this.widgets.showTutorialPanel(displayObject,
+                getPopupPosition(tile), icon, template, imkey);
+    }
+
     /**
      * {@inheritDoc}
      */
@@ -2345,6 +2366,7 @@ public class SwingGUI extends GUI {
         return this.canvas.showFreeColPanel(panel,
             getPopupPosition(tile), false);
     }
+
 
     /**
      * {@inheritDoc}

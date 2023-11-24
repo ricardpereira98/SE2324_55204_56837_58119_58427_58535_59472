@@ -341,15 +341,17 @@ public final class PreGameController extends FreeColClientHolder {
 
     private void InfoPanelTutorial (Player player)
     {
-        player.addModelMessage(new ModelMessage(ModelMessage.MessageType.TUTORIAL, "startTutorial.infopanel", player));
+
+        player.addModelMessage(new ModelMessage(ModelMessage.MessageType.STARTTUTORIAL, "startTutorial.infopanel", player));
         player.addModelMessage(new ModelMessage(ModelMessage.MessageType.SHIP, "startTutorial.infopanel.ship", player));
         player.addModelMessage(new ModelMessage(ModelMessage.MessageType.PERSON, "startTutorial.infopanel.person", player));
 
     }
     private void moveBoatTutorial(Player player) {
         player.addModelMessage(new ModelMessage(ModelMessage.MessageType.SHIP, "startTutorial.moveBoat", player));
-        player.addModelMessage(new ModelMessage(ModelMessage.MessageType.TUTORIAL, "startTutorial.move", player));
-        player.addModelMessage(new ModelMessage(ModelMessage.MessageType.TUTORIAL, "startTutorial.endTurn", player));
+        player.addModelMessage(new ModelMessage(ModelMessage.MessageType.STARTTUTORIAL, "startTutorial.move", player));
+        player.addModelMessage(new ModelMessage(ModelMessage.MessageType.STARTTUTORIAL, "startTutorial.endTurn", player));
+        //player.addModelMessage(new ModelMessage(ModelMessage.MessageType.TOGGLE, "startTutorial.move", player));
 
 
     }

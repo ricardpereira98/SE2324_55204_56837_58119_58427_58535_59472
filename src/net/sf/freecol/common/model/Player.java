@@ -2749,15 +2749,15 @@ public class Player extends FreeColGameObject implements Nameable {
                 : (tile.getX() < tile.getMap().getWidth() / 2) ? "east"
                         : "west";
 
-        addModelMessage(new ModelMessage(ModelMessage.MessageType.WARNING, "model.player.startGame", this)
+        addModelMessage(new ModelMessage(ModelMessage.MessageType.TUTORIAL, "model.player.startGame", this)
                 .addTagged("%direction%", sailTag));
 
     }
 
     // TODO: lilly
     public void addTutorialIntro() {
-        addModelMessage(new ModelMessage(ModelMessage.MessageType.TUTORIAL, "startTutorial.intro", this));
-        addModelMessage(new ModelMessage(ModelMessage.MessageType.TUTORIAL, "startTutorial.missao", this));
+        addModelMessage(new ModelMessage(ModelMessage.MessageType.STARTTUTORIAL, "startTutorial.intro", this));
+        addModelMessage(new ModelMessage(ModelMessage.MessageType.STARTTUTORIAL, "startTutorial.missao", this));
 
         //addModelMessage(new ModelMessage(ModelMessage.MessageType.TUTORIAL, "startTutorial.navegacao", this));
         //addModelMessage(new ModelMessage(ModelMessage.MessageType.TUTORIAL, "startTutorial.elementos", this));
@@ -2766,8 +2766,8 @@ public class Player extends FreeColGameObject implements Nameable {
 
     public void addTutorialEnd()
     {
-        addModelMessage(new ModelMessage(ModelMessage.MessageType.TUTORIAL, "startTutorial.conselho", this));
-        addModelMessage(new ModelMessage(ModelMessage.MessageType.TUTORIAL, "startTutorial.sorte", this));
+        addModelMessage(new ModelMessage(ModelMessage.MessageType.STARTTUTORIAL, "startTutorial.conselho", this));
+        addModelMessage(new ModelMessage(ModelMessage.MessageType.STARTTUTORIAL, "startTutorial.sorte", this));
 
     }
 

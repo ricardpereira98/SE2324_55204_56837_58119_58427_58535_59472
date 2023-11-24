@@ -132,6 +132,8 @@ import net.sf.freecol.common.model.UnitTypeChange;
 import net.sf.freecol.common.model.UnitWas;
 import net.sf.freecol.common.model.WorkLocation;
 import net.sf.freecol.common.option.GameOptions;
+import net.sf.freecol.common.resources.ImageResource;
+import net.sf.freecol.common.resources.ResourceManager;
 import net.sf.freecol.common.util.Introspector;
 import net.sf.freecol.common.util.LogBuilder;
 import net.sf.freecol.server.FreeColServer;
@@ -405,6 +407,13 @@ public final class InGameController extends FreeColClientHolder {
     private void showInformationPanel(final FreeColObject disp,
                                       final StringTemplate template) {
         invokeLater(() -> getGUI().showInformationPanel(disp, template));
+    }
+
+    //TODO: lily
+    private void showTutorialPanel(final FreeColObject disp,
+                                   final StringTemplate template, String imkey)
+    {
+        invokeLater(() -> getGUI().showTutorialPanel(disp, template, imkey));
     }
 
     /**
@@ -4494,11 +4503,10 @@ public final class InGameController extends FreeColClientHolder {
         final Turn currTurn = game.getTurn();
 
         //TODO: Teste only if >1
-       /* if(currTurn.getNumber() == 2)
+        if(currTurn.getNumber() == 2)
         { //TODO PUT ICON INSTEAD OF NULL
 
-            BufferedImage unit = getGUI().getFixedImageLibrary().getScaledImage("image.unit.model.unit.caravel");
-
+            //BufferedImage unit = getGUI().getFixedImageLibrary().getScaledImage("image.unit.model.unit.caravel");
 
             //aparece com a sigla do player
             //showInformationPanel(player, StringTemplate.template("startTutorial.sorte"));
@@ -4508,18 +4516,24 @@ public final class InGameController extends FreeColClientHolder {
             //FreeColObject obg = getGame().getSpecification().getDefaultUnitType(player);
             //showInformationPanel(obg, StringTemplate.template("startTutorial.sorte"));
             //show caravel
-
-           // FreeColObject obg = getGame().getSpecification().getUnitType("image.miscicon.button.normal.toggle_fog_of_war");
-
+            //FreeColObject obg = getGame().getSpecification().getUnitType("image.miscicon.button.normal.toggle_fog_of_war");
             //showInformationPanel(obg, StringTemplate.template("startTutorial.intro"));
 
-            BufferedImage libo = getGUI().getFixedImageLibrary().getScaledImage("image.miscicon.button.normal.toggle_fog_of_war");
+            //BufferedImage libo = getGUI().getFixedImageLibrary().getScaledImage("image.miscicon.button.normal.toggle_fog_of_war");
                     //model.option.miniMapToggleFogOfWar");
-            FreeColObject b = getSpecification().getType("image.miscicon.button.normal.toggle_fog_of_war");
-            showInformationPanel(b, StringTemplate.template("startTutorial.intro"));
+            //getGUI().getFixedImageLibrary().getSizedImage();
 
+
+            //aparece o homemzinho
+            FreeColObject obg = getGame().getSpecification().getDefaultUnitType(player);
+
+            showTutorialPanel(obg, StringTemplate.template( "startTutorial.intro"),"image.miscicon.button.normal.toggle_fog_of_war");
+            showTutorialPanel(obg, StringTemplate.template( "startTutorial.sorte"),"image.miscicon.button.highlighted.zoom_in");
+            nextModelMessage();
         }
-*/
+
+
+
         if (currTurn.isFirstSeasonTurn()) {
             player.addModelMessage(new ModelMessage(MessageType.WARNING,
                                                     "twoTurnsPerYear", player)
@@ -5420,15 +5434,4 @@ public final class InGameController extends FreeColClientHolder {
         return ret;
     }
 
-    public void tutorialStart()
-    {
-        final Game game = getGame();
-        final Turn currTurn = game.getTurn();
-        final Player player = getMyPlayer();
-        if (currTurn.isFirstTurn()) {
-            player.addModelMessage(new ModelMessage(ModelMessage.MessageType.TUTORIAL,
-                    "startTutorial", player));
-        }
-
-    }
 }

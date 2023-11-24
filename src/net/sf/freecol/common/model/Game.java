@@ -1425,7 +1425,7 @@ public class Game extends FreeColGameObject {
                 o = null; // Ignore
             }
         }
-       if (message.getMessageType() == ModelMessage.MessageType.TUTORIAL) {
+       if (message.getMessageType() == ModelMessage.MessageType.STARTTUTORIAL) {
            o = null;
         }
         return o;
