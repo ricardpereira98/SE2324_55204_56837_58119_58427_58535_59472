@@ -94,57 +94,9 @@ public class TutorialPanel extends FreeColPanel{
             }
 
 
-            /*if (images [i] != null) {
-                textPanel.add(new JLabel(images [i]));
-                textPanel.add(txt, "gapleft " + gap + ", growx");
-            } else {
-                textPanel.add(txt, "skip, growx");
-            }
-           StringTemplate disp = displayLabel(fcos[i]);
-            if (disp != null) {
-                JButton button = Utility.localizedButton(StringTemplate
-                        .template("informationPanel.display")
-                        .addStringTemplate("%object%", disp));
-                final FreeColObject fco = fcos[i];
-                button.addActionListener((ActionEvent ae) -> {
-                    getGUI().displayObject(fco);
-                });
-                /*
-                  If there is another text to display, we need to add
-                  "gapbottom 25" into the .add(), which gives some
-                  cushion between each text block
-
-                if ((i + 1) < texts.length) {
-                    textPanel.add(button, "skip, gapbottom 25");
-                } else {
-                    textPanel.add(button, "skip");
-                }
-            }*/
         }
         return textPanel;
     }
-
-    /**
-     * A label for an FCO that can meaningfully be displayed.
-     *
-     * @param fco The {@code FreeColObject} to check.
-     * @return A {@code StringTemplate} label, or null if nothing found.
-     */
-    private StringTemplate displayLabel(FreeColObject fco) {
-        return (fco instanceof Tile && ((Tile)fco).hasSettlement())
-                ? displayLabel(((Tile)fco).getSettlement())
-
-                : (fco instanceof Unit)
-                ? displayLabel((FreeColObject)((Unit)fco).getLocation())
-
-                : (fco instanceof Location)
-                ? ((Location)fco).getLocationLabelFor(getMyPlayer())
-
-                : null;
-
-
-    }
-
 
 
     // Override JComponent

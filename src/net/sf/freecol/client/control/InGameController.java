@@ -4591,27 +4591,6 @@ public final class InGameController extends FreeColClientHolder {
         // TODO: Teste only if >1
         if (currTurn.getNumber() == 2) { // TODO PUT ICON INSTEAD OF NULL
 
-            // BufferedImage unit =
-            // getGUI().getFixedImageLibrary().getScaledImage("image.unit.model.unit.caravel");
-
-            // aparece com a sigla do player
-            // showInformationPanel(player, StringTemplate.template("startTutorial.sorte"));
-            // aparece sem nda
-            // showInformationPanel(null, StringTemplate.template("startTutorial.intro"));
-            // aparece o homemzinho
-            // FreeColObject obg = getGame().getSpecification().getDefaultUnitType(player);
-            // showInformationPanel(obg, StringTemplate.template("startTutorial.sorte"));
-            // show caravel
-            // FreeColObject obg =
-            // getGame().getSpecification().getUnitType("image.miscicon.button.normal.toggle_fog_of_war");
-            // showInformationPanel(obg, StringTemplate.template("startTutorial.intro"));
-
-            // BufferedImage libo =
-            // getGUI().getFixedImageLibrary().getScaledImage("image.miscicon.button.normal.toggle_fog_of_war");
-            // model.option.miniMapToggleFogOfWar");
-            // getGUI().getFixedImageLibrary().getSizedImage();
-
-            // aparece o homemzinho
             FreeColObject obg = getGame().getSpecification().getDefaultUnitType(player);
 
             showTutorialPanel(obg, StringTemplate.template("tutorial.zoom_in"),
