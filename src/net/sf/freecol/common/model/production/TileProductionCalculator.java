@@ -177,7 +177,8 @@ public class TileProductionCalculator {
         if (unitType == null || !tile.canProduce(goodsType, unitType)) {
             return Stream.<Modifier>empty();
         }
-        SeasonEffect seasonEffect = new SeasonEffect(turn);
+
+        SeasonEffect seasonEffect = new SeasonEffect(turn, owner.getGame().getSpecification().getDifficultyLevel());
 
         return concat(seasonEffect.getSeasonModifierStream(),
                 tile.getProductionModifiers(goodsType, unitType),

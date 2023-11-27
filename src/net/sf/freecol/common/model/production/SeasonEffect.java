@@ -9,7 +9,7 @@ import java.util.stream.Stream;
 
 public class SeasonEffect {
 
-    Turn turn;
+    private final Turn turn;
 
     //seasons of the year and the arbitrary constants that define them
     private static final int WINTER = 0;
@@ -18,14 +18,44 @@ public class SeasonEffect {
     private static final int AUTUMN = 3;
 
     // Effect on season (Percentage)
-    private final int WINTER_EFFECT = -20 ;
-    private final int AUTUMN_EFFECT = -15;
-    private final int SPRING_EFFECT = 15;
-    private final int SUMMER_EFFECT = 20;
+    private int WINTER_EFFECT;
+    private int AUTUMN_EFFECT;
+    private int SPRING_EFFECT;
+    private int SUMMER_EFFECT;
 
+    private final int WINTER_VERY_EASY = 0;
+    private final int WINTER_EASY = -10;
+    private final int WINTER_MEDIUM = -25;
+    private final int WINTER_HARD = -50;
+    private final int WINTER_VERY_HARD = -75;
 
-    public SeasonEffect(Turn turn) {
+    private final int SPRING_VERY_EASY = 75;
+    private final int SPRING_EASY = 50;
+    private final int SPRING_MEDIUM = 25;
+    private final int SPRING_HARD = 10;
+    private final int SPRING_VERY_HARD = 0;
+
+    private final int SUMMER_VERY_EASY = 50;
+    private final int SUMMER_EASY = 30;
+    private final int SUMMER_MEDIUM = 20;
+    private final int SUMMER_HARD = 10;
+    private final int SUMMER_VERY_HARD = 0;
+
+    private final int AUTUMN_VERY_EASY = 0;
+    private final int AUTUMN_EASY = -10;
+    private final int AUTUMN_MEDIUM = -20;
+    private final int AUTUMN_HARD = -30;
+    private final int AUTUMN_VERY_HARD = -50;
+
+    private final String VERY_EASY = "model.difficulty.veryEasy";
+    private final String EASY = "model.difficulty.easy";
+    private final String MEDIUM = "model.difficulty.medium";
+    private final String HARD = "model.difficulty.hard";
+    private final String VERY_HARD = "model.difficulty.veryHard";
+
+    public SeasonEffect(Turn turn, String difficultyLevel) {
         this.turn = turn;
+        applyDifficulty(difficultyLevel);
     }
 
     public int getWinterEffect() {
@@ -42,6 +72,33 @@ public class SeasonEffect {
 
     public int getSummerEffect() {
         return SUMMER_EFFECT;
+    }
+
+    private void applyDifficulty(String difficultyLevel){
+        switch (difficultyLevel){
+            case VERY_EASY:
+                setSeasonsEffect(WINTER_VERY_EASY, SPRING_VERY_EASY, SUMMER_VERY_EASY, AUTUMN_VERY_EASY);
+                break;
+            case EASY:
+                setSeasonsEffect(WINTER_EASY, SPRING_EASY, SUMMER_EASY, AUTUMN_EASY);
+                break;
+            case HARD:
+                setSeasonsEffect(WINTER_HARD, SPRING_HARD, SUMMER_HARD, AUTUMN_HARD);
+                break;
+            case VERY_HARD:
+                setSeasonsEffect(WINTER_VERY_HARD, SPRING_VERY_HARD, SUMMER_VERY_HARD, AUTUMN_VERY_HARD);
+                break;
+            case MEDIUM:
+            default:
+                setSeasonsEffect(WINTER_MEDIUM, SPRING_MEDIUM, SUMMER_MEDIUM, AUTUMN_MEDIUM);
+        }
+    }
+
+    private void setSeasonsEffect(int winter, int spring, int summer, int autumn){
+        WINTER_EFFECT = winter;
+        SPRING_EFFECT = spring;
+        SUMMER_EFFECT = summer;
+        AUTUMN_EFFECT = autumn;
     }
 
     public Stream<Modifier> getSeasonModifierStream() {
