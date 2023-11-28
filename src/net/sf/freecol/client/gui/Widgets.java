@@ -109,6 +109,7 @@ import net.sf.freecol.client.gui.panel.report.ReportReligiousPanel;
 import net.sf.freecol.client.gui.panel.report.ReportRequirementsPanel;
 import net.sf.freecol.client.gui.panel.report.ReportTradePanel;
 import net.sf.freecol.client.gui.panel.report.ReportTurnPanel;
+import net.sf.freecol.client.gui.panel.TurnManagerPanel;
 import net.sf.freecol.common.i18n.Messages;
 import net.sf.freecol.common.metaserver.ServerInfo;
 import net.sf.freecol.common.model.Colony;
@@ -1296,4 +1297,15 @@ public final class Widgets {
         }
         return panel;
     }
+
+    public FreeColPanel showTurnManagerPanel() {
+        TurnManagerPanel panel
+                = this.canvas.getExistingFreeColPanel(TurnManagerPanel.class);
+        if (panel == null) {
+            panel = new TurnManagerPanel(this.freeColClient);
+            this.canvas.showFreeColPanel(panel, PopupPosition.CENTERED_RIGHT, true);
+        }
+        return panel;
+    }
 }
+
