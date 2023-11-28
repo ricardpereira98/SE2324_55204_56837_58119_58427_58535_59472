@@ -2262,6 +2262,12 @@ public class GUI extends FreeColClientHolder {
     public FreeColPanel showNewPanel(Specification spec) { return null; }
 
     /**
+     * Show the turn manager window.
+     *
+     * @return The chosen parameters.
+     */
+    public FreeColPanel showTurnManagerWindow() { return null; }
+    /**
      * Show the parameter choice dialog.
      *
      * @return The chosen parameters.
