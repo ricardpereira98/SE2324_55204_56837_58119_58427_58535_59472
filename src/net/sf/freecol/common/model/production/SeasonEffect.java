@@ -17,12 +17,20 @@ public class SeasonEffect {
     private static final int SUMMER = 2;
     private static final int AUTUMN = 3;
 
+    // Difficulties
+    private final String VERY_EASY = "model.difficulty.veryEasy";
+    private final String EASY = "model.difficulty.easy";
+    private final String MEDIUM = "model.difficulty.medium";
+    private final String HARD = "model.difficulty.hard";
+    private final String VERY_HARD = "model.difficulty.veryHard";
+
     // Effect on season (Percentage)
     private int WINTER_EFFECT;
     private int AUTUMN_EFFECT;
     private int SPRING_EFFECT;
     private int SUMMER_EFFECT;
 
+    // Effect on season per difficulty (Percentage)
     private final int WINTER_VERY_EASY = 0;
     private final int WINTER_EASY = -10;
     private final int WINTER_MEDIUM = -25;
@@ -47,34 +55,55 @@ public class SeasonEffect {
     private final int AUTUMN_HARD = -30;
     private final int AUTUMN_VERY_HARD = -50;
 
-    private final String VERY_EASY = "model.difficulty.veryEasy";
-    private final String EASY = "model.difficulty.easy";
-    private final String MEDIUM = "model.difficulty.medium";
-    private final String HARD = "model.difficulty.hard";
-    private final String VERY_HARD = "model.difficulty.veryHard";
 
+    /**
+     * Creates a season effect given a game and turn.
+     *
+     * @param game The current Game being played.
+     */
+    public SeasonEffect(Game game){
+        this.turn = game.getTurn();
+        // Default difficulty
+        applyDifficulty(MEDIUM);
+    }
+
+    /**
+     * Creates a season effect given a game and turn.
+     *
+     * @param turn The current game turn.
+     * @param difficultyLevel Games difficulty.
+     */
     public SeasonEffect(Turn turn, String difficultyLevel) {
         this.turn = turn;
         applyDifficulty(difficultyLevel);
     }
 
-    public int getWinterEffect() {
-        return WINTER_EFFECT;
+    /**
+     * Gets the season effect value for the current turn.
+     *
+     * @return The current season effect value.
+     */
+    public int getSeasonEffectValue(){
+        switch (turn.getSeason()){
+            case WINTER:
+                return WINTER_EFFECT;
+            case SPRING:
+                return SPRING_EFFECT;
+            case SUMMER:
+                return SUMMER_EFFECT;
+            case AUTUMN:
+                return AUTUMN_EFFECT;
+            default: return 0;
+        }
     }
 
-    public int getAutumnEffect() {
-        return AUTUMN_EFFECT;
-    }
 
-    public int getSpringEffect() {
-        return SPRING_EFFECT;
-    }
-
-    public int getSummerEffect() {
-        return SUMMER_EFFECT;
-    }
-
-    private void applyDifficulty(String difficultyLevel){
+    /**
+     * Given a difficulty, applies it to the season effect values.
+     *
+     * @param difficultyLevel The difficulty to be applied.
+     */
+    public void applyDifficulty(String difficultyLevel){
         switch (difficultyLevel){
             case VERY_EASY:
                 setSeasonsEffect(WINTER_VERY_EASY, SPRING_VERY_EASY, SUMMER_VERY_EASY, AUTUMN_VERY_EASY);
@@ -94,6 +123,15 @@ public class SeasonEffect {
         }
     }
 
+    /**
+     * Sets the season effect value.
+     * Auxiliary function of applyDifficulty.
+     *
+     * @param winter The effect value for winter season.
+     * @param spring The effect value for spring season.
+     * @param summer The effect value for summer season.
+     * @param autumn The effect value for autumn season.
+     */
     private void setSeasonsEffect(int winter, int spring, int summer, int autumn){
         WINTER_EFFECT = winter;
         SPRING_EFFECT = spring;
@@ -101,33 +139,33 @@ public class SeasonEffect {
         AUTUMN_EFFECT = autumn;
     }
 
+
+    /**
+     * Gets a Modifier for the tile production of the season.
+     *
+     * @return Stream with the Modifier.
+     */
     public Stream<Modifier> getSeasonModifierStream() {
+        Modifier mod;
         switch (turn.getSeason()){
-            case WINTER:
-                return Stream.of(getWinterMod());
-            case SPRING:
-                return Stream.of(getSpringMod());
-            case SUMMER:
-                return Stream.of(getSummerMod());
-            case AUTUMN:
-                return Stream.of(getAutumnMod());
-            default: return null;
+            case WINTER: mod = getSeasonMod(WINTER_EFFECT); break;
+            case SPRING: mod = getSeasonMod(SPRING_EFFECT); break;
+            case SUMMER: mod = getSeasonMod(SUMMER_EFFECT); break;
+            case AUTUMN: mod = getSeasonMod(AUTUMN_EFFECT); break;
+            default: mod = null;
         }
+        return (mod == null)? null : Stream.of(mod);
     }
 
-    private Modifier getWinterMod() {
-        return new Modifier(Modifier.TILE_SEASON_EFFECT, WINTER_EFFECT, Modifier.ModifierType.PERCENTAGE, Specification.TILE_SEASON_EFFECT);
+
+    /**
+     * Auxiliary function to create the season Modifier.
+     *
+     * @param effect The value to be applied in the season modifier.
+     * @return The Modifier object.
+     */
+    private Modifier getSeasonMod(int effect){
+        return effect == 0 ? null : new Modifier(Modifier.TILE_SEASON_EFFECT, effect, Modifier.ModifierType.PERCENTAGE, Specification.TILE_SEASON_EFFECT);
     }
 
-    private Modifier getSpringMod() {
-        return new Modifier(Modifier.TILE_SEASON_EFFECT, SPRING_EFFECT, Modifier.ModifierType.PERCENTAGE, Specification.TILE_SEASON_EFFECT);
-    }
-
-    private Modifier getSummerMod() {
-        return new Modifier(Modifier.TILE_SEASON_EFFECT, SUMMER_EFFECT, Modifier.ModifierType.PERCENTAGE, Specification.TILE_SEASON_EFFECT);
-    }
-
-    private Modifier getAutumnMod() {
-        return new Modifier(Modifier.TILE_SEASON_EFFECT, AUTUMN_EFFECT, Modifier.ModifierType.PERCENTAGE, Specification.TILE_SEASON_EFFECT);
-    }
 }

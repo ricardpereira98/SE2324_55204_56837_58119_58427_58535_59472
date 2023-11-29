@@ -19,18 +19,13 @@
 
 package net.sf.freecol.client.gui.menu;
 
-import java.awt.BasicStroke;
-import java.awt.Color;
 import java.awt.Font;
 import java.awt.FontMetrics;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
 import java.awt.RenderingHints;
-import java.awt.Shape;
-import java.awt.Stroke;
 import java.awt.event.KeyEvent;
 import java.awt.event.MouseMotionListener;
-import java.awt.font.TextLayout;
 import java.awt.geom.Rectangle2D;
 import java.util.logging.Logger;
 
@@ -110,6 +105,7 @@ import net.sf.freecol.common.model.Player;
 import net.sf.freecol.common.model.Specification;
 import net.sf.freecol.common.model.StringTemplate;
 import net.sf.freecol.common.model.TileImprovementType;
+import net.sf.freecol.common.model.production.SeasonEffect;
 
 
 /**
@@ -334,26 +330,8 @@ public class InGameMenuBar extends FreeColMenuBar {
                 addAmount("%score%", player.getScore()).
                 addStringTemplate("%year%", this.freeColClient.getGame().getTurn().getLabel())).replace("|", "✧");
 
-        int seasonOfTheYear = this.freeColClient.getGame().getTurn().getSeason();
 
-        String textWeather = "";
-
-        switch (seasonOfTheYear) {
-            case WINTER:
-                textWeather = Messages.message(StringTemplate.label("menuBar.statusLine").add("WINTER 50% PRODUCTION DEBUFF ONGOING"));
-                break;
-            case SPRING:
-                textWeather = Messages.message(StringTemplate.label("menuBar.statusLine").add("SPRING 15% PRODUCTION BUFF ONGOING"));
-                break;
-            case SUMMER:
-                textWeather = Messages.message(StringTemplate.label("menuBar.statusLine").add("SUMMER 50% PRODUCTION BUFF ONGOING"));
-                break;
-            case AUTUMN:
-                textWeather = Messages.message(StringTemplate.label("menuBar.statusLine").add("AUTUMN 15% PRODUCTION DEBUFF ONGOING"));
-                break;
-            default:
-                break;
-        }
+        String textWithSeason = getSeasonEffectInfo(text);
 
 
         Graphics2D g2d = (Graphics2D) g;
@@ -367,7 +345,7 @@ public class InGameMenuBar extends FreeColMenuBar {
 
         final FontMetrics fm = g2d.getFontMetrics();
 
-        final Rectangle2D d = fm.getStringBounds(text, g2d);
+        final Rectangle2D d = fm.getStringBounds(textWithSeason, g2d);
 
         final int textWidth = (int) d.getWidth();
         final int textHeight = (int) d.getHeight();
@@ -376,21 +354,22 @@ public class InGameMenuBar extends FreeColMenuBar {
         final int x = getWidth() - rightSidePaddingInPx - textWidth - getInsets().right;
         final int y = (centerHeight - textHeight) / 2 + fm.getAscent();
 
-        if (!textWeather.isEmpty()) {
-            //test
-            final Rectangle2D d2 = fm.getStringBounds(textWeather, g2d);
-            //test
-            final int textWidth2 = (int) d2.getWidth();
-            final int textHeight2 = (int) d2.getHeight();
-            //test
-            final int testPadding = 770;
-            final int x2 = getWidth() - testPadding - textWidth2 - getInsets().right;
-            final int y2 = (centerHeight - textHeight2) / 2 + fm.getAscent();
-            Utility.drawGoldenText(textWeather, g2d, font, x2, y2);
+        Utility.drawGoldenText(textWithSeason, g2d, font, x, y);
+
+    }
+
+    private String getSeasonEffectInfo(String text) {
+        SeasonEffect seasonEffect = new SeasonEffect(this.freeColClient.getGame().getTurn(),
+                this.freeColClient.getGame().getSpecification().getDifficultyLevel());
+
+        int seasonProd = seasonEffect.getSeasonEffectValue();
+        String textWithSeason = text;
+        if (seasonProd < 0) {
+            textWithSeason += " ( Season Production Penalty: " + seasonProd + "% )";
         }
-
-
-        Utility.drawGoldenText(text, g2d, font, x, y);
-
+        if (seasonProd > 0) {
+            textWithSeason += " ( Season Production Bonus: +" + seasonProd + "% )";
+        }
+        return textWithSeason;
     }
 }

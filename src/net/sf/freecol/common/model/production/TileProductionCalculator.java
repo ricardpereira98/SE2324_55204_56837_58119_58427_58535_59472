@@ -178,13 +178,17 @@ public class TileProductionCalculator {
             return Stream.<Modifier>empty();
         }
 
-        SeasonEffect seasonEffect = new SeasonEffect(turn, owner.getGame().getSpecification().getDifficultyLevel());
 
-        return concat(seasonEffect.getSeasonModifierStream(),
+        SeasonEffect seasonEffect = null;
+        if (owner != null) {
+            seasonEffect = new SeasonEffect(turn, owner.getGame().getSpecification().getDifficultyLevel());
+        }
+
+        return concat(((owner == null) ? null : seasonEffect.getSeasonModifierStream()),
                 tile.getProductionModifiers(goodsType, unitType),
                 unitType.getModifiers(goodsType.getId(), tile.getType(), turn),
                 ((owner == null) ? null
-                    : owner.getModifiers(goodsType.getId(), unitType, turn)),
+                        : owner.getModifiers(goodsType.getId(), unitType, turn)),
                 ProductionUtils.getRebelProductionModifiersForTile(tile, colonyProductionBonus, goodsType, unitType));
     }
 
