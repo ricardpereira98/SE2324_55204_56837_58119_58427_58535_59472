@@ -2759,9 +2759,6 @@ public class Player extends FreeColGameObject implements Nameable {
         addModelMessage(new ModelMessage(ModelMessage.MessageType.STARTTUTORIAL, "startTutorial.intro", this));
         addModelMessage(new ModelMessage(ModelMessage.MessageType.STARTTUTORIAL, "startTutorial.missao", this));
 
-        //addModelMessage(new ModelMessage(ModelMessage.MessageType.TUTORIAL, "startTutorial.navegacao", this));
-        //addModelMessage(new ModelMessage(ModelMessage.MessageType.TUTORIAL, "startTutorial.elementos", this));
-        //addModelMessage(new ModelMessage(ModelMessage.MessageType.TUTORIAL, "startTutorial.prosseguir", this));
     }
 
     public void addTutorialEnd()

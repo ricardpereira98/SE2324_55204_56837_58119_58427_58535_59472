@@ -2138,9 +2138,9 @@ public class GUI extends FreeColClientHolder {
     public FreeColPanel showInformationPanel(FreeColObject displayObject,
                                              StringTemplate template) { return null; }
 
-    //TODO: lilly
-    public FreeColPanel showTutorialPanel(FreeColObject displayObject,
-                                          StringTemplate template, String imkey) { return null;}
+    //TODO: lilly & wilker
+    public FreeColPanel showTutorialMessages(FreeColObject displayObject, List<StringTemplate> tutorialTxt, List<String> img)
+    {return null;}
 
     /**
      * Show a dialog where the user may choose a file.

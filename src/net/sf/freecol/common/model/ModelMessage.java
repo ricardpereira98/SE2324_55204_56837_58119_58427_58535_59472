@@ -70,8 +70,6 @@ public class ModelMessage extends StringTemplate {
 
         PERSON("model.option.guiShowTutorial"),
 
-        //TOGGLE("model.option.guiShowTutorial"),
-
         //END Tutorial
         UNIT_ADDED("model.option.guiShowUnitAdded"),
         UNIT_ARRIVED("model.option.guiShowUnitArrived"),
@@ -332,9 +330,6 @@ public class ModelMessage extends StringTemplate {
             case PERSON :
                 o = source.getSpecification().getDefaultUnitType();
                 break;
-            //case TOGGLE:
-                //o = source.getSpecification().getUnitType("model.toggle");
-                //break;
             case GIFT_GOODS:
             default:
                 if (source instanceof Player)

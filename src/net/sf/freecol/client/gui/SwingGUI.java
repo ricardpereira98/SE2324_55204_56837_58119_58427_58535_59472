@@ -71,19 +71,7 @@ import net.sf.freecol.client.gui.mapviewer.MapAsyncPainter;
 import net.sf.freecol.client.gui.mapviewer.MapViewer;
 import net.sf.freecol.client.gui.mapviewer.MapViewerState;
 import net.sf.freecol.client.gui.mapviewer.TileViewer;
-import net.sf.freecol.client.gui.panel.ColonyPanel;
-import net.sf.freecol.client.gui.panel.CornerMapControls;
-import net.sf.freecol.client.gui.panel.FreeColImageBorder;
-import net.sf.freecol.client.gui.panel.FreeColPanel;
-import net.sf.freecol.client.gui.panel.InformationPanel;
-import net.sf.freecol.client.gui.panel.MapControls;
-import net.sf.freecol.client.gui.panel.PurchasePanel;
-import net.sf.freecol.client.gui.panel.RecruitPanel;
-import net.sf.freecol.client.gui.panel.StartGamePanel;
-import net.sf.freecol.client.gui.panel.StatusPanel;
-import net.sf.freecol.client.gui.panel.TradeRouteInputPanel;
-import net.sf.freecol.client.gui.panel.TrainPanel;
-import net.sf.freecol.client.gui.panel.Utility;
+import net.sf.freecol.client.gui.panel.*;
 import net.sf.freecol.client.gui.panel.report.LabourData.UnitData;
 import net.sf.freecol.client.gui.plaf.FreeColLookAndFeel;
 import net.sf.freecol.client.gui.plaf.FreeColToolTipUI;
@@ -2245,25 +2233,40 @@ public class SwingGUI extends GUI {
                                                  icon, template);
     }
 
-    //TODO: lilly
-    @Override
-    public FreeColPanel showTutorialPanel(FreeColObject displayObject,
-                                             StringTemplate template, String imkey) {
-        ImageIcon icon = null;
+
+    //TODO: TAKE OUT
+    public FreeColPanel showTutorialMessages( FreeColObject displayObject, List<StringTemplate> tutorialTxt, List<String> img) {
+        if (tutorialTxt.isEmpty()) return null;
+
+        int n = tutorialTxt.size();
+        String[] texts = new String[n];
+
+        String[] imagekey = new String[n];
+
+        FreeColObject[] fcos = new FreeColObject[n];
+        ImageIcon[] icons = new ImageIcon[n];
+
         Tile tile = null;
-        if (displayObject != null) {
-            BufferedImage library = this.fixedImageLibrary.getSizedImage(imkey, new Dimension(1,1));
-            icon  = new ImageIcon(library);
-            //icon = this.fixedImageLibrary.getObjectImageIcon(displayObject);
-            tile = (displayObject instanceof Location)
-                    ? ((Location)displayObject).getTile()
-                    : null;
+
+        for (int i = 0; i < n; i++) {
+            StringTemplate t = tutorialTxt.get(i);
+            texts[i] = Messages.message(t);
+
+            imagekey[i] = img.get(i);
+
+            BufferedImage library = this.fixedImageLibrary.getScaledImage(imagekey[i]);
+            icons[i] = new ImageIcon(library);
+
+            if (tile == null && fcos[i] instanceof Location) {
+                tile = ((Location)fcos[i]).getTile();
+            }
         }
-        if (getClientOptions().getBoolean(ClientOptions.AUDIO_ALERTS)) {
-            playSound("sound.event.alertSound");
-        }
-        return this.widgets.showTutorialPanel(displayObject,
-                getPopupPosition(tile), icon, template, imkey);
+
+        TutorialPanel panel
+                = new TutorialPanel(this.getFreeColClient(), texts,fcos, icons,imagekey);
+
+
+        return this.canvas.showFreeColPanelTutorial(panel, getPopupPosition(tile), false);
     }
 
     /**

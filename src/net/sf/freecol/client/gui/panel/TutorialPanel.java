@@ -20,7 +20,7 @@ public class TutorialPanel extends FreeColPanel{
 
     /** The skin for this panel. */
     private BufferedImage skin = null;
-    private BufferedImage im = null;
+
 
 
     /**
@@ -35,7 +35,7 @@ public class TutorialPanel extends FreeColPanel{
         this.skin = fixedImageLibrary.getInformationPanelSkin(freeColClient.getMyPlayer());
 
         //Header Tutorial
-        add(Utility.localizedHeader("Tutorial",Utility.FONTSPEC_SUBTITLE), "span,  align center, gaptop -100, gapbottom 0");
+        add(Utility.localizedHeader("Tutorial",Utility.FONTSPEC_SUBTITLE), "span,  align center");
 
 
         final float scaleFactor = fixedImageLibrary.getScaleFactor();
@@ -81,9 +81,14 @@ public class TutorialPanel extends FreeColPanel{
                 BufferedImage hm = ResourceManager.getImage(imkey[i]);
                 ImageIcon im = new ImageIcon(hm);
 
+                Image mi = im.getImage().getScaledInstance(50,50, Image.SCALE_SMOOTH);
+                ImageIcon me = new ImageIcon(mi);
+
+
                 if (im != null) {
+
                     //adds the image to the panel
-                    textPanel.add(new JLabel(im));
+                    textPanel.add(new JLabel(me));
 
                     //adds text to the panel
                     textPanel.add(txt, "gapleft " + gap + ", growx");

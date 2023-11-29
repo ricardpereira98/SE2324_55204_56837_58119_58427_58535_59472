@@ -31,10 +31,8 @@ import static net.sf.freecol.common.util.Utils.delay;
 import static net.sf.freecol.common.util.Utils.deleteFile;
 
 import java.awt.Color;
-import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
-import java.lang.reflect.InvocationTargetException;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
@@ -46,8 +44,6 @@ import java.util.function.Function;
 import java.util.function.Predicate;
 import java.util.logging.Level;
 import java.util.logging.Logger;
-
-import javax.swing.SwingUtilities;
 
 import net.sf.freecol.FreeCol;
 import net.sf.freecol.client.ClientOptions;
@@ -132,8 +128,6 @@ import net.sf.freecol.common.model.UnitTypeChange;
 import net.sf.freecol.common.model.UnitWas;
 import net.sf.freecol.common.model.WorkLocation;
 import net.sf.freecol.common.option.GameOptions;
-import net.sf.freecol.common.resources.ImageResource;
-import net.sf.freecol.common.resources.ResourceManager;
 import net.sf.freecol.common.util.Introspector;
 import net.sf.freecol.common.util.LogBuilder;
 import net.sf.freecol.server.FreeColServer;
@@ -181,6 +175,10 @@ public final class InGameController extends FreeColClientHolder {
 
     /** The messages in the last turn report. */
     private final List<ModelMessage> turnReportMessages = new ArrayList<>();
+
+    //TODO: Wilker & Liliane
+    public List<StringTemplate> textsTutorial = new ArrayList<>();
+    public List<String> imageskey = new ArrayList<>();
 
     /**
      * The constructor to use.
@@ -404,10 +402,13 @@ public final class InGameController extends FreeColClientHolder {
     }
 
     // TODO: lily
-    private void showTutorialPanel(final FreeColObject disp,
-            final StringTemplate template, String imkey) {
-        invokeLater(() -> getGUI().showTutorialPanel(disp, template, imkey));
+    public void showTutorialPanel(final FreeColObject displayObject, List<StringTemplate> tutorialTxt, List<String> img)
+    {
+        invokeLater(()-> getGUI().showTutorialMessages(displayObject, tutorialTxt, img));
+        tutorialTxt.clear();
+        img.clear();
     }
+
 
     /**
      * Wrapper for GUI.getMissionaryChoice
@@ -4589,37 +4590,16 @@ public final class InGameController extends FreeColClientHolder {
         final Turn currTurn = game.getTurn();
 
         // TODO: Teste only if >1
-        if (currTurn.getNumber() == 2) { // TODO PUT ICON INSTEAD OF NULL
+        FreeColObject obg = getGame().getSpecification().getDefaultUnitType(player);
+        if (currTurn.getNumber() == 2) {
 
-            FreeColObject obg = getGame().getSpecification().getDefaultUnitType(player);
+            miniMapTutorial(obg);
 
-            showTutorialPanel(obg, StringTemplate.template("tutorial.zoom_in"),
-                    "image.miscicon.button.highlighted.zoom_in");
-            showTutorialPanel(obg, StringTemplate.template("tutorial.zoom_out"),
-                    "image.miscicon.button.highlighted.zoom_out");
-            showTutorialPanel(obg, StringTemplate.template("tutorial.fog_of_war"),
-                    "image.miscicon.button.normal.toggle_fog_of_war");
-            showTutorialPanel(obg, StringTemplate.template("tutorial.view_politics"),
-                    "image.miscicon.button.highlighted.toggle_view_politics");
-
-            nextModelMessage();
         }
         if (currTurn.getNumber() == 3) {
-            FreeColObject obg = getGame().getSpecification().getDefaultUnitType(player);
-            showTutorialPanel(obg, StringTemplate.template("tutorial.disband"),
-                    "image.miscicon.button.highlighted.disband");
-            showTutorialPanel(obg, StringTemplate.template("tutorial.buid"), "image.miscicon.button.highlighted.build");
-            showTutorialPanel(obg, StringTemplate.template("tutorial.plow"), "image.miscicon.button.highlighted.plow");
-            showTutorialPanel(obg, StringTemplate.template("tutorial.road"), "image.miscicon.button.highlighted.road");
-            showTutorialPanel(obg, StringTemplate.template("tutorial.fortify"),
-                    "image.miscicon.button.highlighted.fortify");
-            showTutorialPanel(obg, StringTemplate.template("tutorial.sentry"),
-                    "image.miscicon.button.highlighted.sentry");
-            showTutorialPanel(obg, StringTemplate.template("tutorial.done"), "image.miscicon.button.highlighted.done");
-            showTutorialPanel(obg, StringTemplate.template("tutorial.wait"), "image.miscicon.button.highlighted.wait");
+            endTutorial(obg);
 
-            nextModelMessage();
-
+            unitButtonsTutorial(obg);
         }
 
         if (currTurn.isFirstSeasonTurn()) {
@@ -4632,6 +4612,63 @@ public final class InGameController extends FreeColClientHolder {
         return true;
     }
 
+    private void miniMapTutorial(FreeColObject obg)
+    {
+        addTutorial("tutorial.minimap.buttons",null);
+        addTutorial("tutorial.minimap.buttons.zoom_in","image.miscicon.button.normal.zoom_in2");
+        addTutorial("tutorial.minimap.buttons.zoom_out","image.miscicon.button.normal.zoom_out2");
+
+        showTutorialPanel(obg, textsTutorial, imageskey);
+
+        addTutorial("tutorial.minimap.buttons",null);
+        addTutorial("tutorial.minimap.buttons.view_politics","image.miscicon.button.normal.toggle_view_economic2");
+        addTutorial("tutorial.minimap.buttons.fog_of_war","image.miscicon.button.normal.toggle_fog_of_war_no2");
+
+        showTutorialPanel(obg, textsTutorial, imageskey);
+
+        addTutorial("tutorial.minimap","image.skin.MiniMap2");
+        addTutorial("tutorial.minimap.2",null);
+
+        showTutorialPanel(obg, textsTutorial,imageskey);
+    }
+
+    private void unitButtonsTutorial(FreeColObject obg)
+    {
+        addTutorial("tutorial.build","image.miscicon.button.normal.build2");
+        addTutorial("tutorial.disband","image.miscicon.button.normal.disband2");
+        showTutorialPanel(obg, textsTutorial, imageskey);
+
+        addTutorial("tutorial.clear","image.miscicon.button.normal.clearForest2");
+        showTutorialPanel(obg, textsTutorial, imageskey);
+
+        addTutorial("tutorial.road","image.miscicon.button.normal.road2");
+        addTutorial("tutorial.plow","image.miscicon.button.normal.plow2");
+        showTutorialPanel(obg, textsTutorial, imageskey);
+
+        addTutorial("tutorial.sentry","image.miscicon.button.normal.sentry2");
+        addTutorial("tutorial.fortify","image.miscicon.button.normal.fortify2");
+        showTutorialPanel(obg, textsTutorial, imageskey);
+
+        addTutorial("tutorial.unit.buttons", null);
+        addTutorial("tutorial.wait","image.miscicon.button.normal.wait2" );
+        addTutorial("tutorial.skipTurn","image.miscicon.button.normal.done2");
+
+        showTutorialPanel(obg, textsTutorial, imageskey);
+
+    }
+
+    private void endTutorial (FreeColObject obg)
+    {
+        addTutorial("startTutorial.conselho", "image.skin.compass");
+        addTutorial("startTutorial.sorte", null);
+        showTutorialPanel(obg, textsTutorial, imageskey);
+
+    }
+    private void addTutorial( String t, String im)
+    {
+        textsTutorial.add(StringTemplate.template(t));
+        imageskey.add(im);
+    }
     /**
      * Handle the new turn.
      *

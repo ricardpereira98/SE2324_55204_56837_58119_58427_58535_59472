@@ -641,18 +641,9 @@ public final class Widgets {
                                    new ImageIcon[] { icon });
         return this.canvas.showFreeColPanel(panel, pos, false);
     }
-    //TODO lilly
-    public FreeColPanel showTutorialPanel(FreeColObject displayObject,
-                                             PopupPosition pos, ImageIcon icon,
-                                             StringTemplate tmpl,String imkey) {
-        TutorialPanel panel
-                = new TutorialPanel(this.freeColClient,
-                new String[] { Messages.message(tmpl) },
-                new FreeColObject[] { displayObject },
-                new ImageIcon[] { icon },
-                new String[]{ imkey });
-        return this.canvas.showFreeColPanelTutorial(panel, pos, false);
-    }
+
+
+
 
 
     /**
