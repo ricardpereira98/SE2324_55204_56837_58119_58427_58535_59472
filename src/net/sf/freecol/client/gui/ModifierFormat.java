@@ -104,7 +104,7 @@ public class ModifierFormat {
                                              FreeColSpecObjectType fcgot,
                                              Turn turn) {
         String sourceName = getSourceName(modifier.getSource());
-        if (fcgot != null && modifier.appliesTo(fcgot)) {
+        if (fcgot != null && modifier.appliesTo(fcgot) && !modifier.getId().equals(Modifier.TILE_SEASON_EFFECT)) {
             sourceName += " (" + Messages.getName(fcgot) + ")";
         }
         float value = modifier.getValue(turn);

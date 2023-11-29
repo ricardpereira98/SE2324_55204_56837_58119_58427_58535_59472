@@ -1,20 +1,20 @@
 /**
- *  Copyright (C) 2002-2022   The FreeCol Team
- *
- *  This file is part of FreeCol.
- *
- *  FreeCol is free software: you can redistribute it and/or modify
- *  it under the terms of the GNU General Public License as published by
- *  the Free Software Foundation, either version 2 of the License, or
- *  (at your option) any later version.
- *
- *  FreeCol is distributed in the hope that it will be useful,
- *  but WITHOUT ANY WARRANTY; without even the implied warranty of
- *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- *  GNU General Public License for more details.
- *
- *  You should have received a copy of the GNU General Public License
- *  along with FreeCol.  If not, see <http://www.gnu.org/licenses/>.
+ * Copyright (C) 2002-2022   The FreeCol Team
+ * <p>
+ * This file is part of FreeCol.
+ * <p>
+ * FreeCol is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation, either version 2 of the License, or
+ * (at your option) any later version.
+ * <p>
+ * FreeCol is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ * <p>
+ * You should have received a copy of the GNU General Public License
+ * along with FreeCol.  If not, see <http://www.gnu.org/licenses/>.
  */
 
 package net.sf.freecol.client.gui.panel;
@@ -66,24 +66,31 @@ import net.sf.freecol.common.util.OSUtils;
  * | ---------------|
  * | okButton       |
  * | ---------------|
- *
  */
 public final class AboutPanel extends FreeColPanel {
 
     private static final Logger logger = Logger.getLogger(AboutPanel.class.getName());
 
-    /** The main FreeCol website */
+    /**
+     * The main FreeCol website
+     */
     private static final String SITE_URL
-        = "http://www.freecol.org";
-    /** The FreeCol SourceForge project link */
+            = "http://www.freecol.org";
+    /**
+     * The FreeCol SourceForge project link
+     */
     private static final String PROJECT_URL
-        = "https://sourceforge.net/projects/freecol/";
-    /** The link to the user manual for FreeCol users */
+            = "https://sourceforge.net/projects/freecol/";
+    /**
+     * The link to the user manual for FreeCol users
+     */
     private static final String MANUAL_URL
-        = "http://www.freecol.org/documentation/freecol-user-manual.html";
-    /** The link to the GitHub mirror */
+            = "http://www.freecol.org/documentation/freecol-user-manual.html";
+    /**
+     * The link to the GitHub mirror
+     */
     private static final String GITHUB_URL
-        = "https://github.com/FreeCol/freecol";
+            = "https://github.com/FreeCol/freecol";
 
 
     /**
@@ -143,7 +150,7 @@ public final class AboutPanel extends FreeColPanel {
         apManual.setFont(fontBold);
         add(apManual, "newline 10");
         JButton apManualURL = Utility.getLinkButton(MANUAL_URL, null,
-                                                    MANUAL_URL);
+                MANUAL_URL);
         apManualURL.addActionListener(this);
         add(apManualURL, "newline");
 
@@ -158,7 +165,7 @@ public final class AboutPanel extends FreeColPanel {
         add(apCopyright, "newline 10");
 
         add(okButton, "newline 20, tag ok");
-        
+
         setEscapeAction(new AbstractAction() {
             @Override
             public void actionPerformed(ActionEvent ae) {
@@ -171,7 +178,7 @@ public final class AboutPanel extends FreeColPanel {
 
     /**
      * {@inheritDoc}
-     *
+     * <p>
      * Launch a browser with the link clicked from the panel.
      *
      * @see OSUtils#launchBrowser(String)
@@ -183,10 +190,9 @@ public final class AboutPanel extends FreeColPanel {
                 || PROJECT_URL.equals(url)
                 || MANUAL_URL.equals(url)
                 || GITHUB_URL.equals(url)
-                ) {
+        ) {
             OSUtils.launchBrowser(url);
-        }
-        else {
+        } else {
             super.actionPerformed(ae);
         }
     }

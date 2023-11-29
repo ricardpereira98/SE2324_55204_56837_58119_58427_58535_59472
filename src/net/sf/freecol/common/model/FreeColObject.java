@@ -696,8 +696,7 @@ public abstract class FreeColObject
      * @param mods The {@code Modifier}s to apply.
      * @return The modified number.
      */
-    public static final float applyModifiers(float number, Turn turn,
-                                             Stream<Modifier> mods) {
+    public static final float applyModifiers(float number, Turn turn, Stream<Modifier> mods) {
         return FeatureContainer.applyModifiers(number, turn, mods);
     }
 

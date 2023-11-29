@@ -349,11 +349,11 @@ public class BuildingProductionCalculator {
         if (workerAssignment == null || workerAssignment.getProductionType().getOutputs().noneMatch(g -> goodsType.equals(g.getType()))) {
             return 0;
         }
-        
+
         return Math.max(0,
-                        (int) FeatureContainer.applyModifiers(getBaseProduction(buildingType, workerAssignment.getProductionType(), goodsType, workerAssignment.getUnitType()),
-                                            turn,
-                                            getProductionModifiers(turn, buildingType, goodsType, workerAssignment.getUnitType())));
+                        (int) FeatureContainer.applyModifiers(getBaseProduction(buildingType,
+                                        workerAssignment.getProductionType(), goodsType, workerAssignment.getUnitType()), turn,
+                                getProductionModifiers(turn, buildingType, goodsType, workerAssignment.getUnitType())));
     }
     
     private int getBaseProduction(BuildingType buildingType, ProductionType productionType, GoodsType goodsType, UnitType unitType) {

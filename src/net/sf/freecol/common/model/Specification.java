@@ -313,6 +313,8 @@ public final class Specification implements OptionContainer {
         = new Source("model.source.shipTradePenalty");
     public static final Source SOL_MODIFIER_SOURCE
         = new Source("model.source.solModifier");
+    public static final Source TILE_SEASON_EFFECT
+        = new Source("model.source.tileSeasonEffect");
     /** All the special static sources. */
     private static final Source[] sources = new Source[] {
         MOVEMENT_PENALTY_SOURCE,
@@ -327,7 +329,8 @@ public final class Specification implements OptionContainer {
         AMBUSH_BONUS_SOURCE,
         COLONY_GOODS_PARTY_SOURCE,
         SHIP_TRADE_PENALTY_SOURCE,
-        SOL_MODIFIER_SOURCE
+        SOL_MODIFIER_SOURCE,
+        TILE_SEASON_EFFECT
     };
 
     // @compat 0.10.x/0.11.x

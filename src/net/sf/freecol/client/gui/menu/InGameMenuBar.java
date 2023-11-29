@@ -106,6 +106,7 @@ import net.sf.freecol.common.model.Player;
 import net.sf.freecol.common.model.Specification;
 import net.sf.freecol.common.model.StringTemplate;
 import net.sf.freecol.common.model.TileImprovementType;
+import net.sf.freecol.common.model.production.SeasonEffect;
 
 
 /**
@@ -120,6 +121,12 @@ public class InGameMenuBar extends FreeColMenuBar {
 
     @SuppressWarnings("unused")
     private static final Logger logger = Logger.getLogger(InGameMenuBar.class.getName());
+
+    //seasons of the year and the constants that define them
+    private static final int WINTER = 0;
+    private static final int SPRING = 1;
+    private static final int SUMMER = 2;
+    private static final int AUTUMN = 3;
 
     /**
      * Creates a new {@code FreeColMenuBar}. This menu bar will include
@@ -329,33 +336,58 @@ public class InGameMenuBar extends FreeColMenuBar {
         final Player player = this.freeColClient.getMyPlayer();
         if (player == null) return;
 
-        final String text = Messages.message(StringTemplate
-            .template("menuBar.statusLine")
-            .addAmount("%gold%", player.getGold())
-            .addAmount("%tax%", player.getTax())
-            .addAmount("%score%", player.getScore())
-            .addStringTemplate("%year%", this.freeColClient.getGame()
-            .getTurn().getLabel())).replace("|", "✧");
-        
-        Graphics2D g2d = (Graphics2D)g;
+        final String text = Messages.message(StringTemplate.template("menuBar.statusLine").
+                addAmount("%gold%", player.getGold()).
+                addAmount("%tax%", player.getTax()).
+                addAmount("%score%", player.getScore()).
+                addStringTemplate("%year%", this.freeColClient.getGame().getTurn().getLabel())).replace("|", "✧");
+
+
+        String textWithSeason = getSeasonEffectInfo(text);
+
+
+        Graphics2D g2d = (Graphics2D) g;
         g2d.setRenderingHint(RenderingHints.KEY_ANTIALIASING,
-                             RenderingHints.VALUE_ANTIALIAS_ON);
+                RenderingHints.VALUE_ANTIALIAS_ON);
         g2d.setRenderingHint(RenderingHints.KEY_RENDERING,
-                             RenderingHints.VALUE_RENDER_QUALITY);
+                RenderingHints.VALUE_RENDER_QUALITY);
 
         final Font font = FontLibrary.getMainFont();
         g2d.setFont(font);
-        
+
         final FontMetrics fm = g2d.getFontMetrics();
-        final Rectangle2D d  = fm.getStringBounds(text, g2d);
+
+        final Rectangle2D d = fm.getStringBounds(textWithSeason, g2d);
+
         final int textWidth = (int) d.getWidth();
-        final int textHeight = (int) d.getHeight();;
-        
+        final int textHeight = (int) d.getHeight();
         final int rightSidePaddingInPx = 10;
         final int centerHeight = getHeight() - getInsets().bottom;
         final int x = getWidth() - rightSidePaddingInPx - textWidth - getInsets().right;
         final int y = (centerHeight - textHeight) / 2 + fm.getAscent();
-        
-        Utility.drawGoldenText(text, g2d, font, x, y);
+
+        Utility.drawGoldenText(textWithSeason, g2d, font, x, y);
+
+    }
+
+    /**
+     * Adds the season effect message to the default text.
+     *
+     * @param text Default text.
+     * @return Default text with the season effect at the end if applicable.
+     */
+    private String getSeasonEffectInfo(String text) {
+        SeasonEffect seasonEffect = new SeasonEffect(this.freeColClient.getGame().getTurn(),
+                this.freeColClient.getGame().getSpecification().getDifficultyLevel());
+
+        int seasonProd = seasonEffect.getSeasonEffectValue();
+        String textWithSeason = text;
+        if (seasonProd < 0) {
+            textWithSeason += " ( Season Production Penalty: " + seasonProd + "% )";
+        }
+        if (seasonProd > 0) {
+            textWithSeason += " ( Season Production Bonus: +" + seasonProd + "% )";
+        }
+        return textWithSeason;
     }
 }

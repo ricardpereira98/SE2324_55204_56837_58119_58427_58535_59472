@@ -44,11 +44,10 @@ public class TileProductionCalculator {
 
     private Player owner;
     private int colonyProductionBonus;
-    
-    
+
     /**
      * Creates a calculator for the given owner and colony data.
-     * 
+     *
      * @param owner The {@code Player} owning the building.
      * @param colonyProductionBonus The production bonus for the colony where the building
      *      is located.
@@ -57,8 +56,8 @@ public class TileProductionCalculator {
         this.owner = owner;
         this.colonyProductionBonus = colonyProductionBonus;
     }
-    
-    
+
+
     /**
      * Gets the basic production information for the colony tile,
      * ignoring any colony limits (which for now, should be
@@ -78,18 +77,16 @@ public class TileProductionCalculator {
      * @return The raw production of this colony tile.
      * @see ProductionCache#update
      */
-    public ProductionInfo getBasicProductionInfo(Tile tile,
-            Turn turn,
-            WorkerAssignment workerAssignment,
-            boolean colonyCenterTile) {
+    public ProductionInfo getBasicProductionInfo(Tile tile, Turn turn, WorkerAssignment workerAssignment, boolean colonyCenterTile) {
+
         ProductionInfo pi = new ProductionInfo();
-        
+
         if (workerAssignment.getProductionType() == null) {
             /*
              *  XXX: It's silly that the production is calculated
              *       before the productionType is set.
              */
-             
+
             return pi;
         }
 
@@ -111,7 +108,7 @@ public class TileProductionCalculator {
         }
         return pi;
     }
-    
+
     /**
      * Gets the productivity of a unit working in this work location,
      * considering *only* the contribution of the unit, exclusive of
@@ -126,6 +123,7 @@ public class TileProductionCalculator {
      * @return The maximum return from this unit.
      */
     public int getUnitProduction(Turn turn, Tile tile, WorkerAssignment workerAssignment, GoodsType goodsType) {
+
         if (workerAssignment == null
                 || workerAssignment.getProductionType().getOutputs().noneMatch(g -> goodsType.equals(g.getType()))
                 || workerAssignment.getUnitType() == null) {
@@ -137,7 +135,7 @@ public class TileProductionCalculator {
                 turn,
                 getProductionModifiers(turn, tile, goodsType, workerAssignment.getUnitType())));
     }
-    
+
     private int getCenterTileProduction(Turn turn, Tile tile, GoodsType goodsType) {
         final int production = tile.getBaseProduction(null, goodsType, null);
         return Math.max(0, (int) FeatureContainer.applyModifiers(
@@ -145,7 +143,7 @@ public class TileProductionCalculator {
                 turn,
                 getCenterTileProductionModifiers(turn, tile, goodsType)));
     }
-    
+
     /**
      * Get the base production exclusive of any bonuses.
      *
@@ -164,10 +162,12 @@ public class TileProductionCalculator {
         final int amount = tile.getBaseProduction(productionType, goodsType, unitType);
         return (amount < 0) ? 0 : amount;
     }
-    
+
+
     /**
      * Gets the production modifiers for the given type of goods and
      * unit type.
+     * Applies the season effect.
      *
      * @param goodsType The {@code GoodsType} to produce.
      * @param unitType The optional {@code UnitType} to produce them.
@@ -177,11 +177,18 @@ public class TileProductionCalculator {
         if (unitType == null || !tile.canProduce(goodsType, unitType)) {
             return Stream.<Modifier>empty();
         }
-        
-        return concat(tile.getProductionModifiers(goodsType, unitType),
+
+
+        SeasonEffect seasonEffect = null;
+        if (owner != null) {
+            seasonEffect = new SeasonEffect(turn, owner.getGame().getSpecification().getDifficultyLevel());
+        }
+
+        return concat(((owner == null) ? null : seasonEffect.getSeasonModifierStream()),
+                tile.getProductionModifiers(goodsType, unitType),
                 unitType.getModifiers(goodsType.getId(), tile.getType(), turn),
                 ((owner == null) ? null
-                    : owner.getModifiers(goodsType.getId(), unitType, turn)),
+                        : owner.getModifiers(goodsType.getId(), unitType, turn)),
                 ProductionUtils.getRebelProductionModifiersForTile(tile, colonyProductionBonus, goodsType, unitType));
     }
 
