@@ -358,6 +358,12 @@ public class InGameMenuBar extends FreeColMenuBar {
 
     }
 
+    /**
+     * Adds the season effect message to the default text.
+     *
+     * @param text Default text.
+     * @return Default text with the season effect at the end if applicable.
+     */
     private String getSeasonEffectInfo(String text) {
         SeasonEffect seasonEffect = new SeasonEffect(this.freeColClient.getGame().getTurn(),
                 this.freeColClient.getGame().getSpecification().getDifficultyLevel());
