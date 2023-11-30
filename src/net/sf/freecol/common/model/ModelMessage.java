@@ -33,7 +33,6 @@ import net.sf.freecol.common.io.FreeColXMLWriter;
 import net.sf.freecol.common.util.Utils;
 import static net.sf.freecol.common.util.StringUtils.*;
 
-
 /**
  * Contains a message about a change in the model.
  */
@@ -61,7 +60,17 @@ public class ModelMessage extends StringTemplate {
         MARKET_PRICES("model.option.guiShowMarketPrices"),
         MISSING_GOODS("model.option.guiShowMissingGoods"),
         SONS_OF_LIBERTY("model.option.guiShowSonsOfLiberty"),
+
         TUTORIAL("model.option.guiShowTutorial"),
+
+        //For Tutorial
+        STARTTUTORIAL("model.option.guiShowTutorial"),
+
+        SHIP("model.option.guiShowTutorial"),
+
+        PERSON("model.option.guiShowTutorial"),
+
+        //END Tutorial
         UNIT_ADDED("model.option.guiShowUnitAdded"),
         UNIT_ARRIVED("model.option.guiShowUnitArrived"),
         UNIT_DEMOTED("model.option.guiShowUnitDemoted"),
@@ -101,33 +110,32 @@ public class ModelMessage extends StringTemplate {
     }
 
     /** Compare messages by type. */
-    public static final Comparator<ModelMessage> messageTypeComparator
-        = (m1, m2) -> m1.getMessageType().ordinal()
-                    - m2.getMessageType().ordinal();
+    public static final Comparator<ModelMessage> messageTypeComparator = (m1, m2) -> m1.getMessageType().ordinal()
+            - m2.getMessageType().ordinal();
 
     private String sourceId;
     private String displayId;
     private MessageType messageType;
     private boolean displayed = false;
 
-
     /**
      * Trivial constructor to allow creation with Game.newInstance.
      */
-    public ModelMessage() {}
-        
+    public ModelMessage() {
+    }
+
     /**
      * Creates a new {@code ModelMessage}.
      *
      * @param messageType The type of this model message.
-     * @param id The object identifier.
-     * @param defaultId The default identifier.
-     * @param source The source of the message. This is what the
-     *               message should be associated with.
-     * @param display The {@code FreeColObject} to display.
+     * @param id          The object identifier.
+     * @param defaultId   The default identifier.
+     * @param source      The source of the message. This is what the
+     *                    message should be associated with.
+     * @param display     The {@code FreeColObject} to display.
      */
     public ModelMessage(MessageType messageType, String id, String defaultId,
-                        FreeColGameObject source, FreeColObject display) {
+            FreeColGameObject source, FreeColObject display) {
         super(id, defaultId, TemplateType.TEMPLATE);
 
         this.messageType = messageType;
@@ -139,13 +147,13 @@ public class ModelMessage extends StringTemplate {
      * Creates a new {@code ModelMessage}.
      *
      * @param messageType The type of this model message.
-     * @param id The object identifier.
-     * @param source The source of the message. This is what the
-     *               message should be associated with.
-     * @param display The {@code FreeColObject} to display.
+     * @param id          The object identifier.
+     * @param source      The source of the message. This is what the
+     *                    message should be associated with.
+     * @param display     The {@code FreeColObject} to display.
      */
     public ModelMessage(MessageType messageType, String id,
-                        FreeColGameObject source, FreeColObject display) {
+            FreeColGameObject source, FreeColObject display) {
         this(messageType, id, null, source, display);
     }
 
@@ -153,12 +161,12 @@ public class ModelMessage extends StringTemplate {
      * Creates a new {@code ModelMessage}.
      *
      * @param messageType The type of this model message.
-     * @param id The object identifier.
-     * @param source The source of the message. This is what the
-     *               message should be associated with.
+     * @param id          The object identifier.
+     * @param source      The source of the message. This is what the
+     *                    message should be associated with.
      */
     public ModelMessage(MessageType messageType, String id,
-                        FreeColGameObject source) {
+            FreeColGameObject source) {
         this(messageType, id, source, getDefaultDisplay(messageType, source));
     }
 
@@ -172,7 +180,6 @@ public class ModelMessage extends StringTemplate {
 
         readFromXML(xr);
     }
-
 
     /**
      * Gets the source of the message.
@@ -212,12 +219,13 @@ public class ModelMessage extends StringTemplate {
 
     /**
      * Switch the source (and display if it is the same) to a new
-     * object.  Called when the source object becomes invalid.
+     * object. Called when the source object becomes invalid.
      *
      * @param newSource A new source.
      */
     public void divert(FreeColGameObject newSource) {
-        if (Utils.equals(displayId, sourceId)) displayId = newSource.getId();
+        if (Utils.equals(displayId, sourceId))
+            displayId = newSource.getId();
         sourceId = newSource.getId();
     }
 
@@ -246,7 +254,7 @@ public class ModelMessage extends StringTemplate {
      */
     public String getOptionName() {
         return (this.messageType == null) ? null
-            : this.messageType.getOptionName();
+                : this.messageType.getOptionName();
     }
 
     /**
@@ -281,41 +289,52 @@ public class ModelMessage extends StringTemplate {
      * Gets the default display object for the given type.
      *
      * @param messageType The type to find the default display object for.
-     * @param source The source object
+     * @param source      The source object
      * @return An object to be displayed for the message.
      */
     static private FreeColObject getDefaultDisplay(MessageType messageType,
-                                                   FreeColGameObject source) {
+            FreeColGameObject source) {
         FreeColObject o = null;
         switch (messageType) {
-        case SONS_OF_LIBERTY:
-        case GOVERNMENT_EFFICIENCY:
-            o = source.getSpecification().getGoodsType("model.goods.bells");
-            break;
-        case UNIT_IMPROVED:
-        case UNIT_DEMOTED:
-        case UNIT_LOST:
-        case UNIT_ADDED:
-        case LOST_CITY_RUMOUR:
-        case COMBAT_RESULT:
-        case DEMANDS:
-        case GOODS_MOVEMENT:
-            o = source;
-            break;
-        case BUILDING_COMPLETED:
-            o = source.getSpecification().getGoodsType("model.goods.hammers");
-            break;
-        case DEFAULT:
-        case WARNING:
-        case WAREHOUSE_CAPACITY:
-        case FOREIGN_DIPLOMACY:
-        case MARKET_PRICES:
-        case MISSING_GOODS:
-        case TUTORIAL:
-        case GIFT_GOODS:
-        default:
-            if (source instanceof Player) o = source;
-            break;
+            case SONS_OF_LIBERTY:
+            case GOVERNMENT_EFFICIENCY:
+                o = source.getSpecification().getGoodsType("model.goods.bells");
+                break;
+            case UNIT_IMPROVED:
+            case UNIT_DEMOTED:
+            case UNIT_LOST:
+            case UNIT_ADDED:
+            case LOST_CITY_RUMOUR:
+            case COMBAT_RESULT:
+            case DEMANDS:
+            case GOODS_MOVEMENT:
+                o = source;
+                break;
+            case BUILDING_COMPLETED:
+                o = source.getSpecification().getGoodsType("model.goods.hammers");
+                break;
+            case DEFAULT:
+            case WARNING:
+            case WAREHOUSE_CAPACITY:
+            case FOREIGN_DIPLOMACY:
+            case MARKET_PRICES:
+            case MISSING_GOODS:
+            case TUTORIAL:
+                o = source;
+                break;
+            case STARTTUTORIAL:
+                o = source;
+            case SHIP:
+               o  = source.getSpecification().getUnitType("model.unit.caravel");
+               break;
+            case PERSON :
+                o = source.getSpecification().getDefaultUnitType();
+                break;
+            case GIFT_GOODS:
+            default:
+                if (source instanceof Player)
+                    o = source;
+                break;
         }
         return o;
     }
@@ -327,20 +346,21 @@ public class ModelMessage extends StringTemplate {
      */
     public String getIgnoredMessageKey() {
         switch (getMessageType()) {
-        case WAREHOUSE_CAPACITY:
-            StringBuilder sb = new StringBuilder(64);
-            sb.append(getSourceId());
-            switch (getTemplateType()) {
-            case TEMPLATE:
-                StringTemplate t = getReplacement("%goods%");
-                if (t != null) sb.append('-').append(t.getId());
-                break;
+            case WAREHOUSE_CAPACITY:
+                StringBuilder sb = new StringBuilder(64);
+                sb.append(getSourceId());
+                switch (getTemplateType()) {
+                    case TEMPLATE:
+                        StringTemplate t = getReplacement("%goods%");
+                        if (t != null)
+                            sb.append('-').append(t.getId());
+                        break;
+                    default:
+                        break;
+                }
+                return sb.toString();
             default:
                 break;
-            }
-            return sb.toString();
-        default:
-            break;
         }
         return null;
     }
@@ -353,28 +373,30 @@ public class ModelMessage extends StringTemplate {
      */
     public List<Object> splitLinks(Player player) {
         final FreeColGameObject source = player.getGame()
-            .getMessageSource(this);
+                .getMessageSource(this);
 
         // Build a list of objects, initially containing just the plain
         // text of the message.
         List<Object> result = new ArrayList<>();
         result.add(Messages.message(this));
 
-        for (SimpleEntry<String,StringTemplate> e : entryList()) {
+        for (SimpleEntry<String, StringTemplate> e : entryList()) {
             // Then for each key, check if it can be made into a link.
             // If not, ignore it.
             String key = e.getKey();
             String val = Messages.message(e.getValue());
-            if (val == null) continue;
+            if (val == null)
+                continue;
             Object b = Utility.getMessageButton(key, val, player, source);
-            if (b == null) continue;
+            if (b == null)
+                continue;
 
             // ...if so, find all instances of the replacement of the key
             // in the object list texts, and replace them with buttons.
             List<Object> next = new ArrayList<>();
             for (Object o : result) {
                 if (o instanceof String) {
-                    String str = (String)o;
+                    String str = (String) o;
                     int index, start = 0;
                     while ((index = str.indexOf(val, start)) >= 0) {
                         if (index > start) {
@@ -396,7 +418,7 @@ public class ModelMessage extends StringTemplate {
     /**
      * Get a comparator that sorts on the message source object.
      *
-     * @param game The {@code Game} to look up source objects in.
+     * @param game        The {@code Game} to look up source objects in.
      * @param specialized A map of specialized comparators keyed by class name.
      * @return The {@code Comparator}.
      */
@@ -418,12 +440,11 @@ public class ModelMessage extends StringTemplate {
                 FreeColGameObject source1 = game.getMessageSource(message1);
                 FreeColGameObject source2 = game.getMessageSource(message2);
                 int base = FreeColObject.getObjectClassIndex(source1)
-                    - FreeColObject.getObjectClassIndex(source2);
+                        - FreeColObject.getObjectClassIndex(source2);
                 if (base == 0 && specialized != null && source1 != null) {
                     String name = source1.getClass().getName();
                     @SuppressWarnings("unchecked")
-                    Comparator<FreeColObject> c
-                        = (Comparator<FreeColObject>)specialized.get(name);
+                    Comparator<FreeColObject> c = (Comparator<FreeColObject>) specialized.get(name);
                     if (c != null) {
                         base = c.compare(source1, source2);
                     }
@@ -433,7 +454,6 @@ public class ModelMessage extends StringTemplate {
         };
     }
 
-
     // Override FreeColObject
 
     /**
@@ -442,7 +462,8 @@ public class ModelMessage extends StringTemplate {
     @Override
     public <T extends FreeColObject> boolean copyIn(T other) {
         ModelMessage o = copyInCast(other, ModelMessage.class);
-        if (o == null || !super.copyIn(o)) return false;
+        if (o == null || !super.copyIn(o))
+            return false;
         this.sourceId = o.getSourceId();
         this.displayId = o.getDisplayId();
         this.messageType = o.getMessageType();
@@ -450,14 +471,12 @@ public class ModelMessage extends StringTemplate {
         return true;
     }
 
-
     // Serialization
 
     private static final String DISPLAY_TAG = "display";
     private static final String HAS_BEEN_DISPLAYED_TAG = "hasBeenDisplayed";
     private static final String MESSAGE_TYPE_TAG = "messageType";
     private static final String SOURCE_TAG = "source";
-
 
     /**
      * {@inheritDoc}
@@ -468,7 +487,8 @@ public class ModelMessage extends StringTemplate {
 
         xw.writeAttribute(SOURCE_TAG, sourceId);
 
-        if (displayId != null) xw.writeAttribute(DISPLAY_TAG, displayId);
+        if (displayId != null)
+            xw.writeAttribute(DISPLAY_TAG, displayId);
 
         xw.writeAttribute(MESSAGE_TYPE_TAG, messageType);
 
@@ -482,12 +502,12 @@ public class ModelMessage extends StringTemplate {
     public void readAttributes(FreeColXMLReader xr) throws XMLStreamException {
         super.readAttributes(xr);
 
-        sourceId = xr.getAttribute(SOURCE_TAG, (String)null);
+        sourceId = xr.getAttribute(SOURCE_TAG, (String) null);
 
-        displayId = xr.getAttribute(DISPLAY_TAG, (String)null);
+        displayId = xr.getAttribute(DISPLAY_TAG, (String) null);
 
-        messageType = xr.getAttribute(MESSAGE_TYPE_TAG, 
-                                      MessageType.class, MessageType.DEFAULT);
+        messageType = xr.getAttribute(MESSAGE_TYPE_TAG,
+                MessageType.class, MessageType.DEFAULT);
 
         displayed = xr.getAttribute(HAS_BEEN_DISPLAYED_TAG, false);
     }
@@ -495,8 +515,9 @@ public class ModelMessage extends StringTemplate {
     /**
      * {@inheritDoc}
      */
-    public String getXMLTagName() { return TAG; }
-
+    public String getXMLTagName() {
+        return TAG;
+    }
 
     // Override Object
 
@@ -505,14 +526,15 @@ public class ModelMessage extends StringTemplate {
      */
     @Override
     public boolean equals(Object o) {
-        if (this == o) return true;
+        if (this == o)
+            return true;
         if (o instanceof ModelMessage) {
-            ModelMessage other = (ModelMessage)o;
+            ModelMessage other = (ModelMessage) o;
             return messageType == other.messageType
-                && displayed == other.displayed
-                && Utils.equals(sourceId, other.sourceId)
-                && Utils.equals(displayId, other.displayId)
-                && super.equals(other);
+                    && displayed == other.displayed
+                    && Utils.equals(sourceId, other.sourceId)
+                    && Utils.equals(displayId, other.displayId)
+                    && super.equals(other);
         }
         return false;
     }
@@ -523,8 +545,10 @@ public class ModelMessage extends StringTemplate {
     @Override
     public int hashCode() {
         int hash = super.hashCode();
-        if (sourceId != null) hash = 37 * hash + sourceId.hashCode();
-        if (displayId != null) hash = 37 * hash + displayId.hashCode();
+        if (sourceId != null)
+            hash = 37 * hash + sourceId.hashCode();
+        if (displayId != null)
+            hash = 37 * hash + displayId.hashCode();
         hash = 37 * hash + messageType.ordinal();
         hash = 37 * hash + ((displayed) ? 1 : 0);
         return hash;
@@ -537,12 +561,12 @@ public class ModelMessage extends StringTemplate {
     public String toString() {
         StringBuilder sb = new StringBuilder(128);
         sb.append("[ModelMessage ").append(hashCode())
-            .append(' ').append((sourceId == null) ? "null" : sourceId)
-            .append('/').append((displayId == null) ? "null" : displayId)
-            .append(' ').append(messageType)
-            .append(' ').append(displayed)
-            .append(' ').append(super.toString())
-            .append(']');
+                .append(' ').append((sourceId == null) ? "null" : sourceId)
+                .append('/').append((displayId == null) ? "null" : displayId)
+                .append(' ').append(messageType)
+                .append(' ').append(displayed)
+                .append(' ').append(super.toString())
+                .append(']');
         return sb.toString();
     }
 }

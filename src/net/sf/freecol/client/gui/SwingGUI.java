@@ -71,19 +71,7 @@ import net.sf.freecol.client.gui.mapviewer.MapAsyncPainter;
 import net.sf.freecol.client.gui.mapviewer.MapViewer;
 import net.sf.freecol.client.gui.mapviewer.MapViewerState;
 import net.sf.freecol.client.gui.mapviewer.TileViewer;
-import net.sf.freecol.client.gui.panel.ColonyPanel;
-import net.sf.freecol.client.gui.panel.CornerMapControls;
-import net.sf.freecol.client.gui.panel.FreeColImageBorder;
-import net.sf.freecol.client.gui.panel.FreeColPanel;
-import net.sf.freecol.client.gui.panel.InformationPanel;
-import net.sf.freecol.client.gui.panel.MapControls;
-import net.sf.freecol.client.gui.panel.PurchasePanel;
-import net.sf.freecol.client.gui.panel.RecruitPanel;
-import net.sf.freecol.client.gui.panel.StartGamePanel;
-import net.sf.freecol.client.gui.panel.StatusPanel;
-import net.sf.freecol.client.gui.panel.TradeRouteInputPanel;
-import net.sf.freecol.client.gui.panel.TrainPanel;
-import net.sf.freecol.client.gui.panel.Utility;
+import net.sf.freecol.client.gui.panel.*;
 import net.sf.freecol.client.gui.panel.report.LabourData.UnitData;
 import net.sf.freecol.client.gui.plaf.FreeColLookAndFeel;
 import net.sf.freecol.client.gui.plaf.FreeColToolTipUI;
@@ -2245,6 +2233,42 @@ public class SwingGUI extends GUI {
                                                  icon, template);
     }
 
+
+    //TODO: TAKE OUT
+    public FreeColPanel showTutorialMessages( FreeColObject displayObject, List<StringTemplate> tutorialTxt, List<String> img) {
+        if (tutorialTxt.isEmpty()) return null;
+
+        int n = tutorialTxt.size();
+        String[] texts = new String[n];
+
+        String[] imagekey = new String[n];
+
+        FreeColObject[] fcos = new FreeColObject[n];
+        ImageIcon[] icons = new ImageIcon[n];
+
+        Tile tile = null;
+
+        for (int i = 0; i < n; i++) {
+            StringTemplate t = tutorialTxt.get(i);
+            texts[i] = Messages.message(t);
+
+            imagekey[i] = img.get(i);
+
+            BufferedImage library = this.fixedImageLibrary.getScaledImage(imagekey[i]);
+            icons[i] = new ImageIcon(library);
+
+            if (tile == null && fcos[i] instanceof Location) {
+                tile = ((Location)fcos[i]).getTile();
+            }
+        }
+
+        TutorialPanel panel
+                = new TutorialPanel(this.getFreeColClient(), texts,fcos, icons,imagekey);
+
+
+        return this.canvas.showFreeColPanelTutorial(panel, getPopupPosition(tile), false);
+    }
+
     /**
      * {@inheritDoc}
      */
@@ -2345,6 +2369,7 @@ public class SwingGUI extends GUI {
         return this.canvas.showFreeColPanel(panel,
             getPopupPosition(tile), false);
     }
+
 
     /**
      * {@inheritDoc}

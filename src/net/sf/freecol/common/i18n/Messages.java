@@ -725,45 +725,45 @@ public class Messages {
         if (template == null) return null;
         String result = "";
         switch (template.getTemplateType()) {
-        case LABEL:
-            if (template.isEmpty()) {
-                result = message(template.getId());
-            } else {
-                StringBuilder sb = new StringBuilder(64);
-                for (SimpleEntry<String,StringTemplate> e
-                         : template.entryList()) {
-                    sb.append(template.getId()).append(message(e.getValue()));
-                }
-                if (sb.length() >= template.getId().length()) {
-                    result = sb.toString().substring(template.getId().length());
+            case LABEL:
+                if (template.isEmpty()) {
+                    result = message(template.getId());
                 } else {
-                    logger.warning("incorrect use of template " + template);
+                    StringBuilder sb = new StringBuilder(64);
+                    for (SimpleEntry<String,StringTemplate> e
+                            : template.entryList()) {
+                        sb.append(template.getId()).append(message(e.getValue()));
+                    }
+                    if (sb.length() >= template.getId().length()) {
+                        result = sb.toString().substring(template.getId().length());
+                    } else {
+                        logger.warning("incorrect use of template " + template);
+                    }
                 }
-            }
-            break;
-        case TEMPLATE:
-            if (containsKey(template.getId())) {
-                result = messageBundle.get(template.getId());
-            } else if (template.getDefaultId() != null) {
-                result = messageBundle.get(template.getDefaultId());
-            }
-            result = replaceChoices(result, template);
-            for (SimpleEntry<String, StringTemplate> e
-                     : template.entryList()) {
-                if (e.getKey() != null) {
-                    result = result.replace(e.getKey(), message(e.getValue()));
+                break;
+            case TEMPLATE:
+                if (containsKey(template.getId())) {
+                    result = messageBundle.get(template.getId());
+                } else if (template.getDefaultId() != null) {
+                    result = messageBundle.get(template.getDefaultId());
                 }
-            }
-            break;
-        case KEY:
-            String key = messageBundle.get(template.getId());
-            result = (key == null) ? template.getId()
-                : replaceChoices(key, null);
-            break;
-        case NAME:
-        default:
-            result = template.getId();
-            break;
+                result = replaceChoices(result, template);
+                for (SimpleEntry<String, StringTemplate> e
+                        : template.entryList()) {
+                    if (e.getKey() != null) {
+                        result = result.replace(e.getKey(), message(e.getValue()));
+                    }
+                }
+                break;
+            case KEY:
+                String key = messageBundle.get(template.getId());
+                result = (key == null) ? template.getId()
+                        : replaceChoices(key, null);
+                break;
+            case NAME:
+            default:
+                result = template.getId();
+                break;
         }
         return result;
     }

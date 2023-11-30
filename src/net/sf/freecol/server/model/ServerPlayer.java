@@ -2249,11 +2249,8 @@ outer:  for (Effect effect : effects) {
      * @param random A pseudo-random number source.
      * @param cs A {@code ChangeSet} to update.
      */
-    public void csCombat(FreeColGameObject attacker,
-                         FreeColGameObject defender,
-                         List<CombatEffectType> crs,
-                         Random random,
-                         ChangeSet cs) {
+    public void csCombat(FreeColGameObject attacker, FreeColGameObject defender,                         List<CombatEffectType> crs,
+                         Random random, ChangeSet cs) {
         CombatModel combatModel = getGame().getCombatModel();
         boolean isAttack = combatModel.combatIsAttack(attacker, defender);
         boolean isBombard = combatModel.combatIsBombard(attacker, defender);

@@ -1145,6 +1145,17 @@ public final class Canvas extends JDesktopPane {
         return panel;
     }
 
+    //TODO: lilly
+    public FreeColPanel showFreeColPanelTutorial(FreeColPanel panel,
+                                         PopupPosition popupPosition,
+                                         boolean resizable) {
+        repaint();
+        addAsFrame(panel, true, popupPosition, resizable);
+        panel.requestFocus();
+        freeColClient.getActionManager().update();
+        return panel;
+    }
+
     /**
      * Displays the given dialog, optionally making sure a tile is visible.
      *

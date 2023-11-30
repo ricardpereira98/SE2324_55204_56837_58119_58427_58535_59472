@@ -20,25 +20,24 @@
 package net.sf.freecol.client.control;
 
 import java.awt.Color;
+import java.awt.image.BufferedImage;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.logging.Logger;
 
-import javax.swing.SwingUtilities;
+import javax.swing.*;
 
 import net.sf.freecol.FreeCol;
 import net.sf.freecol.client.ClientOptions;
 import net.sf.freecol.client.FreeColClient;
 import net.sf.freecol.client.gui.GUI;
+import net.sf.freecol.client.gui.ImageLibrary;
 import net.sf.freecol.common.debug.FreeColDebugger;
 import net.sf.freecol.common.i18n.Messages;
 import net.sf.freecol.common.io.FreeColDirectories;
-import net.sf.freecol.common.model.FreeColObject;
-import net.sf.freecol.common.model.Game;
+import net.sf.freecol.common.model.*;
 import net.sf.freecol.common.model.Game.LogoutReason;
-import net.sf.freecol.common.model.Nation;
 import net.sf.freecol.common.model.NationOptions.NationState;
-import net.sf.freecol.common.model.NationType;
-import net.sf.freecol.common.model.Player;
 import net.sf.freecol.common.model.StringTemplate;
 import net.sf.freecol.common.option.GameOptions;
 import net.sf.freecol.common.option.MapGeneratorOptions;
@@ -54,7 +53,6 @@ import net.sf.freecol.common.util.Utils;
 public final class PreGameController extends FreeColClientHolder {
 
     private static final Logger logger = Logger.getLogger(PreGameController.class.getName());
-
 
     /**
      * The constructor to use.
@@ -317,14 +315,45 @@ public final class PreGameController extends FreeColClientHolder {
             fcc.skipTurns(FreeColDebugger.getDebugRunTurns());
             return false;
         }
-        
+
+        //TODO: TUTORIAL BEGINNING
         // Starting message if needed
         if (getGame().getTurn().getNumber() == 1) {
-            player.addStartGameMessage();
+
+            moveBoatTutorial(player);
+            igc().nextModelMessage();
+
+            InfoPanelTutorial(player);
+            igc().nextModelMessage();
+
+            player.addStartGameMessage(); //game message
+            igc().nextModelMessage();
+
+            player.addTutorialIntro(); // intro tutorial
+
+
         }
         igc().nextModelMessage();
+
+
         return true;
     }
+
+    private void InfoPanelTutorial (Player player)
+    {
+        player.addModelMessage(new ModelMessage(ModelMessage.MessageType.STARTTUTORIAL, "startTutorial.infopanel", player));
+        player.addModelMessage(new ModelMessage(ModelMessage.MessageType.SHIP, "startTutorial.infopanel.ship", player));
+        player.addModelMessage(new ModelMessage(ModelMessage.MessageType.PERSON, "startTutorial.infopanel.person", player));
+    }
+
+    private void moveBoatTutorial(Player player) {
+
+        player.addModelMessage(new ModelMessage(ModelMessage.MessageType.SHIP, "startTutorial.moveBoat", player));
+        player.addModelMessage(new ModelMessage(ModelMessage.MessageType.STARTTUTORIAL, "startTutorial.move", player));
+        player.addModelMessage(new ModelMessage(ModelMessage.MessageType.STARTTUTORIAL, "startTutorial.endTurn", player));
+
+    }
+
 
     /**
      * Handles an update.
