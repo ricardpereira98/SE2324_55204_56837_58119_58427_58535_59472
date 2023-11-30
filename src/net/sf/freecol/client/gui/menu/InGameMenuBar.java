@@ -122,12 +122,6 @@ public class InGameMenuBar extends FreeColMenuBar {
     @SuppressWarnings("unused")
     private static final Logger logger = Logger.getLogger(InGameMenuBar.class.getName());
 
-    //seasons of the year and the constants that define them
-    private static final int WINTER = 0;
-    private static final int SPRING = 1;
-    private static final int SUMMER = 2;
-    private static final int AUTUMN = 3;
-
     /**
      * Creates a new {@code FreeColMenuBar}. This menu bar will include
      * all of the submenus and items.
