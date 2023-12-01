@@ -3,3 +3,7 @@ Despite its extensive nature, it is well-detailed and well-structured, covering 
 
 REVIEWER José Trigueiro:
 [SOLVED]Falta a minha review para o Use case do Diogo
+
+José Pereira 55204:
+
+UPDATE 1/12/2023 - Merge doc concluído com sucesso e bem estruturado.
