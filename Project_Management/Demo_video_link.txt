@@ -4,6 +4,7 @@ Software Engineering - Final Project demo
 
 José Pereira 55204
 Diogo Lemos 56837
+José Trigueiro 58119
 Liliane Correia 58427
 Wilker Martins 58535
 Gustavo Silva 59472
